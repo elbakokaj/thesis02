@@ -47,12 +47,11 @@ const Login = () => {
                 <div className='login forms form-style'>
 
 
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='input input-field' placeholder='Email' />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='input input-field' placeholder='Please enter your email here' />
                     <br />
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='input input-field' placeholder='Password' />
-
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='input input-field' placeholder='Please enter your password here' />
                     <br />
-                    <button type="submit" className='input submit'>Log In</button>
+                    <button type="submit" className='input submit'>LOG IN</button>
                 </div>
             </form>
         </div >
