@@ -1,52 +1,80 @@
-.student-page {
+.studentPage {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    min-height: 100vh;
+    background-color: #F8B195;
 }
 
-.header {
+.dashboard {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 15%;
+    background-color: #E84A5F;
+    padding: 60px;
 }
 
 .profile-pic {
-    height: 100px;
-    width: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    margin-right: 20px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 6px solid #fff;
 }
 
 .nav-bar {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    background-color: #E84A5F;
+    padding: 60px;
 }
 
 ul {
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 li {
-    margin: 0 10px;
+    margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
 }
 
 .active-link {
-    color: #fff;
-    background-color: #007bff;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background-color: #fff;
+    color: #E84A5F;
 }
 
 .content {
-    margin-top: 20px;
-    text-align: center;
+    flex: 1;
+    width: 85%;
+    background-color: #FADBD8;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.content p {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+.content-text {
+    max-width: 800px;
+    text-align: center;
+    margin-top: 60px;
+    font-size: 22px;
+    line-height: 1.6;
 }
