@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Professor.css';
 
 const Professor = ({ name, picture }) => {
+    const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
+
+    const toggleSchoolYearPopup = () => {
+        setShowSchoolYearPopup(!showSchoolYearPopup);
+    };
+
     return (
         <div className='professorPage'>
-
             <div className='dashboard'>
                 <header>
                     <img className='profile-pic' src={picture} alt='Profile' />
@@ -23,10 +28,8 @@ const Professor = ({ name, picture }) => {
                                 Calendar
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink exact to='/classes' activeClassName='active-link'>
-                                Classes
-                            </NavLink>
+                        <li onClick={toggleSchoolYearPopup}>
+                            <a href='#'>Classes</a>
                         </li>
                         <li>
                             <NavLink exact to='/contact' activeClassName='active-link'>
@@ -47,8 +50,22 @@ const Professor = ({ name, picture }) => {
                     <p>Here you can access all of your important information and resources.</p>
                 </div>
             </div>
+            {showSchoolYearPopup && (
+                <div className='popup'>
+                    <div className='popup-content'>
+                        <h2>Select School Year</h2>
+                        <ul>
+                            <li>2022-2023</li>
+                            <li>2021-2022</li>
+                            <li>2020-2021</li>
+                        </ul>
+                        <button onClick={toggleSchoolYearPopup}>Close</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default Professor;
+

@@ -78,3 +78,53 @@ a {
     font-size: 22px;
     line-height: 1.6;
 }
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e8994a;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    justify-content: center;
+    width: 30%;
+    z-index: 99999;
+}
+
+
+
+.popup-content {
+    text-align: center;
+}
+
+.popup ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.popup ul li {
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.popup ul li:hover {
+    text-decoration: underline;
+}
+
+.popup button {
+    margin-top: 10px;
+    background-color: white;
+    color: #0077be;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    background-color: #0077be;
+    color: white;
+}
