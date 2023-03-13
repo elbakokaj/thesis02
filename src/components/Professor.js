@@ -13,7 +13,7 @@ const Professor = ({ name, picture }) => {
 
     const handleSchoolYearSelect = (schoolYear) => {
         setSelectedYear(schoolYear);
-        // simulate fetching students from an API
+        // simuexcused fetching students from an API
         setStudents([{ id: 1, name: 'Alice', attendance: [] },
         { id: 2, name: 'Bob', attendance: [] },
         { id: 3, name: 'Charlie', attendance: [] },
@@ -105,10 +105,10 @@ const Professor = ({ name, picture }) => {
                                             >                   Present
                                             </button>
                                             <button
-                                                className={`status-btn ${student.attendance.includes('late') ? 'late' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'late')}
+                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
+                                                onClick={() => handleAttendance(student.id, 'excused')}
                                             >
-                                                Late
+                                                Excused
                                             </button>
                                             <button
                                                 className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
@@ -117,7 +117,7 @@ const Professor = ({ name, picture }) => {
                                                 Absent
                                             </button>
                                         </td>
-                                        <td>{student.attendance.filter((status) => status !== 'present').length}</td>
+                                        <td>{student.attendance.filter((status) => status == 'absent').length}</td>
                                     </tr>
                                 ))}
                             </tbody>
