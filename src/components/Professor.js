@@ -6,19 +6,25 @@ const Professor = ({ name, picture }) => {
     const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
     const [students, setStudents] = useState([]);
     const [selectedYear, setSelectedYear] = useState("");
+    const [showAccountSettings, setShowAccountSettings] = useState(false);
 
     const toggleSchoolYearPopup = () => {
         setShowSchoolYearPopup(!showSchoolYearPopup);
     };
 
+    const toggleAccountSettings = () => {
+        setShowAccountSettings(!showAccountSettings);
+    };
+
     const handleSchoolYearSelect = (schoolYear) => {
         setSelectedYear(schoolYear);
-        // simuexcused fetching students from an API
-        setStudents([{ id: 1, name: 'Alice', attendance: [] },
-        { id: 2, name: 'Bob', attendance: [] },
-        { id: 3, name: 'Charlie', attendance: [] },
-        { id: 4, name: 'David', attendance: [] },
-        { id: 5, name: 'Eve', attendance: [] },
+        // simulate fetching students from an API
+        setStudents([
+            { id: 1, name: 'Alice', attendance: [] },
+            { id: 2, name: 'Bob', attendance: [] },
+            { id: 3, name: 'Charlie', attendance: [] },
+            { id: 4, name: 'David', attendance: [] },
+            { id: 5, name: 'Eve', attendance: [] },
         ]);
 
         // hide the popup
@@ -51,10 +57,8 @@ const Professor = ({ name, picture }) => {
                 </header>
                 <nav>
                     <ul>
-                        <li>
-                            <NavLink exact to='/profile' activeClassName='active-link'>
-                                Profile
-                            </NavLink>
+                        <li onClick={toggleAccountSettings}>
+                            <a href='#'>Profile</a>
                         </li>
                         <li>
                             <NavLink exact to='/calendar' activeClassName='active-link'>
@@ -99,45 +103,77 @@ const Professor = ({ name, picture }) => {
                                     <tr key={student.id}>
                                         <td>{student.name}</td>
                                         <td>
-                                            <button
-                                                className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'present')}
-                                            >                   Present
-                                            </button>
-                                            <button
-                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'excused')}
-                                            >
-                                                Excused
-                                            </button>
-                                            <button
-                                                className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'absent')}
-                                            >
-                                                Absent
-                                            </button>
+                                            <div className='attendance-status'>
+                                                <button
+                                                    className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
+                                                    onClick={() => handleAttendance(student.id, 'present')}
+                                                >                   Present
+                                                </button>
+                                                <button
+                                                    className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
+                                                    onClick={() => handleAttendance(student.id, 'excused')}
+                                                >
+                                                    Excused
+                                                </button>
+                                                <button
+                                                    className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
+                                                    onClick={() => handleAttendance(student.id, 'absent')}
+                                                >
+                                                    Absent
+                                                </button>
+                                            </div>
                                         </td>
-                                        <td>{student.attendance.filter((status) => status == 'absent').length}</td>
+                                        <td>{student.attendance.filter((status) => status === 'late').length}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 )}
-            </div>
-            {showSchoolYearPopup && (
-                <div className='popup'>
-                    <div className='popup-content'>
-                        <h2>Select a School Year</h2>
-                        <ul>
-                            <li onClick={() => handleSchoolYearSelect('2022-2023')}>2022-2023</li>
-                            <li onClick={() => handleSchoolYearSelect('2021-2022')}>2021-2022</li>
-                            <li onClick={() => handleSchoolYearSelect('2020-2021')}>2020-2021</li>
-                            <li onClick={() => handleSchoolYearSelect('2019-2020')}>2019-2020</li>
-                        </ul>
+                {showSchoolYearPopup && (
+                    <div className='popup'>
+                        <div className='popup-content'>
+                            <h2>Select a School Year</h2>
+                            <ul>
+                                <li onClick={() => handleSchoolYearSelect('2021-2022')}>
+                                    <a href='#'>2021-2022</a>
+                                </li>
+                                <li onClick={() => handleSchoolYearSelect('2022-2023')}>
+                                    <a href='#'>2022-2023</a>
+                                </li>
+                                <li onClick={() => handleSchoolYearSelect('2023-2024')}>
+                                    <a href='#'>2023-2024</a>
+                                </li>
+                            </ul>
+                            <button className='popup-close' onClick={toggleSchoolYearPopup}>
+                                X
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+
+                {showAccountSettings && (
+                    <div className='popup'>
+                        <div className='popup-content'>
+                            <h2>Account Settings</h2>
+                            <ul>
+                                <li>
+                                    <a href='#'>Edit Profile</a>
+                                </li>
+                                <li>
+                                    <a href='#'>Change Password</a>
+                                </li>
+                                <li>
+                                    <a href='#'>Privacy Settings</a>
+                                </li>
+                            </ul>
+                            <button className='popup-close' onClick={toggleAccountSettings}>
+                                X
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
