@@ -74,7 +74,7 @@ const Professor = ({ name, picture }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink exact to='/logout' activeClassName='active-link'>
+                            <NavLink exact to='/login' activeClassName='active-link'>
                                 Logout
                             </NavLink>
                         </li>
@@ -158,13 +158,10 @@ const Professor = ({ name, picture }) => {
                             <h2>Account Settings</h2>
                             <ul>
                                 <li>
+                                    <a href='#'>View Profile</a>
+                                </li>
+                                <li>
                                     <a href='#'>Edit Profile</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Change Password</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Privacy Settings</a>
                                 </li>
                             </ul>
                             <button className='popup-close' onClick={toggleAccountSettings}>
