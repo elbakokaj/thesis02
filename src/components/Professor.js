@@ -60,11 +60,6 @@ const Professor = ({ name, picture }) => {
                         <li onClick={toggleAccountSettings}>
                             <a href='#'>Profile</a>
                         </li>
-                        <li>
-                            <NavLink exact to='/calendar' activeClassName='active-link'>
-                                Calendar
-                            </NavLink>
-                        </li>
                         <li onClick={toggleSchoolYearPopup}>
                             <a href='#'>Classes</a>
                         </li>
