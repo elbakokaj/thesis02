@@ -7,6 +7,28 @@ const Professor = ({ name, picture }) => {
     const [students, setStudents] = useState([]);
     const [selectedYear, setSelectedYear] = useState("");
     const [showAccountSettings, setShowAccountSettings] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [showContentText, setShowContentText] = useState(true);
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    const [profile, setProfile] = useState({
+        name: 'John Doe',
+        surname: 'Doe',
+        birthday: 'January 1, 1980',
+        degree: 'Ph.D. in Computer Science',
+        consultationHours: 'Tuesdays and Thursdays, 2-4pm',
+    });
+
+    const handleProfileChange = (e) => {
+        const { name, value } = e.target;
+        setProfile({ ...profile, [name]: value });
+    };
+
+    const handleProfileSubmit = (e) => {
+        e.preventDefault();
+        // Handle saving changes here (e.g., send a request to update the profile in the backend)
+        toggleEditMode();
+    };
 
     const toggleSchoolYearPopup = () => {
         setShowSchoolYearPopup(!showSchoolYearPopup);
@@ -15,6 +37,23 @@ const Professor = ({ name, picture }) => {
     const toggleAccountSettings = () => {
         setShowAccountSettings(!showAccountSettings);
     };
+
+    const toggleProfile = () => {
+        setShowProfile(!showProfile);
+
+        if (!showProfile) {
+            setShowSchoolYearPopup(false);
+            setStudents([]);
+            setShowContentText(false);
+        } else {
+            setShowContentText(true);
+        }
+    };
+
+    const toggleEditMode = () => {
+        setIsEditMode(!isEditMode);
+    };
+
 
     const handleSchoolYearSelect = (schoolYear) => {
         setSelectedYear(schoolYear);
@@ -57,7 +96,7 @@ const Professor = ({ name, picture }) => {
                 </header>
                 <nav>
                     <ul>
-                        <li onClick={toggleAccountSettings}>
+                        <li onClick={toggleProfile}>
                             <a href='#'>Profile</a>
                         </li>
                         <li onClick={toggleSchoolYearPopup}>
@@ -77,12 +116,52 @@ const Professor = ({ name, picture }) => {
                 </nav>
             </div>
             <div className='content'>
-                {students.length === 0 ? (
+                {showProfile && (
+                    <div className='professor-profile'>
+                        {isEditMode ? (
+                            // Edit form
+                            <form onSubmit={handleProfileSubmit}>
+                                <h2>Edit Profile</h2>
+                                <label>
+                                    Name: <input name='name' value={profile.name} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    Surname: <input name='surname' value={profile.surname} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    Birthday: <input name='birthday' value={profile.birthday} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    Degree: <input name='degree' value={profile.degree} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    Consultation Hours: <input name='consultationHours' value={profile.consultationHours} onChange={handleProfileChange} />
+                                </label>
+                                <button type='submit'>Save Changes</button>
+                                <button type='button' onClick={toggleEditMode}>Cancel</button>
+                            </form>
+                        ) : (
+                            // Profile view
+                            <>
+                                <h2>Professor Profile</h2>
+                                <p><strong>Name:</strong> {profile.name}</p>
+                                <p><strong>Surname:</strong> {profile.surname}</p>
+                                <p><strong>Birthday:</strong> {profile.birthday}</p>
+                                <p><strong>Degree:</strong> {profile.degree}</p>
+                                <p><strong>Consultation Hours:</strong> {profile.consultationHours}</p>
+                                {/* Add Edit button */}
+                                <button onClick={toggleEditMode}>Edit Profile</button>
+                            </>
+                        )}
+                    </div>
+                )}
+                {!showProfile && showContentText && students.length === 0 && (
                     <div className='content-text'>
                         <p>Welcome to your professor dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
-                ) : (
+                )}
+                {!showProfile && students.length > 0 && (
                     <div className='attendance-list'>
                         <h2>Attendance for School Year {selectedYear}</h2>
                         <table>
@@ -102,7 +181,8 @@ const Professor = ({ name, picture }) => {
                                                 <button
                                                     className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
                                                     onClick={() => handleAttendance(student.id, 'present')}
-                                                >                   Present
+                                                >
+                                                    Present
                                                 </button>
                                                 <button
                                                     className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
@@ -152,7 +232,7 @@ const Professor = ({ name, picture }) => {
                         <div className='popup-content'>
                             <h2>Account Settings</h2>
                             <ul>
-                                <li>
+                                <li onClick={toggleProfile}>
                                     <a href='#'>View Profile</a>
                                 </li>
                                 <li>
