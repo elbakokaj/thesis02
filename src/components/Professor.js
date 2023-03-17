@@ -10,6 +10,10 @@ const Professor = ({ name, picture }) => {
     const [showProfile, setShowProfile] = useState(false);
     const [showContentText, setShowContentText] = useState(true);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showEmailListPopup, setShowEmailListPopup] = useState(false);
+    const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
+    const [selectedEmail, setSelectedEmail] = useState("");
+    const [showEmailList, setShowEmailList] = useState(false);
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
@@ -54,6 +58,20 @@ const Professor = ({ name, picture }) => {
         setIsEditMode(!isEditMode);
     };
 
+    const toggleEmailListPopup = () => {
+        setShowEmailListPopup(!showEmailListPopup);
+    };
+
+    const openEmailFormPopup = (email) => {
+        setSelectedEmail(email);
+        setShowEmailFormPopup(true);
+    };
+
+    const closeEmailFormPopup = () => {
+        setSelectedEmail("");
+        setShowEmailFormPopup(false);
+    };
+
 
     const handleSchoolYearSelect = (schoolYear) => {
         setSelectedYear(schoolYear);
@@ -87,6 +105,26 @@ const Professor = ({ name, picture }) => {
         setStudents(updatedStudents);
     };
 
+    const handleSendEmail = (e) => {
+        e.preventDefault();
+        // Implement your email sending logic here
+        console.log("Email sent to:", selectedEmail);
+        closeEmailFormPopup();
+    };
+
+
+
+    const handleContactClick = () => {
+        toggleEmailList();
+    };
+
+    const toggleEmailList = () => {
+        setShowEmailList(!showEmailList);
+        setShowEmailList(true);
+        setShowProfile(false);
+        setShowContentText(false);
+    };
+
     return (
         <div className='professorPage'>
             <div className='dashboard'>
@@ -102,11 +140,10 @@ const Professor = ({ name, picture }) => {
                         <li onClick={toggleSchoolYearPopup}>
                             <a href='#'>Classes</a>
                         </li>
-                        <li>
-                            <NavLink exact to='/contact' activeClassName='active-link'>
-                                Contact
-                            </NavLink>
+                        <li onClick={handleContactClick}>
+                            <a href='#'>Contact</a>
                         </li>
+
                         <li>
                             <NavLink exact to='/login' activeClassName='active-link'>
                                 Logout
@@ -243,6 +280,75 @@ const Professor = ({ name, picture }) => {
                                 X
                             </button>
                         </div>
+                    </div>
+                )}
+                {showEmailListPopup && (
+                    <div className='popup'>
+                        <div className='popup-content'>
+                            <h2>Email List</h2>
+                            <ul>
+                                {students.map((student) => (
+                                    <li key={student.id} onClick={() => openEmailFormPopup(`${student.name.toLowerCase()}@example.com`)}>
+                                        <a href='#'>{`${student.name.toLowerCase()}@example.com`}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                            <button className='popup-close' onClick={toggleEmailListPopup}>
+                                X
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {showEmailFormPopup && (
+                    <div className='popup'>
+                        <div className='popup-content'>
+                            <h2>Send Email to {selectedEmail}</h2>
+                            <form onSubmit={handleSendEmail}>
+                                <label>
+                                    Subject: <input type='text' name='subject' />
+                                </label>
+                                <label>
+                                    Message: <textarea name='message'></textarea>
+                                </label>
+                                <button type='submit'>Send</button>
+                                <button type='button' onClick={closeEmailFormPopup}>Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+                {!showProfile && !showContentText && showEmailList && (
+                    <div className='email-list'>
+                        <h2>Email List</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {students.map((student) => (
+                                    <tr key={student.id}>
+                                        <td>{student.name.split(" ")[0]}</td>
+                                        <td>{student.name.split(" ")[1]}</td>
+                                        <td>
+                                            <a
+                                                href='#'
+                                                onClick={() =>
+                                                    openEmailFormPopup(
+                                                        `${student.name.toLowerCase().replace(" ", ".")}@example.com`
+                                                    )
+                                                }
+                                            >
+                                                {`${student.name.toLowerCase().replace(" ", ".")}@example.com`}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
