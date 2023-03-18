@@ -92,9 +92,17 @@ const Professor = ({ name, picture }) => {
         // find the student in the list
         const updatedStudents = students.map((student) => {
             if (student.id === studentId) {
-                // update the attendance status
-                const updatedAttendance = [...student.attendance];
+                // Remove all existing statuses
+                const updatedAttendance = student.attendance.filter(
+                    (attendanceStatus) =>
+                        attendanceStatus !== 'present' &&
+                        attendanceStatus !== 'excused' &&
+                        attendanceStatus !== 'absent'
+                );
+
+                // Add the new status
                 updatedAttendance.push(status);
+
                 return { ...student, attendance: updatedAttendance };
             } else {
                 return student;
@@ -104,6 +112,7 @@ const Professor = ({ name, picture }) => {
         // update the state
         setStudents(updatedStudents);
     };
+
 
     const handleSendEmail = (e) => {
         e.preventDefault();
