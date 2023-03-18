@@ -8,12 +8,13 @@ const Professor = ({ name, picture }) => {
     const [selectedYear, setSelectedYear] = useState("");
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-    const [showContentText, setShowContentText] = useState(true);
     const [isEditMode, setIsEditMode] = useState(false);
     const [showEmailListPopup, setShowEmailListPopup] = useState(false);
     const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState("");
     const [showEmailList, setShowEmailList] = useState(false);
+    const [contentToShow, setContentToShow] = useState('');
+    const [showContentText, setShowContentText] = useState(true);
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
@@ -43,13 +44,11 @@ const Professor = ({ name, picture }) => {
     };
 
     const toggleProfile = () => {
-        setShowProfile(!showProfile);
-
-        if (!showProfile) {
-            setShowSchoolYearPopup(false);
-            setStudents([]);
+        if (contentToShow !== 'profile') {
+            setContentToShow('profile');
             setShowContentText(false);
         } else {
+            setContentToShow('');
             setShowContentText(true);
         }
     };
@@ -72,20 +71,21 @@ const Professor = ({ name, picture }) => {
         setShowEmailFormPopup(false);
     };
 
-
-    const handleSchoolYearSelect = (schoolYear) => {
-        setSelectedYear(schoolYear);
-        // simulate fetching students from an API
-        setStudents([
+    const setDefaultStudents = () => {
+        return [
             { id: 1, name: 'Alice', attendance: [] },
             { id: 2, name: 'Bob', attendance: [] },
             { id: 3, name: 'Charlie', attendance: [] },
             { id: 4, name: 'David', attendance: [] },
             { id: 5, name: 'Eve', attendance: [] },
-        ]);
+        ];
+    };
 
-        // hide the popup
+    const handleSchoolYearSelect = (schoolYear) => {
+        setSelectedYear(schoolYear);
+        setStudents(setDefaultStudents());
         setShowSchoolYearPopup(false);
+        setContentToShow('attendance');
     };
 
     const handleAttendance = (studentId, status) => {
@@ -115,15 +115,24 @@ const Professor = ({ name, picture }) => {
 
 
     const handleContactClick = () => {
-        toggleEmailList();
+        if (students.length === 0) {
+            setStudents(setDefaultStudents());
+        }
+        if (contentToShow !== 'contact') {
+            setContentToShow('contact');
+            setShowContentText(false);
+        } else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
     };
 
     const toggleEmailList = () => {
         setShowEmailList(!showEmailList);
-        setShowEmailList(true);
         setShowProfile(false);
         setShowContentText(false);
     };
+
 
     return (
         <div className='professorPage'>
@@ -153,7 +162,7 @@ const Professor = ({ name, picture }) => {
                 </nav>
             </div>
             <div className='content'>
-                {showProfile && (
+                {contentToShow === 'profile' && (
                     <div className='professor-profile'>
                         {isEditMode ? (
                             // Edit form
@@ -198,7 +207,7 @@ const Professor = ({ name, picture }) => {
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
                 )}
-                {!showProfile && students.length > 0 && (
+                {contentToShow === 'attendance' && students.length > 0 && (
                     <div className='attendance-list'>
                         <h2>Attendance for School Year {selectedYear}</h2>
                         <table>
@@ -317,7 +326,7 @@ const Professor = ({ name, picture }) => {
                         </div>
                     </div>
                 )}
-                {!showProfile && !showContentText && showEmailList && (
+                {contentToShow === 'contact' && (
                     <div className='email-list'>
                         <h2>Email List</h2>
                         <table>
