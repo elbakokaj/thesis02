@@ -142,6 +142,30 @@ const Professor = ({ name, picture }) => {
         setShowContentText(false);
     };
 
+    const saveAttendance = async () => {
+        // You will need to replace this URL with the actual API endpoint
+        const apiUrl = 'https://your-backend-api/attendance';
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ students }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to save attendance data: ${response.statusText}`);
+            }
+
+            console.log('Attendance data saved successfully');
+        } catch (error) {
+            console.error('Error while saving attendance data:', error);
+        }
+    };
+
+
 
     return (
         <div className='professorPage'>
@@ -258,6 +282,7 @@ const Professor = ({ name, picture }) => {
                                 ))}
                             </tbody>
                         </table>
+                        <button onClick={saveAttendance}>Save Attendance</button>
                     </div>
                 )}
                 {showSchoolYearPopup && (
