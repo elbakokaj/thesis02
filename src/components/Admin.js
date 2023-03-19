@@ -13,6 +13,16 @@ const Admin = ({ name, picture }) => {
     const [showEmailList, setShowEmailList] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
+    const [selectedSemester, setSelectedSemester] = useState(null);
+    const [courses, setCourses] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [groups, setGroups] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const [classDates, setClassDates] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [attendance, setAttendance] = useState([]);
+    const [showSemesters, setShowSemesters] = useState(false);
+
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
@@ -74,6 +84,12 @@ const Admin = ({ name, picture }) => {
         ];
     };
 
+    const semesters = [
+        { id: 1, name: 'Fall 2022' },
+        { id: 2, name: 'Spring 2023' },
+        { id: 3, name: 'Summer 2023' },
+    ];
+
     const handleSendEmail = (e) => {
         e.preventDefault();
         // Implement your email sending logic here
@@ -101,6 +117,150 @@ const Admin = ({ name, picture }) => {
         setShowProfile(false);
         setShowContentText(false);
     };
+    const onSelectSemester = (semester) => {
+        setShowSemesters(false);
+        setSelectedSemester(semester);
+        // Replace EXAMPLE_COURSES with the actual courses data that you have
+        const EXAMPLE_COURSES = [
+            { id: 1, name: 'Course 1' },
+            { id: 2, name: 'Course 2' },
+            { id: 3, name: 'Course 3' },
+        ];
+        setCourses(EXAMPLE_COURSES);
+    };
+
+
+
+    const SemesterSelection = ({ semesters, setSelectedSemester }) => {
+        // render a list of semesters and handle semester selection
+        const handleSemesterClick = (semester) => {
+            setSelectedSemester(semester);
+        };
+
+        return (
+            <div>
+                <h2>Select Semester</h2>
+                <ul>
+                    {semesters.map((semester, index) => (
+                        <li key={index} onClick={() => onSelectSemester(semester)}>
+                            {semester.name}
+                        </li>
+                    ))}
+
+                </ul>
+            </div>
+        );
+    };
+
+
+    const CourseSelection = ({ courses, setSelectedCourse }) => {
+        // render a list of courses and handle course selection
+        const handleCourseClick = (course) => {
+            setSelectedCourse(course);
+        };
+
+        return (
+            <div>
+                <h2>Select Course</h2>
+                <ul>
+                    {courses.map((course) => (
+                        <li key={course.id} onClick={() => handleCourseClick(course)}>
+                            {course.name}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    };
+
+    const GroupSelection = ({ groups, setSelectedGroup }) => {
+        // render a list of groups and handle group selection
+        const handleGroupClick = (group) => {
+            setSelectedGroup(group);
+        };
+
+        return (
+            <div>
+                <h2>Select Group</h2>
+                <ul>
+                    {groups.map((group) => (
+                        <li key={group.id} onClick={() => handleGroupClick(group)}>
+                            {group.name}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    };
+
+    const ClassDateSelection = ({ classDates, setSelectedDate }) => {
+        // render a list of class dates and handle date selection
+        const handleDateClick = (date) => {
+            setSelectedDate(date);
+        };
+
+        return (
+            <div>
+                <h2>Select Class Date</h2>
+                <ul>
+                    {classDates.map((date) => (
+                        <li key={date.id} onClick={() => handleDateClick(date)}>
+                            {date.name}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    };
+
+    const AttendanceList = ({ attendance, setAttendance }) => {
+        // render attendance list and handle attendance update
+        const handleAttendance = (studentId, status) => {
+            const updatedAttendance = attendance.map((item) => {
+                if (item.studentId === studentId) {
+                    return { ...item, status };
+                }
+                return item;
+            });
+            setAttendance(updatedAttendance);
+        };
+
+        return (
+            <div className="attendance-list">
+                <h2>Attendance List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {students.map((student) => {
+                            const studentAttendance = attendance.find((item) => item.studentId === student.id) || {};
+                            return (
+                                <tr key={student.id}>
+                                    <td>{student.name}</td>
+                                    <td>
+                                        <select
+                                            value={studentAttendance.status}
+                                            onChange={(e) => handleAttendance(student.id, e.target.value)}
+                                        >
+                                            <option value="present">Present</option>
+                                            <option value="excused">Excused</option>
+                                            <option value="absent">Absent</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                <button onClick={() => console.log(attendance)}>Save Attendance</button>
+            </div>
+        );
+    };
+
 
     return (
         <div className='adminPage'>
@@ -115,10 +275,8 @@ const Admin = ({ name, picture }) => {
                         <li onClick={toggleProfile}>
                             <a href='#'>Profile</a>
                         </li>
-                        <li>
-                            <NavLink exact to='/courses' activeClassName='active-link'>
-                                Courses
-                            </NavLink>
+                        <li onClick={() => { setShowSemesters(true); setShowContentText(false); }}>
+                            <a href='#'>Courses</a>
                         </li>
                         <li>
                             <NavLink exact to='/requests' activeClassName='active-link'>
@@ -176,11 +334,15 @@ const Admin = ({ name, picture }) => {
                         )}
                     </div>
                 )}
-                {!showProfile && showContentText && (
+                {!showProfile && showContentText && !showSemesters && (
                     <div className='content-text'>
                         <p>Welcome to your professor dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
+                )}
+
+                {showSemesters && selectedSemester === null && (
+                    <SemesterSelection semesters={semesters} setSelectedSemester={setSelectedSemester} />
                 )}
 
                 {showEmailFormPopup && (
@@ -235,6 +397,25 @@ const Admin = ({ name, picture }) => {
                     </div>
                 )}
 
+                {courses.map((course, index) => (
+                    <div key={index}>
+                        {course.name}
+                    </div>
+                ))}
+
+
+                {selectedSemester !== null && selectedCourse === null && (
+                    <CourseSelection courses={courses} setSelectedCourse={setSelectedCourse} />
+                )}
+                {selectedCourse !== null && selectedGroup === null && (
+                    <GroupSelection groups={groups} setSelectedGroup={setSelectedGroup} />
+                )}
+                {selectedGroup !== null && selectedDate === null && (
+                    <ClassDateSelection classDates={classDates} setSelectedDate={setSelectedDate} />
+                )}
+                {selectedDate !== null && (
+                    <AttendanceList attendance={attendance} setAttendance={setAttendance} />
+                )}
             </div>
         </div>
     );
