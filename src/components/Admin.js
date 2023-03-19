@@ -278,11 +278,7 @@ const Admin = ({ name, picture }) => {
                         <li onClick={() => { setShowSemesters(true); setShowContentText(false); }}>
                             <a href='#'>Courses</a>
                         </li>
-                        <li>
-                            <NavLink exact to='/requests' activeClassName='active-link'>
-                                Requests
-                            </NavLink>
-                        </li>
+
                         <li onClick={handleContactClick}>
                             <a href='#'>Contact</a>
                         </li>
