@@ -28,8 +28,6 @@ const Admin = ({ name, picture }) => {
         name: 'John Doe',
         surname: 'Doe',
         birthday: 'January 1, 1980',
-        degree: 'Ph.D. in Computer Science',
-        consultationHours: 'Tuesdays and Thursdays, 2-4pm',
     });
 
     const handleProfileChange = (e) => {
@@ -306,12 +304,6 @@ const Admin = ({ name, picture }) => {
                                 <label>
                                     Birthday: <input name='birthday' value={profile.birthday} onChange={handleProfileChange} />
                                 </label>
-                                <label>
-                                    Degree: <input name='degree' value={profile.degree} onChange={handleProfileChange} />
-                                </label>
-                                <label>
-                                    Consultation Hours: <input name='consultationHours' value={profile.consultationHours} onChange={handleProfileChange} />
-                                </label>
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
@@ -322,8 +314,6 @@ const Admin = ({ name, picture }) => {
                                 <p><strong>Name:</strong> {profile.name}</p>
                                 <p><strong>Surname:</strong> {profile.surname}</p>
                                 <p><strong>Birthday:</strong> {profile.birthday}</p>
-                                <p><strong>Degree:</strong> {profile.degree}</p>
-                                <p><strong>Consultation Hours:</strong> {profile.consultationHours}</p>
                                 {/* Add Edit button */}
                                 <button onClick={toggleEditMode}>Edit Profile</button>
                             </>
