@@ -3,7 +3,13 @@ import { NavLink } from 'react-router-dom';
 import '../css/Admin.css';
 
 const Admin = ({ name, picture }) => {
-    const [students, setStudents] = useState([]);
+    const [students, setStudents] = useState([
+        { id: 1, name: 'Alice', attendance: [] },
+        { id: 2, name: 'Bob', attendance: [] },
+        { id: 3, name: 'Charlie', attendance: [] },
+        { id: 4, name: 'David', attendance: [] },
+        { id: 5, name: 'Eve', attendance: [] },
+    ]);
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -22,6 +28,9 @@ const Admin = ({ name, picture }) => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [attendance, setAttendance] = useState([]);
     const [showSemesters, setShowSemesters] = useState(false);
+    const [showAttendance, setShowAttendance] = useState(false);
+    const [selectedYear, setSelectedYear] = useState("");
+
 
 
     const [profile, setProfile] = useState({
@@ -127,7 +136,65 @@ const Admin = ({ name, picture }) => {
         setCourses(EXAMPLE_COURSES);
     };
 
+    const EXAMPLE_GROUPS = [
+        { id: 1, name: 'Group 1' },
+        { id: 2, name: 'Group 2' },
+        { id: 3, name: 'Group 3' },
+    ];
 
+    const EXAMPLE_CLASS_DATES = [
+        { id: 1, name: 'Date 1' },
+        { id: 2, name: 'Date 2' },
+        { id: 3, name: 'Date 3' },
+    ];
+
+    const handleAttendance = (studentId, status) => {
+        // find the student in the list
+        const updatedStudents = students.map((student) => {
+            if (student.id === studentId) {
+                // Remove all existing statuses
+                const updatedAttendance = student.attendance.filter(
+                    (attendanceStatus) =>
+                        attendanceStatus !== 'present' &&
+                        attendanceStatus !== 'excused' &&
+                        attendanceStatus !== 'absent'
+                );
+
+                // Add the new status
+                updatedAttendance.push(status);
+
+                return { ...student, attendance: updatedAttendance };
+            } else {
+                return student;
+            }
+        });
+
+        // update the state
+        setStudents(updatedStudents);
+    };
+
+    const saveAttendance = async () => {
+        // You will need to replace this URL with the actual API endpoint
+        const apiUrl = 'https://your-backend-api/attendance';
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ students }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to save attendance data: ${response.statusText}`);
+            }
+
+            console.log('Attendance data saved successfully');
+        } catch (error) {
+            console.error('Error while saving attendance data:', error);
+        }
+    };
 
     const SemesterSelection = ({ semesters, setSelectedSemester }) => {
         // render a list of semesters and handle semester selection
@@ -155,6 +222,7 @@ const Admin = ({ name, picture }) => {
         // render a list of courses and handle course selection
         const handleCourseClick = (course) => {
             setSelectedCourse(course);
+            setGroups(EXAMPLE_GROUPS);
         };
 
         return (
@@ -175,6 +243,7 @@ const Admin = ({ name, picture }) => {
         // render a list of groups and handle group selection
         const handleGroupClick = (group) => {
             setSelectedGroup(group);
+            setClassDates(EXAMPLE_CLASS_DATES);
         };
 
         return (
@@ -211,7 +280,7 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-    const AttendanceList = ({ attendance, setAttendance }) => {
+    const AttendanceList = ({ attendance, setAttendance, students }) => {
         // render attendance list and handle attendance update
         const handleAttendance = (studentId, status) => {
             const updatedAttendance = attendance.map((item) => {
@@ -235,19 +304,30 @@ const Admin = ({ name, picture }) => {
                     </thead>
                     <tbody>
                         {students.map((student) => {
-                            const studentAttendance = attendance.find((item) => item.studentId === student.id) || {};
                             return (
                                 <tr key={student.id}>
                                     <td>{student.name}</td>
                                     <td>
-                                        <select
-                                            value={studentAttendance.status}
-                                            onChange={(e) => handleAttendance(student.id, e.target.value)}
-                                        >
-                                            <option value="present">Present</option>
-                                            <option value="excused">Excused</option>
-                                            <option value="absent">Absent</option>
-                                        </select>
+                                        <div className="attendance-status">
+                                            <button
+                                                className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
+                                                onClick={() => handleAttendance(student.id, 'present')}
+                                            >
+                                                Present
+                                            </button>
+                                            <button
+                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
+                                                onClick={() => handleAttendance(student.id, 'excused')}
+                                            >
+                                                Excused
+                                            </button>
+                                            <button
+                                                className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
+                                                onClick={() => handleAttendance(student.id, 'absent')}
+                                            >
+                                                Absent
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             );
@@ -258,6 +338,9 @@ const Admin = ({ name, picture }) => {
             </div>
         );
     };
+
+
+
 
 
     return (
@@ -383,11 +466,7 @@ const Admin = ({ name, picture }) => {
                     </div>
                 )}
 
-                {courses.map((course, index) => (
-                    <div key={index}>
-                        {course.name}
-                    </div>
-                ))}
+
 
 
                 {selectedSemester !== null && selectedCourse === null && (
@@ -399,9 +478,16 @@ const Admin = ({ name, picture }) => {
                 {selectedGroup !== null && selectedDate === null && (
                     <ClassDateSelection classDates={classDates} setSelectedDate={setSelectedDate} />
                 )}
+
+
                 {selectedDate !== null && (
-                    <AttendanceList attendance={attendance} setAttendance={setAttendance} />
+                    <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
+
                 )}
+
+
+
+
             </div>
         </div>
     );
