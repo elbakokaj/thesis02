@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Student.css';
 
@@ -8,6 +8,29 @@ const Student = ({ name, picture }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [showContentText, setShowContentText] = useState(true);
     const [contentToShow, setContentToShow] = useState('');
+    const [selectedMessage, setSelectedMessage] = useState(null);
+    const [messages, setMessages] = useState([
+        //dont forget to remove these when you connect backend, this are just to test if they work
+        {
+            from: 'Professor A',
+            subject: 'Important Update on Course',
+            date: '2023-03-20',
+            isRead: false,
+        },
+        {
+            from: 'Admin',
+            subject: 'Upcoming Event Reminder',
+            date: '2023-03-19',
+            isRead: true,
+        },
+        {
+            from: 'Professor B',
+            subject: 'Assignment Deadline Extended',
+            date: '2023-03-18',
+            isRead: false,
+        },
+    ]);
+
 
 
     const [profile, setProfile] = useState({
@@ -54,6 +77,55 @@ const Student = ({ name, picture }) => {
             setShowContentText(true);
         }
     }
+    const fetchMessages = async () => {
+        try {
+            const response = await fetch('API_URL', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any authentication headers if needed
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setMessages(data);
+            } else {
+                console.error('Error fetching messages:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchMessages();
+    }, []);
+    const renderMessages = () => {
+        return messages.map((message, index) => (
+            <div
+                key={index}
+                className={`message-row ${message.isRead ? '' : 'unread'}`}
+                onClick={() => {
+                    handleRowClick(message);
+                    message.isRead = true;
+                }}
+            >
+                <div className="message-from">{message.from}</div>
+                <div className="message-subject">{message.subject}</div>
+                <div className="message-date">{message.date}</div>
+            </div>
+        ));
+    };
+
+    const handleRowClick = (message) => {
+        setSelectedMessage(message);
+    };
+
+    const closeMessagePopup = () => {
+        setSelectedMessage(null);
+    };
+
 
     return (
         <div className='studentPage'>
@@ -121,17 +193,34 @@ const Student = ({ name, picture }) => {
                         )}
                     </div>
                 )}
-                {!showProfile && !showContentText && contentToShow === 'messages' && (
-                    <div className='messagesToShow'>
-                        <p>divnsdklnvsflvmlkfsmlkfmv</p>
-                    </div>
-                )}
+
                 {!showProfile && showContentText && (
                     <div className='content-text'>
-                        <p>Welcome to your professor dashboard!</p>
+                        <p>Welcome to your student dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
                 )}
+
+                {!showProfile && !showContentText && contentToShow === 'messages' && (
+                    <div className='messagesToShow'>
+                        {renderMessages()}
+                    </div>
+                )}
+                {selectedMessage && (
+                    <div className="message-popup">
+                        <div className="message-popup-content">
+                            <h3>{selectedMessage.subject}</h3>
+                            <p><strong>From:</strong> {selectedMessage.from}</p>
+                            <p><strong>Date:</strong> {selectedMessage.date}</p>
+                            <p>
+                                {/* Add the full message content here */}
+                                This is the full message content. Replace this with actual content when connected to the backend.
+                            </p>
+                            <button onClick={closeMessagePopup}>Close</button>
+                        </div>
+                    </div>
+                )}
+
             </div>
         </div>
     );

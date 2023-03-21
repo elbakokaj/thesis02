@@ -304,25 +304,26 @@ const Admin = ({ name, picture }) => {
                     </thead>
                     <tbody>
                         {students.map((student) => {
+                            const studentAttendance = attendance.find(item => item.studentId === student.id);
                             return (
                                 <tr key={student.id}>
                                     <td>{student.name}</td>
                                     <td>
                                         <div className="attendance-status">
                                             <button
-                                                className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
+                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'present' ? 'present' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
-                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
+                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'excused' ? 'excused' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
-                                                className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
+                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'absent' ? 'absent' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'absent')}
                                             >
                                                 Absent
@@ -338,6 +339,7 @@ const Admin = ({ name, picture }) => {
             </div>
         );
     };
+
 
 
 
