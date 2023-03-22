@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Professor.css';
+import 'boxicons/css/boxicons.min.css';
 
 const Professor = ({ name, picture }) => {
     const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
@@ -169,32 +170,42 @@ const Professor = ({ name, picture }) => {
 
     return (
         <div className='professorPage'>
-            <div className='dashboard'>
+            <div className='dashboard-professor'>
                 <header>
-                    <img className='profile-pic' src={picture} alt='Profile' />
+                    <img className='profile-pic-ofProfessor' src={picture} alt='Profile' />
                     <h1>Hello {name}!</h1>
                 </header>
-                <nav>
-                    <ul>
-                        <li onClick={toggleProfile}>
-                            <a href='#'>Profile</a>
-                        </li>
-                        <li onClick={toggleSchoolYearPopup}>
-                            <a href='#'>Classes</a>
-                        </li>
-                        <li onClick={handleContactClick}>
-                            <a href='#'>Contact</a>
-                        </li>
 
-                        <li>
-                            <NavLink exact to='/login' activeClassName='active-link'>
-                                Logout
-                            </NavLink>
-                        </li>
-                    </ul>
-                </nav>
+                <ul className="nav-links">
+                    <li onClick={toggleProfile}>
+                        <a href="#">
+                            <i className='bx bx-user' ></i>
+                            <span className="links_name">Profile</span>
+                        </a>
+                    </li>
+                    <li onClick={toggleSchoolYearPopup}>
+                        <a href="#" className="active">
+                            <i className='bx bx-grid-alt' ></i>
+                            <span className="links_name">Classes</span>
+                        </a>
+                    </li>
+                    <li onClick={handleContactClick}>
+                        <a href="#">
+                            <i className='bx bx-list-ul' ></i>
+                            <span className="links_name">Contact</span>
+                        </a>
+                    </li>
+
+                    <li>  {/*ski punu kurgjo */}
+                        <a href="#">
+                            <i className='bx bx-log-out'></i>
+                            <span className="links_name">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+
             </div>
-            <div className='content'>
+            <div className='content-ofProfessor'>
                 {contentToShow === 'profile' && (
                     <div className='professor-profile'>
                         {isEditMode ? (
@@ -235,7 +246,7 @@ const Professor = ({ name, picture }) => {
                     </div>
                 )}
                 {!showProfile && showContentText && students.length === 0 && (
-                    <div className='content-text'>
+                    <div className='content-text-ofProfessor'>
                         <p>Welcome to your professor dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>

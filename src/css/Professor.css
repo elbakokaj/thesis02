@@ -4,37 +4,101 @@
     background-color: #F8B195;
 }
 
-.dashboard {
+.dashboard-professor {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 15%;
-    background-color: #e8994a;
+    width: 240px;
+    background-color: #0A2558;
     padding: 60px;
+    position: fixed;
+    height: 100%;
+    transition: all 0.5s ease;
 }
 
-.profile-pic {
+.profile-pic-ofProfessor {
     width: 150px;
-    height: 150px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    border: 6px solid #fff;
+    display: flex;
+    align-items: center;
 }
 
-.content {
+.dashboard-professor .nav-links {
+    margin-top: 10px;
+}
+
+.dashboard-professor .nav-links li i {
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+}
+
+.dashboard-professor .nav-links li {
+    /* text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease; */
+    position: relative;
+    list-style: none;
+    height: 50px;
+}
+
+.dashboard-professor .nav-links li a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+}
+
+.dashboard-professor .nav-links li a.active {
+    background: #081D45;
+}
+
+.dashboard-professor .nav-links li a:hover {
+    background: #081D45;
+}
+
+.dashboard-professor .nav-links li i {
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+}
+
+.active-link {
+    background-color: #fff;
+    color: #e8a94a;
+}
+
+.content-ofProfessor {
+    flex: 1;
     width: 85%;
-    padding: 60px;
+    background-color: #f5f4f4;
+    padding: 40px;
+    padding-left: calc(40px + 240px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* Change from center to stretch */
 }
 
-.content-text {
+.content-text-ofProfessor {
+    max-width: 800px;
     text-align: center;
-    font-size: 1.5rem;
-    color: #fff;
+    margin-top: 60px;
+    font-size: 22px;
+    line-height: 1.6;
 }
 
 .attendance-list {
@@ -126,4 +190,11 @@ th {
 
 table {
     width: 100%;
+}
+
+.dashboard-professor .nav-links li a .links_name {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    white-space: nowrap;
 }
