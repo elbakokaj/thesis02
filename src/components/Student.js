@@ -126,6 +126,12 @@ const Student = ({ name, picture }) => {
         setSelectedMessage(null);
     };
 
+    const handlePictureClick = () => {
+        console.log("Clicked to change profile picture");
+        // Handle picture change event here (e.g., open file picker, upload and update the picture)
+    };
+
+
 
     return (
         <div className='studentPage'>
@@ -144,7 +150,7 @@ const Student = ({ name, picture }) => {
                         </a>
                     </li>
                     <li> {/*ski punu kurgjo */}
-                        <a href="#" className="active">
+                        <a href="#">
                             <i className='bx bx-grid-alt' ></i>
                             <span className="links_name">Courses</span>
                         </a>
@@ -166,7 +172,11 @@ const Student = ({ name, picture }) => {
             </div>
             <div className='content-ofStudent'>
                 {contentToShow === 'profile' && (
-                    <div className='student-profile'>
+                    <div className={`student-profile ${isEditMode ? "edit-mode" : ""}`}>
+                        <div className="profile-picture">
+                            <img src={picture} alt="Profile" />
+                            <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
+                        </div>
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleProfileSubmit}>
@@ -196,7 +206,7 @@ const Student = ({ name, picture }) => {
                                 <p><strong>Birthday:</strong> {profile.birthday}</p>
                                 <p><strong>Year of Enrollment:</strong> {profile.yearEnrolled}</p>
                                 {/* Add Edit button */}
-                                <button onClick={toggleEditMode}>Edit Profile</button>
+                                <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                             </>
                         )}
                     </div>

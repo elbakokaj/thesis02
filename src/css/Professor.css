@@ -67,6 +67,8 @@
 
 .dashboard-professor .nav-links li a:hover {
     background: #081D45;
+    border-radius: 10%;
+
 }
 
 .dashboard-professor .nav-links li i {

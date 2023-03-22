@@ -16,7 +16,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 240px;
+    width: 250px;
     background-color: #0A2558;
     padding: 60px;
     position: fixed;
@@ -104,10 +104,12 @@ ul {
 
 .dashboard-student .nav-links li a.active {
     background: #081D45;
+
 }
 
 .dashboard-student .nav-links li a:hover {
     background: #081D45;
+    border-radius: 10%;
 }
 
 .dashboard-student .nav-links li i {
@@ -120,6 +122,7 @@ ul {
 .active-link {
     background-color: #fff;
     color: #e8a94a;
+
 }
 
 .content-ofStudent {
@@ -129,9 +132,8 @@ ul {
     padding: 40px;
     padding-left: calc(40px + 240px);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    /* Change from center to stretch */
 }
 
 .content-text-ofStudent {
@@ -160,6 +162,7 @@ ul {
 
 .message-row:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
 }
 
 .unread {
@@ -210,4 +213,109 @@ ul {
     font-size: 15px;
     font-weight: 400;
     white-space: nowrap;
+}
+
+.student-profile {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.student-profile h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.student-profile p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.student-profile form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.student-profile form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.student-profile form input {
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.student-profile form button {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.student-profile form button[type='submit'] {
+    background-color: #0A2558;
+    color: #fff;
+}
+
+.student-profile form button[type='button'] {
+    background-color: #ccc;
+    color: #444;
+}
+
+.student-profile .profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.student-profile .edit-profile-btn {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ccc;
+    color: #444;
+}
+
+.student-profile .profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.student-profile .profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.student-profile .profile-picture .camera-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.student-profile.edit-mode .profile-picture .camera-icon {
+    display: inline-block;
 }

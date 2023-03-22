@@ -218,6 +218,10 @@ const Admin = ({ name, picture }) => {
         );
     };
 
+    const handlePictureClick = () => {
+        console.log("Clicked to change profile picture");
+        // Handle picture change event here (e.g., open file picker, upload and update the picture)
+    };
 
     const CourseSelection = ({ courses, setSelectedCourse }) => {
         // render a list of courses and handle course selection
@@ -341,11 +345,6 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-
-
-
-
-
     return (
         <div className='adminPage'>
 
@@ -363,7 +362,7 @@ const Admin = ({ name, picture }) => {
                         </a>
                     </li>
                     <li onClick={() => { setShowSemesters(true); setShowContentText(false); }}>
-                        <a href="#" className="active">
+                        <a href="#">
                             <i className='bx bx-grid-alt' ></i>
                             <span className="links_name">Courses</span>
                         </a>
@@ -386,7 +385,11 @@ const Admin = ({ name, picture }) => {
             </div>
             <div className='content-ofAdmin'>
                 {contentToShow === 'profile' && (
-                    <div className='professor-profile'>
+                    <div className={`admin-profile ${isEditMode ? "edit-mode" : ""}`}>
+                        <div className="profile-picture">
+                            <img src={picture} alt="Profile" />
+                            <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
+                        </div>
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleProfileSubmit}>
@@ -411,13 +414,13 @@ const Admin = ({ name, picture }) => {
                                 <p><strong>Surname:</strong> {profile.surname}</p>
                                 <p><strong>Birthday:</strong> {profile.birthday}</p>
                                 {/* Add Edit button */}
-                                <button onClick={toggleEditMode}>Edit Profile</button>
+                                <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                             </>
                         )}
                     </div>
                 )}
                 {!showProfile && showContentText && !showSemesters && (
-                    <div className='content-text-ofStudent'>
+                    <div className='content-text-ofAdmin'>
                         <p>Welcome to your professor dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
