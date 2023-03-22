@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Student.css';
-
+import 'boxicons/css/boxicons.min.css';
 const Student = ({ name, picture }) => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -130,35 +130,43 @@ const Student = ({ name, picture }) => {
     return (
         <div className='studentPage'>
 
-            <div className='dashboard'>
+            <div className='dashboard-student'>
                 <header>
-                    <img className='profile-pic' src={picture} alt='Profile' />
+                    <img className='profile-pic-ofStudent' src={picture} alt='Profile' />
                     <h1>Hello {name}!</h1>
                 </header>
-                <nav>
-                    <ul>
-                        <li onClick={toggleProfile}>
-                            <a href='#'>Profile</a>
-                        </li>
-                        <li>
-                            <NavLink exact to='/courses' activeClassName='active-link'>
-                                Courses
-                            </NavLink>
-                        </li>
-                        <li onClick={toggleMessages}>
-                            <a href='#'>Messages</a>
-                        </li>
-                        <li>
-                            <NavLink exact to='/logout' activeClassName='active-link'>
-                                Logout
-                            </NavLink>
-                        </li>
-                    </ul>
-                </nav>
+
+                <ul className="nav-links">
+                    <li onClick={toggleProfile}>
+                        <a href="#">
+                            <i class='bx bx-user' ></i>
+                            <span class="links_name">Profile</span>
+                        </a>
+                    </li>
+                    <li> {/*ski punu kurgjo */}
+                        <a href="#" class="active">
+                            <i class='bx bx-grid-alt' ></i>
+                            <span class="links_name">Courses</span>
+                        </a>
+                    </li>
+                    <li onClick={toggleMessages}>
+                        <a href="#">
+                            <i class='bx bx-message' ></i>
+                            <span class="links_name">Messages</span>
+                        </a>
+                    </li>
+                    <li>  {/*ski punu kurgjo */}
+                        <a href="#">
+                            <i class='bx bx-log-out'></i>
+                            <span class="links_name">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+
             </div>
-            <div className='content'>
+            <div className='content-ofStudent'>
                 {contentToShow === 'profile' && (
-                    <div className='professor-profile'>
+                    <div className='student-profile'>
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleProfileSubmit}>
@@ -195,7 +203,7 @@ const Student = ({ name, picture }) => {
                 )}
 
                 {!showProfile && showContentText && (
-                    <div className='content-text'>
+                    <div className='content-text-ofStudent'>
                         <p>Welcome to your student dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>

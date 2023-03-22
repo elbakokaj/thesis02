@@ -1,29 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 .studentPage {
     display: flex;
     min-height: 100vh;
     background-color: #F8B195;
 }
 
-.dashboard {
+.dashboard-student {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 15%;
-    background-color: #e8994a;
+    width: 240px;
+    background-color: #0A2558;
     padding: 60px;
+    position: fixed;
+    height: 100%;
+    transition: all 0.5s ease;
 }
 
-.profile-pic {
+.dashboard-student.active {
+    width: 60px;
+}
+
+.profile-pic-ofStudent {
     width: 150px;
-    height: 150px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 20px;
     border: 6px solid #fff;
+    display: flex;
+    align-items: center;
 }
 
-.nav-bar {
+
+
+.dashboard-student .nav-links {
+    margin-top: 10px;
+}
+
+.dasboard-student .nav-links li i {
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+}
+
+/* .nav-bar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,8 +60,8 @@
     margin-top: 40px;
     background-color: #e8994a;
     padding: 60px;
-}
-
+} */
+/* 
 ul {
     list-style: none;
     margin: 0;
@@ -40,20 +69,52 @@ ul {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 
-li {
-    margin-bottom: 20px;
-}
-
-a {
+/* .dashboard-student ul {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
     text-decoration: none;
+    transition: all 0.4s ease;
+} */
+
+.dashboard-student .nav-links li {
+    /* text-decoration: none;
     color: #fff;
     font-weight: bold;
     font-size: 20px;
     padding: 10px 20px;
     border-radius: 50px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; */
+    position: relative;
+    list-style: none;
+    height: 50px;
+}
+
+.dashboard-student .nav-links li a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+}
+
+.dashboard-student .nav-links li a.active {
+    background: #081D45;
+}
+
+.dasboard-student .nav-links li a:hover {
+    background: #081D45;
+}
+
+.dashboard-student .nav-links li i {
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
 }
 
 .active-link {
@@ -61,17 +122,19 @@ a {
     color: #e8a94a;
 }
 
-.content {
+.content-ofStudent {
     flex: 1;
     width: 85%;
-    background-color: #faead8;
+    background-color: #f5f4f4;
     padding: 40px;
+    padding-left: calc(40px + 240px);
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Change from center to stretch */
 }
 
-.content-text {
+.content-text-ofStudent {
     max-width: 800px;
     text-align: center;
     margin-top: 60px;
@@ -81,21 +144,46 @@ a {
 
 .message-row {
     display: flex;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+}
+
+.messagesToShow {
+    width: 100%;
+}
+
+.message-row:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .unread {
     background-color: #f0f0f0;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .message-from,
 .message-subject,
 .message-date {
     flex: 1;
-    padding: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
 }
+
+.message-from {
+    font-weight: bold;
+}
+
+.message-date {
+    text-align: right;
+    font-size: 14px;
+    color: #888;
+}
+
 
 .message-popup {
     position: fixed;
@@ -115,4 +203,11 @@ a {
     border-radius: 10px;
     width: 80%;
     max-width: 600px;
+}
+
+.dasboard-student .nav-links li a .links_name {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    white-space: nowrap;
 }
