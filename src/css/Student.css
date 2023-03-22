@@ -45,7 +45,7 @@
     margin-top: 10px;
 }
 
-.dasboard-student .nav-links li i {
+.dashboard-student .nav-links li i {
     min-width: 60px;
     text-align: center;
     font-size: 18px;
@@ -106,7 +106,7 @@ ul {
     background: #081D45;
 }
 
-.dasboard-student .nav-links li a:hover {
+.dashboard-student .nav-links li a:hover {
     background: #081D45;
 }
 
@@ -205,7 +205,7 @@ ul {
     max-width: 600px;
 }
 
-.dasboard-student .nav-links li a .links_name {
+.dashboard-student .nav-links li a .links_name {
     color: #fff;
     font-size: 15px;
     font-weight: 400;

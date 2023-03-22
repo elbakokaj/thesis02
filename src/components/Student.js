@@ -139,26 +139,26 @@ const Student = ({ name, picture }) => {
                 <ul className="nav-links">
                     <li onClick={toggleProfile}>
                         <a href="#">
-                            <i class='bx bx-user' ></i>
-                            <span class="links_name">Profile</span>
+                            <i className='bx bx-user' ></i>
+                            <span className="links_name">Profile</span>
                         </a>
                     </li>
                     <li> {/*ski punu kurgjo */}
-                        <a href="#" class="active">
-                            <i class='bx bx-grid-alt' ></i>
-                            <span class="links_name">Courses</span>
+                        <a href="#" className="active">
+                            <i className='bx bx-grid-alt' ></i>
+                            <span className="links_name">Courses</span>
                         </a>
                     </li>
                     <li onClick={toggleMessages}>
                         <a href="#">
-                            <i class='bx bx-message' ></i>
-                            <span class="links_name">Messages</span>
+                            <i className='bx bx-message' ></i>
+                            <span className="links_name">Messages</span>
                         </a>
                     </li>
                     <li>  {/*ski punu kurgjo */}
                         <a href="#">
-                            <i class='bx bx-log-out'></i>
-                            <span class="links_name">Log out</span>
+                            <i className='bx bx-log-out'></i>
+                            <span className="links_name">Log out</span>
                         </a>
                     </li>
                 </ul>
