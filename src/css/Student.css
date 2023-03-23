@@ -319,3 +319,92 @@ ul {
 .student-profile.edit-mode .profile-picture .camera-icon {
     display: inline-block;
 }
+
+.coursesToShow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.course-box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 15px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    font-size: 18px;
+}
+
+.course-box:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.course-stats-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.bar-chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 20px;
+    height: 200px;
+}
+
+.bar {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 14px;
+    color: #fff;
+    padding-bottom: 5px;
+    position: relative;
+    border-radius: 5px 5px 0 0;
+}
+
+.attended {
+    background-color: #4caf50;
+}
+
+.missed {
+    background-color: #f44336;
+}
+
+.bar span {
+    position: absolute;
+    bottom: -20px;
+}
+
+.diagram-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.diagram-box {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    background-color: lightgray;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.bar {
+    width: 30px;
+    background-color: #4BC0C0;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}

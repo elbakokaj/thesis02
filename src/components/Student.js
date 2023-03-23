@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Student.css';
 import 'boxicons/css/boxicons.min.css';
+import { Pie } from 'react-chartjs-2';
 const Student = ({ name, picture }) => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -9,6 +10,25 @@ const Student = ({ name, picture }) => {
     const [showContentText, setShowContentText] = useState(true);
     const [contentToShow, setContentToShow] = useState('');
     const [selectedMessage, setSelectedMessage] = useState(null);
+    const [showCourses, setShowCourses] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [pieChartData, setPieChartData] = useState(null);
+    const [courses, setCourses] = useState([
+        { id: 1, name: 'Course A', attended: 10, total: 20 },
+        { id: 2, name: 'Course B', attended: 5, total: 15 },
+        { id: 3, name: 'Course C', attended: 12, total: 25 },
+        { id: 4, name: 'Course D', attended: 8, total: 20 },
+        { id: 5, name: 'Course E', attended: 14, total: 20 },
+        { id: 6, name: 'Course F', attended: 10, total: 20 },
+        { id: 7, name: 'Course G', attended: 10, total: 20 },
+        { id: 8, name: 'Course H', attended: 10, total: 20 },
+        { id: 9, name: 'Course I', attended: 10, total: 20 },
+        { id: 10, name: 'Course J', attended: 10, total: 20 },
+        { id: 11, name: 'Course K', attended: 10, total: 20 },
+        { id: 12, name: 'Course L', attended: 10, total: 20 },
+    ]);
+
+
     const [messages, setMessages] = useState([
         //dont forget to remove these when you connect backend, this are just to test if they work
         {
@@ -131,7 +151,45 @@ const Student = ({ name, picture }) => {
         // Handle picture change event here (e.g., open file picker, upload and update the picture)
     };
 
+    const toggleCourses = () => {
+        if (contentToShow !== 'courses') {
+            setContentToShow('courses');
+            setShowContentText(false);
+        } else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
+    };
 
+    const renderCourses = () => {
+        return courses.map((course) => (
+            <div
+                key={course.id}
+                className="course-row course-box"
+                onClick={() => displayCourseStats(course)}
+            >
+                <div className="course-name">{course.name}</div>
+            </div>
+        ));
+    };
+
+    const displayCourseStats = (course) => {
+        setSelectedCourse(course);
+
+        const attendedClasses = course.attended;
+        const missedClasses = course.total - course.attended;
+
+        setPieChartData({
+            labels: ['Attended', 'Missed'],
+            datasets: [
+                {
+                    data: [attendedClasses, missedClasses],
+                    backgroundColor: ['#4BC0C0', '#FF6384'],
+                    hoverBackgroundColor: ['#4BC0C0', '#FF6384'],
+                },
+            ],
+        });
+    };
 
     return (
         <div className='studentPage'>
@@ -149,7 +207,7 @@ const Student = ({ name, picture }) => {
                             <span className="links_name">Profile</span>
                         </a>
                     </li>
-                    <li> {/*ski punu kurgjo */}
+                    <li onClick={toggleCourses}>
                         <a href="#">
                             <i className='bx bx-grid-alt' ></i>
                             <span className="links_name">Courses</span>
@@ -239,6 +297,27 @@ const Student = ({ name, picture }) => {
                     </div>
                 )}
 
+                {!showProfile && !showContentText && contentToShow === 'courses' && (
+                    <div className="coursesToShow">
+                        {selectedCourse === null ? (
+                            renderCourses()
+                        ) : (
+                            pieChartData && (
+                                <div className="course-stats">
+                                    <h3>Course Statistics</h3>
+                                    <Pie data={pieChartData} />
+
+                                    {/* Add the diagram box here */}
+                                    <div id="course-stats"></div>
+
+                                    <button onClick={() => setSelectedCourse(null)}>Go back to courses list</button>
+                                </div>
+                            )
+                        )}
+
+
+                    </div>
+                )}
             </div>
         </div>
     );
