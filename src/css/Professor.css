@@ -200,3 +200,57 @@ table {
     font-weight: 400;
     white-space: nowrap;
 }
+
+.email-list {
+    width: 100%;
+    /* Add this if there's any padding on the parent container */
+    box-sizing: border-box;
+}
+
+.email-list h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.email-list table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Add this to ensure table fills the full width */
+    table-layout: fixed;
+}
+
+.email-list th,
+.email-list td {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    /* Add this to prevent text overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.email-list thead tr {
+    background-color: #f5f5f5;
+}
+
+.email-list tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.email-list tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.email-list tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.email-list a {
+    text-decoration: none;
+    color: #000;
+}
+
+.email-list a:hover {
+    text-decoration: underline;
+}

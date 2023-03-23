@@ -13,9 +13,9 @@ const App = () => {
       <Routes>
         {/* <Route exact path="/" element={<Login />} /> */}
         {/* <Route path="/dashboard/student" component={Student} /> qeshtu duhet mu bo mbasi e lidh log in me student po nihere po e ndreqim faqen e student */}
-        <Route exact path="/" element={<Student />} />
+        {/* <Route exact path="/" element={<Student />} /> */}
         {/* <Route exact path="/" element={<Admin />} /> */}
-        {/* <Route exact path="/" element={<Professor />} /> */}
+        <Route exact path="/" element={<Professor />} />
       </Routes>
     </BrowserRouter>
   );

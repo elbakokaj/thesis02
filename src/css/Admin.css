@@ -298,3 +298,28 @@ th {
 .admin-profile.edit-mode .profile-picture .camera-icon {
     display: inline-block;
 }
+
+.email-list thead tr {
+    background-color: #f5f5f5;
+}
+
+.email-list tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.email-list tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.email-list tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.email-list a {
+    text-decoration: none;
+    color: #000;
+}
+
+.email-list a:hover {
+    text-decoration: underline;
+}
