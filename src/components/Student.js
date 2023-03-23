@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import '../css/Student.css';
 import 'boxicons/css/boxicons.min.css';
 import { Pie } from 'react-chartjs-2';
+
 const Student = ({ name, picture }) => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -303,15 +304,22 @@ const Student = ({ name, picture }) => {
                             renderCourses()
                         ) : (
                             pieChartData && (
-                                <div className="course-stats">
-                                    <h3>Course Statistics</h3>
-                                    <Pie data={pieChartData} />
 
-                                    {/* Add the diagram box here */}
-                                    <div id="course-stats"></div>
-
-                                    <button onClick={() => setSelectedCourse(null)}>Go back to courses list</button>
+                                <div class="pie-chart-container">
+                                    <div class="pie-chart-content">
+                                        <div className="course-stats">
+                                            <h3>Course Statistics</h3>
+                                            <Pie data={pieChartData} />
+                                            {/* Add the diagram box here
+                                        <div id="course-stats"></div> */}
+                                        </div>
+                                        <div className='wrapperOfButton'>
+                                            <h4>Hover on the chart to see the number of you missed or attended classes</h4>
+                                        </div>
+                                    </div>
+                                    <button className='back-to-courses-button' onClick={() => setSelectedCourse(null)}>Go back to courses list</button>
                                 </div>
+
                             )
                         )}
 
