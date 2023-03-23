@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 .professorPage {
     display: flex;
     min-height: 100vh;
@@ -90,9 +97,8 @@
     padding: 40px;
     padding-left: calc(40px + 240px);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    /* Change from center to stretch */
 }
 
 .content-text-ofProfessor {
@@ -101,46 +107,6 @@
     margin-top: 60px;
     font-size: 22px;
     line-height: 1.6;
-}
-
-.attendance-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-table {
-    width: 100%;
-}
-
-th {
-    text-align: left;
-    font-weight: bold;
-}
-
-.status-btn {
-    margin-right: 10px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-.present {
-    background-color: #2ecc71;
-}
-
-.excused {
-    background-color: #f1c40f;
-}
-
-.absent {
-    background-color: #e74c3c;
 }
 
 .popup {
@@ -159,11 +125,18 @@ th {
     background-color: #fff;
     border-radius: 8px;
     padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 15px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    font-size: 18px;
 }
 
 .popup-content h2 {
     margin-top: 0;
     margin-bottom: 20px;
+    color: #272727;
 }
 
 .popup-content ul {
@@ -175,20 +148,34 @@ th {
 .popup-content li {
     margin: 10px 0;
     padding: 10px;
-    background-color: #f1c40f;
+    background-color: #0A2558;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .popup-content li:hover {
-    background-color: #e67e22;
+    background-color: #1953c1;
+}
+
+.popup-content li a {
+    color: rgb(228, 227, 227);
+
+}
+
+.popup-close {
+    margin-right: 100%;
+    width: 25px;
+    height: 25px;
+    color: #444;
+    border-radius: 10%;
 }
 
 .active-link {
     color: #fff;
     font-weight: bold;
 }
+
 
 table {
     width: 100%;
@@ -253,4 +240,200 @@ table {
 
 .email-list a:hover {
     text-decoration: underline;
+}
+
+.professor-profile {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.professor-profile h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.professor-profile p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.professor-profile form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.professor-profile form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.professor-profile form input {
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.professor-profile form button {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.professor-profile form button[type='submit'] {
+    background-color: #0A2558;
+    color: #fff;
+}
+
+.professor-profile form button[type='button'] {
+    background-color: #ccc;
+    color: #444;
+}
+
+.professor-profile .profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.professor-profile .edit-profile-btn {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ccc;
+    color: #444;
+}
+
+.professor-profile .profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.professor-profile .profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.professor-profile .profile-picture .camera-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.professor-profile.edit-mode .profile-picture .camera-icon {
+    display: inline-block;
+}
+
+.attendance-list {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.attendance-list h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.attendance-list table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.attendance-list th,
+.attendance-list td {
+    text-align: left;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attendance-list thead tr {
+    background-color: #0A2558;
+    color: #f0f0f0;
+}
+
+.attendance-list tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.attendance-list tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.attendance-list tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.attendance-list a {
+    text-decoration: none;
+    color: #000;
+}
+
+.attendance-status {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-btn {
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 16px;
+    background-color: #ccc;
+}
+
+.present {
+    background-color: green;
+}
+
+.excused {
+    background-color: orange;
+}
+
+.absent {
+    background-color: red;
+}
+
+.saveAttendanceButton {
+    margin-top: 20px;
+    margin-left: 1100px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ccc;
+    color: #444;
+    padding: 5px
 }

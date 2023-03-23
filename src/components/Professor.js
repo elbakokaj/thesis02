@@ -210,7 +210,7 @@ const Professor = ({ name, picture }) => {
             </div>
             <div className='content-ofProfessor'>
                 {contentToShow === 'profile' && (
-                    <div className={`student-profile ${isEditMode ? "edit-mode" : ""}`}>
+                    <div className={`professor-profile ${isEditMode ? "edit-mode" : ""}`}>
                         <div className="profile-picture">
                             <img src={picture} alt="Profile" />
                             <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
@@ -300,12 +300,15 @@ const Professor = ({ name, picture }) => {
                                 ))}
                             </tbody>
                         </table>
-                        <button onClick={saveAttendance}>Save Attendance</button>
+                        <button className='saveAttendanceButton' onClick={saveAttendance}>Save Attendance</button>
                     </div>
                 )}
                 {showSchoolYearPopup && (
                     <div className='popup'>
                         <div className='popup-content'>
+                            <button className='popup-close' onClick={toggleSchoolYearPopup}>
+                                X
+                            </button>
                             <h2>Select a School Year</h2>
                             <ul>
                                 <li onClick={() => handleSchoolYearSelect('2021-2022')}>
@@ -318,9 +321,7 @@ const Professor = ({ name, picture }) => {
                                     <a href='#'>2023-2024</a>
                                 </li>
                             </ul>
-                            <button className='popup-close' onClick={toggleSchoolYearPopup}>
-                                X
-                            </button>
+
                         </div>
                     </div>
                 )}

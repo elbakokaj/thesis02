@@ -115,9 +115,8 @@
     padding: 40px;
     padding-left: calc(40px + 240px);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    /* Change from center to stretch */
 }
 
 .content-text-ofAdmin {
