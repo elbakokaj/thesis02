@@ -340,7 +340,7 @@ const Admin = ({ name, picture }) => {
                         })}
                     </tbody>
                 </table>
-                <button onClick={() => console.log(attendance)}>Save Attendance</button>
+                <button className='saveAttendanceButton' onClick={() => console.log(attendance)}>Save Attendance</button>
             </div>
         );
     };

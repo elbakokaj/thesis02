@@ -266,7 +266,6 @@ const Professor = ({ name, picture }) => {
                                 <tr>
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Missed Classes</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -295,7 +294,6 @@ const Professor = ({ name, picture }) => {
                                                 </button>
                                             </div>
                                         </td>
-                                        <td>{student.attendance.filter((status) => status === 'late').length}</td>
                                     </tr>
                                 ))}
                             </tbody>
