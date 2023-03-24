@@ -431,8 +431,8 @@ const Admin = ({ name, picture }) => {
                 )}
 
                 {showEmailFormPopup && (
-                    <div className='popup'>
-                        <div className='popup-content'>
+                    <div className='popupEmail'>
+                        <div className='popup-contentEmail'>
                             <h2>Send Email to {selectedEmail}</h2>
                             <form onSubmit={handleSendEmail}>
                                 <label>

@@ -342,27 +342,11 @@ const Professor = ({ name, picture }) => {
                         </div>
                     </div>
                 )}
-                {showEmailListPopup && (
-                    <div className='popup'>
-                        <div className='popup-content'>
-                            <h2>Email List</h2>
-                            <ul>
-                                {students.map((student) => (
-                                    <li key={student.id} onClick={() => openEmailFormPopup(`${student.name.toLowerCase()}@example.com`)}>
-                                        <a href='#'>{`${student.name.toLowerCase()}@example.com`}</a>
-                                    </li>
-                                ))}
-                            </ul>
-                            <button className='popup-close' onClick={toggleEmailListPopup}>
-                                X
-                            </button>
-                        </div>
-                    </div>
-                )}
+
 
                 {showEmailFormPopup && (
-                    <div className='popup'>
-                        <div className='popup-content'>
+                    <div className='popupEmail'>
+                        <div className='popup-contentEmail'>
                             <h2>Send Email to {selectedEmail}</h2>
                             <form onSubmit={handleSendEmail}>
                                 <label>
