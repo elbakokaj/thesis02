@@ -81,6 +81,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0A2558;
+    background: linear-gradient(to bottom right, #0A2558, #1F3770 44%, #324C87 65%);
     opacity: 0.9;
 }
