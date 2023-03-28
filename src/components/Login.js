@@ -42,18 +42,22 @@ const Login = () => {
     }
 
     return (
-        <div className='login-form'>
-            <form className='mainForm' onSubmit={handleSubmit}>
-                <div className='login forms form-style'>
+        <div className="login-wrapper">
+            <div className="parent-container">
+                <div className='login-form'>
+                    <form className='mainForm' onSubmit={handleSubmit}>
+                        <div className='login forms form-style'>
 
 
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='input input-field' placeholder='Please enter your email here' />
-                    <br />
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='input input-field' placeholder='Please enter your password here' />
-                    <br />
-                    <button type="submit" className='input submit'>LOG IN</button>
-                </div>
-            </form>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='input input-field' placeholder='Please enter your email here' />
+                            <br />
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='input input-field' placeholder='Please enter your password here' />
+                            <br />
+                            <button type="submit" className='input submit'>LOG IN</button>
+                        </div>
+                    </form>
+                </div >
+            </div >
         </div >
     );
 };
