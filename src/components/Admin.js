@@ -482,7 +482,7 @@ const Admin = ({ name, picture }) => {
 
                 {!selectedDate && contentToShow === 'courses' && (
                     <div className='semesterSelection'>
-                        <div>
+                        <div className="white-box">
                             <h2>Select Semester</h2>
                             <ul>
                                 {semesters.map((semester, index) => (
@@ -493,7 +493,7 @@ const Admin = ({ name, picture }) => {
                             </ul>
                         </div>
                         {selectedSemester !== null && (
-                            <div>
+                            <div className="white-box">
                                 <h2>Select Course</h2>
                                 <CourseSelection courses={courses} setSelectedCourse={setSelectedCourse} />
                             </div>
@@ -504,14 +504,14 @@ const Admin = ({ name, picture }) => {
 
 
 
-                {!selectedDate && selectedCourse !== null && (
+                {!selectedDate && selectedCourse !== null && contentToShow === 'courses' && (
                     <div className='groupSelection'>
-                        <div>
+                        <div className="white-box">
                             <h2>Select Group</h2>
                             <GroupSelection groups={groups} setSelectedGroup={setSelectedGroup} />
                         </div>
-                        {selectedGroup !== null && (
-                            <div>
+                        {selectedGroup !== null && contentToShow === 'courses' && (
+                            <div className="white-box">
                                 <h2>Select Date</h2>
                                 <ClassDateSelection classDates={classDates} setSelectedDate={date => { setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
