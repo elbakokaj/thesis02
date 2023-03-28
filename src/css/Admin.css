@@ -322,3 +322,14 @@ th {
 .email-list a:hover {
     text-decoration: underline;
 }
+
+.semesterSelection,
+.groupSelection {
+    display: flex;
+    flex-direction: column;
+}
+
+.semesterSelection>div,
+.groupSelection>div {
+    margin-right: 20px;
+}

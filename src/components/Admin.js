@@ -120,6 +120,15 @@ const Admin = ({ name, picture }) => {
         }
     };
 
+    const toggleCourses = () => {
+        setContentToShow('courses');
+        setShowContentText(false);
+        setSelectedSemester(null);
+        setSelectedCourse(null);
+        setSelectedGroup(null);
+        setSelectedDate(null);
+    };
+
     const toggleEmailList = () => {
         setShowEmailList(!showEmailList);
         setShowProfile(false);
@@ -232,7 +241,6 @@ const Admin = ({ name, picture }) => {
 
         return (
             <div>
-                <h2>Select Course</h2>
                 <ul>
                     {courses.map((course) => (
                         <li key={course.id} onClick={() => handleCourseClick(course)}>
@@ -253,7 +261,7 @@ const Admin = ({ name, picture }) => {
 
         return (
             <div>
-                <h2>Select Group</h2>
+
                 <ul>
                     {groups.map((group) => (
                         <li key={group.id} onClick={() => handleGroupClick(group)}>
@@ -273,7 +281,7 @@ const Admin = ({ name, picture }) => {
 
         return (
             <div>
-                <h2>Select Class Date</h2>
+
                 <ul>
                     {classDates.map((date) => (
                         <li key={date.id} onClick={() => handleDateClick(date)}>
@@ -285,18 +293,8 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-    const AttendanceList = ({ attendance, setAttendance, students }) => {
-        // render attendance list and handle attendance update
-        const handleAttendance = (studentId, status) => {
-            const updatedAttendance = attendance.map((item) => {
-                if (item.studentId === studentId) {
-                    return { ...item, status };
-                }
-                return item;
-            });
-            setAttendance(updatedAttendance);
-        };
 
+    const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
             <div className="attendance-list">
                 <h2>Attendance List</h2>
@@ -316,23 +314,24 @@ const Admin = ({ name, picture }) => {
                                     <td>
                                         <div className="attendance-status">
                                             <button
-                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'present' ? 'present' : ''}`}
+                                                className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
-                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'excused' ? 'excused' : ''}`}
+                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
-                                                className={`status-btn ${studentAttendance && studentAttendance.status === 'absent' ? 'absent' : ''}`}
+                                                className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
                                                 onClick={() => handleAttendance(student.id, 'absent')}
                                             >
                                                 Absent
                                             </button>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -361,12 +360,13 @@ const Admin = ({ name, picture }) => {
                             <span className="links_name">Profile</span>
                         </a>
                     </li>
-                    <li onClick={() => { setShowSemesters(true); setShowContentText(false); }}>
+                    <li onClick={toggleCourses}>
                         <a href="#">
                             <i className='bx bx-grid-alt' ></i>
                             <span className="links_name">Courses</span>
                         </a>
                     </li>
+
 
                     <li onClick={handleContactClick}>
                         <a href="#">
@@ -421,14 +421,12 @@ const Admin = ({ name, picture }) => {
                 )}
                 {!showProfile && showContentText && !showSemesters && (
                     <div className='content-text-ofAdmin'>
-                        <p>Welcome to your professor dashboard!</p>
+                        <p>Welcome to your admin dashboard!</p>
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
                 )}
 
-                {showSemesters && selectedSemester === null && (
-                    <SemesterSelection semesters={semesters} setSelectedSemester={setSelectedSemester} />
-                )}
+
 
                 {showEmailFormPopup && (
                     <div className='popupEmail'>
@@ -482,24 +480,49 @@ const Admin = ({ name, picture }) => {
                     </div>
                 )}
 
-
-
-
-                {selectedSemester !== null && selectedCourse === null && (
-                    <CourseSelection courses={courses} setSelectedCourse={setSelectedCourse} />
+                {!selectedDate && contentToShow === 'courses' && (
+                    <div className='semesterSelection'>
+                        <div>
+                            <h2>Select Semester</h2>
+                            <ul>
+                                {semesters.map((semester, index) => (
+                                    <li key={index} onClick={() => onSelectSemester(semester)}>
+                                        {semester.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        {selectedSemester !== null && (
+                            <div>
+                                <h2>Select Course</h2>
+                                <CourseSelection courses={courses} setSelectedCourse={setSelectedCourse} />
+                            </div>
+                        )}
+                    </div>
                 )}
-                {selectedCourse !== null && selectedGroup === null && (
-                    <GroupSelection groups={groups} setSelectedGroup={setSelectedGroup} />
-                )}
-                {selectedGroup !== null && selectedDate === null && (
-                    <ClassDateSelection classDates={classDates} setSelectedDate={setSelectedDate} />
-                )}
 
 
-                {selectedDate !== null && (
+
+
+                {!selectedDate && selectedCourse !== null && (
+                    <div className='groupSelection'>
+                        <div>
+                            <h2>Select Group</h2>
+                            <GroupSelection groups={groups} setSelectedGroup={setSelectedGroup} />
+                        </div>
+                        {selectedGroup !== null && (
+                            <div>
+                                <h2>Select Date</h2>
+                                <ClassDateSelection classDates={classDates} setSelectedDate={date => { setSelectedDate(date); setContentToShow('attendance') }} />
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {contentToShow === 'attendance' && selectedDate !== null && (
                     <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
-
                 )}
+
 
 
 
