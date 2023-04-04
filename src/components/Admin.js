@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Admin.css';
 import 'boxicons/css/boxicons.min.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const Admin = ({ name, picture }) => {
     const [students, setStudents] = useState([
@@ -31,6 +33,12 @@ const Admin = ({ name, picture }) => {
     const [showSemesters, setShowSemesters] = useState(false);
     const [showAttendance, setShowAttendance] = useState(false);
     const [selectedYear, setSelectedYear] = useState("");
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Perform any logout actions, e.g., remove tokens, clear user data
+        navigate('/login');
+    };
 
 
 
@@ -374,7 +382,7 @@ const Admin = ({ name, picture }) => {
                             <span className="links_name">Contact</span>
                         </a>
                     </li>
-                    <li>  {/*ski punu kurgjo */}
+                    <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
                             <span className="links_name">Log out</span>

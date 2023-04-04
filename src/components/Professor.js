@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import '../css/Professor.css';
 import 'boxicons/css/boxicons.min.css';
+import { useNavigate } from 'react-router-dom';
 
 const Professor = ({ name, picture }) => {
     const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
@@ -18,7 +19,12 @@ const Professor = ({ name, picture }) => {
     const [showContentText, setShowContentText] = useState(true);
     const [classDates, setClassDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
+    const navigate = useNavigate();
 
+    const handleLogout = () => {
+        // Perform any logout actions, e.g., remove tokens, clear user data
+        navigate('/login');
+    };
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
@@ -259,7 +265,7 @@ const Professor = ({ name, picture }) => {
                         </a>
                     </li>
 
-                    <li>  {/*ski punu kurgjo */}
+                    <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
                             <span className="links_name">Log out</span>

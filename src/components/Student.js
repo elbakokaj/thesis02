@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import '../css/Student.css';
 import 'boxicons/css/boxicons.min.css';
 import { Pie } from 'react-chartjs-2';
+import { useNavigate } from 'react-router-dom';
 
 const Student = ({ name, picture }) => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
@@ -14,6 +15,7 @@ const Student = ({ name, picture }) => {
     const [showCourses, setShowCourses] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [pieChartData, setPieChartData] = useState(null);
+    const navigate = useNavigate();
     const [courses, setCourses] = useState([
         { id: 1, name: 'Course A', attended: 10, total: 20 },
         { id: 2, name: 'Course B', attended: 5, total: 15 },
@@ -83,6 +85,11 @@ const Student = ({ name, picture }) => {
             setContentToShow('');
             setShowContentText(true);
         }
+    };
+
+    const handleLogout = () => {
+        // Perform any logout actions, e.g., remove tokens, clear user data
+        navigate('/login');
     };
 
     const toggleEditMode = () => {
@@ -220,7 +227,7 @@ const Student = ({ name, picture }) => {
                             <span className="links_name">Messages</span>
                         </a>
                     </li>
-                    <li>  {/*ski punu kurgjo */}
+                    <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
                             <span className="links_name">Log out</span>
