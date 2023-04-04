@@ -16,6 +16,9 @@ const Professor = ({ name, picture }) => {
     const [showEmailList, setShowEmailList] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
+    const [classDates, setClassDates] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(null);
+
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
@@ -48,6 +51,17 @@ const Professor = ({ name, picture }) => {
         if (contentToShow !== 'profile') {
             setContentToShow('profile');
             setShowContentText(false);
+        } else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
+    };
+
+    const toggleTakenAttendances = () => {
+        if (contentToShow !== 'attendanceDates') {
+            setContentToShow('attendanceDates');
+            setShowContentText(false);
+            fetchClassDates();
         } else {
             setContentToShow('');
             setShowContentText(true);
@@ -142,6 +156,21 @@ const Professor = ({ name, picture }) => {
         setShowProfile(false);
         setShowContentText(false);
     };
+    const fetchClassDates = async () => {
+        try {
+            // Replace this URL with the actual API endpoint
+            const apiUrl = 'https://your-backend-api/class-dates';
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch class dates: ${response.statusText}`);
+            }
+            const dates = await response.json();
+            setClassDates(dates);
+        } catch (error) {
+            console.error('Error while fetching class dates:', error);
+        }
+    };
+
 
     const saveAttendance = async () => {
         // You will need to replace this URL with the actual API endpoint
@@ -171,6 +200,24 @@ const Professor = ({ name, picture }) => {
         // Handle picture change event here (e.g., open file picker, upload and update the picture)
     };
 
+    const downloadAttendanceData = async (date) => {
+        try {
+            // Replace this URL with the actual API endpoint
+            const apiUrl = `https://your-backend-api/attendance/${date}`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch attendance data: ${response.statusText}`);
+            }
+            const data = await response.json();
+            // Handle the downloaded attendance data (e.g., save it to a file, display it)
+            console.log('Downloaded attendance data:', data);
+        } catch (error) {
+            console.error('Error while downloading attendance data:', error);
+        }
+    };
+
+
+
     return (
         <div className='professorPage'>
             <div className='dashboard-professor'>
@@ -196,6 +243,12 @@ const Professor = ({ name, picture }) => {
                         <a href="#">
                             <i className='bx bx-list-ul' ></i>
                             <span className="links_name">Contact</span>
+                        </a>
+                    </li>
+                    <li onClick={toggleTakenAttendances}>
+                        <a href="#">
+                            <i className='bx bx-calendar-check'></i>
+                            <span className="links_name">Taken Attendances</span>
                         </a>
                     </li>
 
@@ -401,6 +454,19 @@ const Professor = ({ name, picture }) => {
                         </table>
                     </div>
                 )}
+                {contentToShow === 'attendanceDates' && (
+                    <div className='attendance-dates'>
+                        <h2>Attendance Dates</h2>
+                        <ul>
+                            {classDates.map((date, index) => (
+                                <li key={index} onClick={() => downloadAttendanceData(date)}>
+                                    <a href='#'>{date}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
             </div>
         </div>
     );
