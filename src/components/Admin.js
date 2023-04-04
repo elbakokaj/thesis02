@@ -403,13 +403,19 @@ const Admin = ({ name, picture }) => {
                                 <label>
                                     Birthday: <input name='birthday' value={profile.birthday} onChange={handleProfileChange} />
                                 </label>
+                                <label>
+                                    Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    New Password: <input name='newPassword' value={profile.newPassword} onChange={handleProfileChange} />
+                                </label>
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
                         ) : (
                             // Profile view
                             <>
-                                <h2>Professor Profile</h2>
+                                <h2>Admin Profile</h2>
                                 <p><strong>Name:</strong> {profile.name}</p>
                                 <p><strong>Surname:</strong> {profile.surname}</p>
                                 <p><strong>Birthday:</strong> {profile.birthday}</p>

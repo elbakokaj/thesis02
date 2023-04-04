@@ -252,7 +252,12 @@ const Student = ({ name, picture }) => {
                                 <label>
                                     Year of Enrollment: <input name='yearEnrolled' value={profile.yearEnrolled} onChange={handleProfileChange} />
                                 </label>
-
+                                <label>
+                                    Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    New Password: <input name='newPassword' value={profile.newPassword} onChange={handleProfileChange} />
+                                </label>
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>

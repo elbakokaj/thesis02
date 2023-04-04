@@ -234,6 +234,12 @@ const Professor = ({ name, picture }) => {
                                 <label>
                                     Consultation Hours: <input name='consultationHours' value={profile.consultationHours} onChange={handleProfileChange} />
                                 </label>
+                                <label>
+                                    Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
+                                </label>
+                                <label>
+                                    New Password: <input name='newPassword' value={profile.newPassword} onChange={handleProfileChange} />
+                                </label>
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>

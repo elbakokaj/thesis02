@@ -27,6 +27,20 @@ const Login = () => {
             setLoggedIn(true);
         }
     };
+    const handleForgotPassword = async () => {
+        // Make a request to the server to send a password reset email
+        await fetch('/api/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Show an alert or message to inform the user that the email has been sent
+        alert('A password reset link has been sent to your email.');
+    };
+
 
     if (loggedIn) {
         // Redirect the user to a different page depending on their role
@@ -54,6 +68,9 @@ const Login = () => {
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='input input-field' placeholder='Please enter your password here' />
                             <br />
                             <button type="submit" className='input submit'>LOG IN</button>
+                            <br />
+                            <button type="button" className='input forgot-password' onClick={handleForgotPassword}>Forgot Password</button>
+
                         </div>
                     </form>
                 </div >
