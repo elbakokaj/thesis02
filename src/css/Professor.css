@@ -428,7 +428,7 @@ table {
     background-color: red;
 }
 
-.saveAttendanceButton {
+/* .saveAttendanceButton {
     margin-top: 20px;
     margin-left: 1100px;
     font-size: 15px;
@@ -438,7 +438,7 @@ table {
     background-color: #ccc;
     color: #444;
     padding: 5px
-}
+} */
 
 .popupEmail {
     position: fixed;
@@ -562,4 +562,44 @@ table {
 
 .popup-contentEmail form button:last-child {
     margin-right: 0;
+}
+
+/* .allPresentButton {
+    margin-top: 20px;
+    margin-right: 1100px;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #444;
+    padding: 5px;
+    background-color: #0A2558;
+    color: #fff;
+} */
+
+.allPresentButton,
+.saveAttendanceButton {
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+    width: 120px;
+    text-align: center;
+}
+
+.allPresentButton {
+    background-color: #0A2558;
+    color: #fff;
+}
+
+.saveAttendanceButton {
+    background-color: #ccc;
+    color: #444;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }

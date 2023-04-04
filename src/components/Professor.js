@@ -216,6 +216,13 @@ const Professor = ({ name, picture }) => {
         }
     };
 
+    const markAllPresent = () => {
+        const updatedStudents = students.map((student) => ({
+            ...student,
+            attendance: 'present',
+        }));
+        setStudents(updatedStudents);
+    };
 
 
     return (
@@ -357,9 +364,13 @@ const Professor = ({ name, picture }) => {
                                 ))}
                             </tbody>
                         </table>
-                        <button className='saveAttendanceButton' onClick={saveAttendance}>Save Attendance</button>
+                        <div className="buttons-container">
+                            <button className='allPresentButton' onClick={markAllPresent}>All Present</button>
+                            <button className='saveAttendanceButton' onClick={saveAttendance}>Save Attendance</button>
+                        </div>
                     </div>
                 )}
+
                 {showSchoolYearPopup && (
                     <div className='popup'>
                         <div className='popup-content'>
