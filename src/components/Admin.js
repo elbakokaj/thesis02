@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import '../css/Admin.css';
 import 'boxicons/css/boxicons.min.css';
 import { useNavigate } from 'react-router-dom';
+import axios from "../axios"
 
 
 const Admin = ({ name, picture }) => {
@@ -37,7 +38,8 @@ const Admin = ({ name, picture }) => {
 
     const handleLogout = () => {
         // Perform any logout actions, e.g., remove tokens, clear user data
-        navigate('/login');
+        window.localStorage.clear()
+        window.location.assign('/');
     };
 
 
@@ -48,10 +50,28 @@ const Admin = ({ name, picture }) => {
         birthday: 'January 1, 1980',
     });
 
-    const handleProfileChange = (e) => {
+    const [editBody, setEditBody] = useState({
+        firstName: "",
+        lastName: "",
+        birthday: ""
+    });
+    const handleProfileChange = (e, type) => {
         const { name, value } = e.target;
-        setProfile({ ...profile, [name]: value });
+
+        // Update the editBody object based on the input change
+        setEditBody(prevEditBody => ({ ...prevEditBody, [type]: value }));
     };
+
+    async function handleEditPost(e) {
+        e.preventDefault();
+        await axios.put(`/profile/edit/${admin_id}`, editBody)
+            .then((res) => {
+                console.log('resPUT', res)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+    }
 
     const handleProfileSubmit = (e) => {
         e.preventDefault();
@@ -62,8 +82,22 @@ const Admin = ({ name, picture }) => {
         setShowAccountSettings(!showAccountSettings);
     };
 
-    const toggleProfile = () => {
+    const [userData, setUserData] = useState(null)
+
+    const admin_id = window.localStorage.getItem("user_id")
+
+    const toggleProfile = async (e) => {
+        e.preventDefault();
         if (contentToShow !== 'profile') {
+            await axios.get(`/profile/${admin_id}`)
+                .then((res) => {
+                    setUserData(res.data[0])
+
+
+                })
+                .catch(err =>
+                    alert("Error:" + err)
+                )
             setContentToShow('profile');
             setShowContentText(false);
         } else {
@@ -358,7 +392,7 @@ const Admin = ({ name, picture }) => {
             <div className='dashboard-admin'>
                 <header>
                     <img className='profile-pic-ofAdmin' src={picture} alt='Profile' />
-                    <h1>Hello {name}!</h1>
+                    <h1>Hello {userData?.firstName}!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -400,16 +434,16 @@ const Admin = ({ name, picture }) => {
                         </div>
                         {isEditMode ? (
                             // Edit form
-                            <form onSubmit={handleProfileSubmit}>
+                            <form onSubmit={handleEditPost}>
                                 <h2>Edit Profile</h2>
                                 <label>
-                                    Name: <input name='name' value={profile.name} onChange={handleProfileChange} />
+                                    Name: <input type="text" name='name' defaultValue={userData?.firstName} onChange={(e) => handleProfileChange(e, "firstName")} />
                                 </label>
                                 <label>
-                                    Surname: <input name='surname' value={profile.surname} onChange={handleProfileChange} />
+                                    Surname: <input type="text" name='surname' defaultValue={userData?.lastName} onChange={(e) => handleProfileChange(e, "lastName")} />
                                 </label>
                                 <label>
-                                    Birthday: <input name='birthday' value={profile.birthday} onChange={handleProfileChange} />
+                                    Birthday: <input type="date" name='birthday' defaultValue={userData?.birthday.substring(0, 10)} onChange={(e) => handleProfileChange(e, "birthday")} />
                                 </label>
                                 <label>
                                     Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
@@ -424,9 +458,9 @@ const Admin = ({ name, picture }) => {
                             // Profile view
                             <>
                                 <h2>Admin Profile</h2>
-                                <p><strong>Name:</strong> {profile.name}</p>
-                                <p><strong>Surname:</strong> {profile.surname}</p>
-                                <p><strong>Birthday:</strong> {profile.birthday}</p>
+                                <p><strong>Name:</strong> {userData?.firstName}</p>
+                                <p><strong>Surname:</strong> {userData?.lastName}</p>
+                                <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
                                 {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                             </>

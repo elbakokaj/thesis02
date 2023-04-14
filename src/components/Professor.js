@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import '../css/Professor.css';
 import 'boxicons/css/boxicons.min.css';
 import { useNavigate } from 'react-router-dom';
+import axios from "../axios"
 
 const Professor = ({ name, picture }) => {
     const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
@@ -23,21 +24,43 @@ const Professor = ({ name, picture }) => {
 
     const handleLogout = () => {
         // Perform any logout actions, e.g., remove tokens, clear user data
-        navigate('/login');
+        window.localStorage.clear()
+        window.location.assign('/');
     };
 
     const [profile, setProfile] = useState({
         name: 'John Doe',
         surname: 'Doe',
         birthday: 'January 1, 1980',
-        degree: 'Ph.D. in Computer Science',
+        course: 'Ph.D. in Computer Science',
         consultationHours: 'Tuesdays and Thursdays, 2-4pm',
     });
 
-    const handleProfileChange = (e) => {
+    const [editBody, setEditBody] = useState({
+        firstName: "",
+        lastName: "",
+        birthday: "",
+        course: "",
+        consultationHours: ""
+    });
+
+    const handleProfileChange = (e, type) => {
         const { name, value } = e.target;
-        setProfile({ ...profile, [name]: value });
+
+        // Update the editBody object based on the input change
+        setEditBody(prevEditBody => ({ ...prevEditBody, [type]: value }));
     };
+
+    async function handleEditPost(e) {
+        e.preventDefault();
+        await axios.put(`/profile/edit/${professor_id}`, editBody)
+            .then((res) => {
+                console.log('resPUT', res)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+    }
 
     const handleProfileSubmit = (e) => {
         e.preventDefault();
@@ -53,8 +76,23 @@ const Professor = ({ name, picture }) => {
         setShowAccountSettings(!showAccountSettings);
     };
 
-    const toggleProfile = () => {
+    // stats to get data from API'S
+    const [userData, setUserData] = useState(null)
+
+    const professor_id = window.localStorage.getItem("user_id")
+
+    const toggleProfile = async (e) => {
+        e.preventDefault();
         if (contentToShow !== 'profile') {
+            await axios.get(`/profile/${professor_id}`)
+                .then((res) => {
+                    setUserData(res.data[0])
+
+
+                })
+                .catch(err =>
+                    alert("Error:" + err)
+                )
             setContentToShow('profile');
             setShowContentText(false);
         } else {
@@ -236,7 +274,7 @@ const Professor = ({ name, picture }) => {
             <div className='dashboard-professor'>
                 <header>
                     <img className='profile-pic-ofProfessor' src={picture} alt='Profile' />
-                    <h1>Hello {name}!</h1>
+                    <h1>Hello {userData?.firstName}!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -283,22 +321,22 @@ const Professor = ({ name, picture }) => {
                         </div>
                         {isEditMode ? (
                             // Edit form
-                            <form onSubmit={handleProfileSubmit}>
+                            <form onSubmit={handleEditPost}>
                                 <h2>Edit Profile</h2>
                                 <label>
-                                    Name: <input name='name' value={profile.name} onChange={handleProfileChange} />
+                                    Name: <input type="text" name='name' defaultValue={userData?.firstName} onChange={(e) => handleProfileChange(e, "firstName")} />
                                 </label>
                                 <label>
-                                    Surname: <input name='surname' value={profile.surname} onChange={handleProfileChange} />
+                                    Surname: <input type="text" name='surname' defaultValue={userData?.lastName} onChange={(e) => handleProfileChange(e, "lastName")} />
                                 </label>
                                 <label>
-                                    Birthday: <input name='birthday' value={profile.birthday} onChange={handleProfileChange} />
+                                    Birthday: <input type="date" name='birthday' defaultValue={userData?.birthday.substring(0, 10)} onChange={(e) => handleProfileChange(e, "birthday")} />
                                 </label>
                                 <label>
-                                    Degree: <input name='degree' value={profile.degree} onChange={handleProfileChange} />
+                                    Course: <input type="text" name='course' defaultValue={userData?.course} onChange={(e) => handleProfileChange(e, "course")} />
                                 </label>
                                 <label>
-                                    Consultation Hours: <input name='consultationHours' value={profile.consultationHours} onChange={handleProfileChange} />
+                                    Consultation Hours: <input type="text" name='consultationHours' defaultValue={userData?.consultationHours} onChange={(e) => handleProfileChange(e, "consultationHours")} />
                                 </label>
                                 <label>
                                     Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
@@ -313,11 +351,11 @@ const Professor = ({ name, picture }) => {
                             // Profile view
                             <>
                                 <h2>Professor Profile</h2>
-                                <p><strong>Name:</strong> {profile.name}</p>
-                                <p><strong>Surname:</strong> {profile.surname}</p>
-                                <p><strong>Birthday:</strong> {profile.birthday}</p>
-                                <p><strong>Degree:</strong> {profile.degree}</p>
-                                <p><strong>Consultation Hours:</strong> {profile.consultationHours}</p>
+                                <p><strong>Name:</strong> {userData?.firstName}</p>
+                                <p><strong>Surname:</strong> {userData?.lastName}</p>
+                                <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
+                                <p><strong>Course:</strong> {userData?.course}</p>
+                                <p><strong>Consultation Hours:</strong> {userData?.consultationHours}</p>
                                 {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                             </>
