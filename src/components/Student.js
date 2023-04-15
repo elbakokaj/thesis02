@@ -14,20 +14,7 @@ const Student = ({ name, picture }) => {
     const [showCourses, setShowCourses] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [pieChartData, setPieChartData] = useState(null);
-    const [courses, setCourses] = useState([
-        { id: 1, name: 'Course A', attended: 10, total: 20 },
-        { id: 2, name: 'Course B', attended: 5, total: 15 },
-        { id: 3, name: 'Course C', attended: 12, total: 25 },
-        { id: 4, name: 'Course D', attended: 8, total: 20 },
-        { id: 5, name: 'Course E', attended: 14, total: 20 },
-        { id: 6, name: 'Course F', attended: 10, total: 20 },
-        { id: 7, name: 'Course G', attended: 10, total: 20 },
-        { id: 8, name: 'Course H', attended: 10, total: 20 },
-        { id: 9, name: 'Course I', attended: 10, total: 20 },
-        { id: 10, name: 'Course J', attended: 10, total: 20 },
-        { id: 11, name: 'Course K', attended: 10, total: 20 },
-        { id: 12, name: 'Course L', attended: 10, total: 20 },
-    ]);
+    const [courses, setCourses] = useState([]);
 
 
     const [messages, setMessages] = useState([
@@ -109,8 +96,6 @@ const Student = ({ name, picture }) => {
             await axios.get(`/profile/${student_id}`)
                 .then((res) => {
                     setUserData(res.data[0])
-
-
                 })
                 .catch(err =>
                     alert("Error:" + err)
@@ -196,7 +181,15 @@ const Student = ({ name, picture }) => {
         // Handle picture change event here (e.g., open file picker, upload and update the picture)
     };
 
-    const toggleCourses = () => {
+    const toggleCourses = async () => {
+        await axios.get(`/courses/find_courses`)
+            .then((res) => {
+                setCourses(res.data)
+                console.log('allCourses', res.data)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
         if (contentToShow !== 'courses') {
             setContentToShow('courses');
             setShowContentText(false);
@@ -207,28 +200,50 @@ const Student = ({ name, picture }) => {
     };
 
     const renderCourses = () => {
-        return courses.map((course) => (
-            <div
-                key={course.id}
-                className="course-row course-box"
-                onClick={() => displayCourseStats(course)}
-            >
-                <div className="course-name">{course.name}</div>
-            </div>
-        ));
+        return (
+
+            courses?.map((el) => (
+                < div
+                    key={el?._id}
+                    className="course-row course-box"
+                    onClick={() => displayCourseStats(el._id, el?.course_date)}
+                >
+                    <div className="course-name">{el?.name}</div>
+                </div >
+            )))
     };
 
-    const displayCourseStats = (course) => {
-        setSelectedCourse(course);
 
-        const attendedClasses = course.attended;
-        const missedClasses = course.total - course.attended;
+    const displayCourseStats = async (course_id, course_date) => {
+        const attendedClasses = [];
+        const missedClasses = [];
+        const body = {
+            course_id: course_id,
+            student_id: student_id,
+            course_date: course_date
+        }
+        await axios.get(`/attendances/find_specific_status`, { params: body })
+            .then((res) => {
+                console.log('body', body)
+                attendedClasses.push(res?.data?.filter((el) => el?.status == "present"));
+                missedClasses.push(res?.data?.filter((el) => el?.status == "absent"));
+                setSelectedCourse(res.data?._id)
+                console.log('res.data', res.data[0])
+
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+        console.log('classesa', attendedClasses)
+        console.log('classesm', missedClasses)
+
+
 
         setPieChartData({
             labels: ['Attended', 'Missed'],
             datasets: [
                 {
-                    data: [attendedClasses, missedClasses],
+                    data: [attendedClasses[0].length, missedClasses[0].length],
                     backgroundColor: ['#4BC0C0', '#FF6384'],
                     hoverBackgroundColor: ['#4BC0C0', '#FF6384'],
                 },
