@@ -28,7 +28,7 @@
     width: 60px;
 }
 
-.profile-pic-ofStudent {
+/* .profile-pic-ofStudent {
     width: 150px;
     height: 80px;
     border-radius: 50%;
@@ -38,7 +38,7 @@
     display: flex;
     align-items: center;
 }
-
+ */
 
 
 .dashboard-student .nav-links {
@@ -464,4 +464,15 @@
     margin-right: 2%;
     margin-top: 10px;
     opacity: 1;
+}
+
+.change-password-btn {
+    font-size: 15px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #0A2558;
+    color: #fff;
+    margin-left: 15px;
 }

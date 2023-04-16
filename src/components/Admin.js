@@ -149,18 +149,18 @@ const Admin = ({ name, picture }) => {
 
 
 
-    const handleContactClick = () => {
-        if (students.length === 0) {
-            setStudents(setDefaultStudents());
-        }
-        if (contentToShow !== 'contact') {
-            setContentToShow('contact');
-            setShowContentText(false);
-        } else {
-            setContentToShow('');
-            setShowContentText(true);
-        }
-    };
+    // const handleContactClick = () => {
+    //     if (students.length === 0) {
+    //         setStudents(setDefaultStudents());
+    //     }
+    //     if (contentToShow !== 'contact') {
+    //         setContentToShow('contact');
+    //         setShowContentText(false);
+    //     } else {
+    //         setContentToShow('');
+    //         setShowContentText(true);
+    //     }
+    // };
 
     const toggleCourses = () => {
         setContentToShow('courses');
@@ -391,8 +391,8 @@ const Admin = ({ name, picture }) => {
 
             <div className='dashboard-admin'>
                 <header>
-                    <img className='profile-pic-ofAdmin' src={picture} alt='Profile' />
-                    <h1>Hello {userData?.firstName}!</h1>
+                    {/* <img className='profile-pic-ofAdmin' src={picture} alt='Profile' /> */}
+                    <h1>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -410,12 +410,12 @@ const Admin = ({ name, picture }) => {
                     </li>
 
 
-                    <li onClick={handleContactClick}>
+                    {/* <li onClick={handleContactClick}>
                         <a href="#">
                             <i className='bx bx-list-ul' ></i>
                             <span className="links_name">Contact</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
@@ -428,10 +428,10 @@ const Admin = ({ name, picture }) => {
             <div className='content-ofAdmin'>
                 {contentToShow === 'profile' && (
                     <div className={`admin-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        <div className="profile-picture">
+                        {/* <div className="profile-picture">
                             <img src={picture} alt="Profile" />
                             <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div>
+                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
@@ -493,7 +493,7 @@ const Admin = ({ name, picture }) => {
                         </div>
                     </div>
                 )}
-                {contentToShow === 'contact' && (
+                {/* {contentToShow === 'contact' && (
                     <div className='email-list'>
                         <h2>Email List</h2>
                         <table>
@@ -526,7 +526,7 @@ const Admin = ({ name, picture }) => {
                             </tbody>
                         </table>
                     </div>
-                )}
+                )} */}
 
                 {!selectedDate && contentToShow === 'courses' && (
                     <div className='semesterSelection'>

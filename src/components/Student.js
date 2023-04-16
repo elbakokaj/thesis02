@@ -15,38 +15,39 @@ const Student = ({ name, picture }) => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [pieChartData, setPieChartData] = useState(null);
     const [courses, setCourses] = useState([]);
+    const [showChangePassword, setShowChangePassword] = useState(false);
 
 
-    const [messages, setMessages] = useState([
-        //dont forget to remove these when you connect backend, this are just to test if they work
-        {
-            from: 'Professor A',
-            subject: 'Important Update on Course',
-            date: '2023-03-20',
-            isRead: false,
-        },
-        {
-            from: 'Admin',
-            subject: 'Upcoming Event Reminder',
-            date: '2023-03-19',
-            isRead: true,
-        },
-        {
-            from: 'Professor B',
-            subject: 'Assignment Deadline Extended',
-            date: '2023-03-18',
-            isRead: false,
-        },
-    ]);
+    // const [messages, setMessages] = useState([
+    //     //dont forget to remove these when you connect backend, this are just to test if they work
+    //     {
+    //         from: 'Professor A',
+    //         subject: 'Important Update on Course',
+    //         date: '2023-03-20',
+    //         isRead: false,
+    //     },
+    //     {
+    //         from: 'Admin',
+    //         subject: 'Upcoming Event Reminder',
+    //         date: '2023-03-19',
+    //         isRead: true,
+    //     },
+    //     {
+    //         from: 'Professor B',
+    //         subject: 'Assignment Deadline Extended',
+    //         date: '2023-03-18',
+    //         isRead: false,
+    //     },
+    // ]);
 
 
 
-    const [profile, setProfile] = useState({
-        name: 'John Doe',
-        surname: 'Doe',
-        birthday: 'January 1, 1980',
-        yearEnrolled: '2020/2021'
-    });
+    // const [profile, setProfile] = useState({
+    //     name: 'John Doe',
+    //     surname: 'Doe',
+    //     birthday: 'January 1, 1980',
+    //     yearEnrolled: '2020/2021'
+    // });
 
     const [editBody, setEditBody] = useState({
         firstName: "",
@@ -102,6 +103,7 @@ const Student = ({ name, picture }) => {
                 )
             setContentToShow('profile');
             setShowContentText(false);
+            setShowChangePassword(false);
         } else {
             setContentToShow('');
             setShowContentText(true);
@@ -118,68 +120,68 @@ const Student = ({ name, picture }) => {
         setIsEditMode(!isEditMode);
     };
 
-    const toggleMessages = () => {
-        if (contentToShow !== 'messages') {
-            setContentToShow('messages');
-            setShowContentText(false);
-        } else {
-            setContentToShow('');
-            setShowContentText(true);
-        }
-    }
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch('API_URL', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Add any authentication headers if needed
-                },
-            });
+    // const toggleMessages = () => {
+    //     if (contentToShow !== 'messages') {
+    //         setContentToShow('messages');
+    //         setShowContentText(false);
+    //     } else {
+    //         setContentToShow('');
+    //         setShowContentText(true);
+    //     }
+    // }
+    // const fetchMessages = async () => {
+    //     try {
+    //         const response = await fetch('API_URL', {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 // Add any authentication headers if needed
+    //             },
+    //         });
 
-            if (response.ok) {
-                const data = await response.json();
-                setMessages(data);
-            } else {
-                console.error('Error fetching messages:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-    };
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setMessages(data);
+    //         } else {
+    //             console.error('Error fetching messages:', response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching messages:', error);
+    //     }
+    // };
 
-    useEffect(() => {
-        // fetchMessages();
-    }, []);
-    const renderMessages = () => {
-        return messages.map((message, index) => (
-            <div
-                key={index}
-                className={`message-row ${message.isRead ? '' : 'unread'}`}
-                onClick={() => {
-                    handleRowClick(message);
-                    message.isRead = true;
-                }}
-            >
-                <div className="message-from">{message.from}</div>
-                <div className="message-subject">{message.subject}</div>
-                <div className="message-date">{message.date}</div>
-            </div>
-        ));
-    };
+    // useEffect(() => {
+    //     // fetchMessages();
+    // }, []);
+    // const renderMessages = () => {
+    //     return messages.map((message, index) => (
+    //         <div
+    //             key={index}
+    //             className={`message-row ${message.isRead ? '' : 'unread'}`}
+    //             onClick={() => {
+    //                 handleRowClick(message);
+    //                 message.isRead = true;
+    //             }}
+    //         >
+    //             <div className="message-from">{message.from}</div>
+    //             <div className="message-subject">{message.subject}</div>
+    //             <div className="message-date">{message.date}</div>
+    //         </div>
+    //     ));
+    // };
 
-    const handleRowClick = (message) => {
-        setSelectedMessage(message);
-    };
+    // const handleRowClick = (message) => {
+    //     setSelectedMessage(message);
+    // };
 
-    const closeMessagePopup = () => {
-        setSelectedMessage(null);
-    };
+    // const closeMessagePopup = () => {
+    //     setSelectedMessage(null);
+    // };
 
-    const handlePictureClick = () => {
-        console.log("Clicked to change profile picture");
-        // Handle picture change event here (e.g., open file picker, upload and update the picture)
-    };
+    // const handlePictureClick = () => {
+    //     console.log("Clicked to change profile picture");
+    //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
+    // };
 
     const toggleCourses = async () => {
         await axios.get(`/courses/find_courses`)
@@ -251,13 +253,26 @@ const Student = ({ name, picture }) => {
         });
     };
 
+    const toggleChangePassword = () => {
+        if (contentToShow !== 'changePassword') {
+            setContentToShow('changePassword');
+            setShowContentText(false);
+        } else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
+    };
+
+
+    const handlePasswordChange = (e) => {
+        // ndrrimi i passit
+    };
     return (
         <div className='studentPage'>
 
             <div className='dashboard-student'>
                 <header>
-                    <img className='profile-pic-ofStudent' src={picture} alt='Profile' />
-                    <h1>Hello {userData?.firstName}!</h1>
+                    <h1>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -273,12 +288,12 @@ const Student = ({ name, picture }) => {
                             <span className="links_name">Courses</span>
                         </a>
                     </li>
-                    <li onClick={toggleMessages}>
+                    {/* <li onClick={toggleMessages}>
                         <a href="#">
                             <i className='bx bx-message' ></i>
                             <span className="links_name">Messages</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
@@ -291,10 +306,10 @@ const Student = ({ name, picture }) => {
             <div className='content-ofStudent'>
                 {contentToShow === 'profile' && (
                     <div className={`student-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        <div className="profile-picture">
+                        {/* <div className="profile-picture">
                             <img src={picture} alt="Profile" />
                             <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div>
+                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
@@ -323,13 +338,14 @@ const Student = ({ name, picture }) => {
                         ) : (
                             // Profile view
                             <>
-                                <h2>Professor Profile</h2>
+                                <h2>Student Profile</h2>
                                 <p><strong>Name:</strong> {userData?.firstName}</p>
                                 <p><strong>Surname:</strong> {userData?.lastName}</p>
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
                                 <p><strong>Year of Enrollment:</strong> {userData?.yearOfEnrollment}</p>
                                 {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
+                                <button className="change-password-btn" onClick={toggleChangePassword}>Change Password</button>
                             </>
                         )}
                     </div>
@@ -342,25 +358,27 @@ const Student = ({ name, picture }) => {
                     </div>
                 )}
 
-                {!showProfile && !showContentText && contentToShow === 'messages' && (
+
+                {/* {!showProfile && !showContentText && contentToShow === 'messages' && (
                     <div className='messagesToShow'>
                         {renderMessages()}
                     </div>
-                )}
-                {selectedMessage && (
+                )} */}
+                {/* {selectedMessage && (
                     <div className="message-popup">
                         <div className="message-popup-content">
                             <h3>{selectedMessage.subject}</h3>
                             <p><strong>From:</strong> {selectedMessage.from}</p>
                             <p><strong>Date:</strong> {selectedMessage.date}</p>
                             <p>
-                                {/* Add the full message content here */}
+                                {/* Add the full message content here 
                                 This is the full message content. Replace this with actual content when connected to the backend.
                             </p>
                             <button onClick={closeMessagePopup}>Close</button>
                         </div>
                     </div>
-                )}
+                )} */}
+
 
                 {!showProfile && !showContentText && contentToShow === 'courses' && (
                     <div className="coursesToShow">
@@ -388,6 +406,21 @@ const Student = ({ name, picture }) => {
                         )}
 
 
+                    </div>
+                )}
+                {!showProfile && !showContentText && contentToShow === 'changePassword' && (
+                    <div className="change-password-form">
+                        <h2>Change Password</h2>
+                        <form onSubmit={handlePasswordChange}>
+                            <label>
+                                Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
+                            </label>
+                            <label>
+                                New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
+                            </label>
+                            <button type="submit">Save Changes</button>
+                            <button type="button" onClick={toggleChangePassword}>Cancel</button>
+                        </form>
                     </div>
                 )}
             </div>

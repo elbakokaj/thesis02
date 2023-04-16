@@ -273,8 +273,8 @@ const Professor = ({ name, picture }) => {
         <div className='professorPage'>
             <div className='dashboard-professor'>
                 <header>
-                    <img className='profile-pic-ofProfessor' src={picture} alt='Profile' />
-                    <h1>Hello {userData?.firstName}!</h1>
+                    {/* <img className='profile-pic-ofProfessor' src={picture} alt='Profile' /> */}
+                    <h1>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -290,12 +290,12 @@ const Professor = ({ name, picture }) => {
                             <span className="links_name">Classes</span>
                         </a>
                     </li>
-                    <li onClick={handleContactClick}>
+                    {/* <li onClick={handleContactClick}>
                         <a href="#">
                             <i className='bx bx-list-ul' ></i>
                             <span className="links_name">Contact</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li onClick={toggleTakenAttendances}>
                         <a href="#">
                             <i className='bx bx-calendar-check'></i>
@@ -315,10 +315,10 @@ const Professor = ({ name, picture }) => {
             <div className='content-ofProfessor'>
                 {contentToShow === 'profile' && (
                     <div className={`professor-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        <div className="profile-picture">
+                        {/* <div className="profile-picture">
                             <img src={picture} alt="Profile" />
                             <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div>
+                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
@@ -458,7 +458,7 @@ const Professor = ({ name, picture }) => {
                 )}
 
 
-                {showEmailFormPopup && (
+                {/* {showEmailFormPopup && (
                     <div className='popupEmail'>
                         <div className='popup-contentEmail'>
                             <h2>Send Email to {selectedEmail}</h2>
@@ -474,8 +474,8 @@ const Professor = ({ name, picture }) => {
                             </form>
                         </div>
                     </div>
-                )}
-                {contentToShow === 'contact' && (
+                )} */}
+                {/* {contentToShow === 'contact' && (
                     <div className='email-list'>
                         <h2>Email List</h2>
                         <table>
@@ -508,7 +508,7 @@ const Professor = ({ name, picture }) => {
                             </tbody>
                         </table>
                     </div>
-                )}
+                )} */}
                 {contentToShow === 'attendanceDates' && (
                     <div className='attendance-dates'>
                         <h2>Attendance Dates</h2>
