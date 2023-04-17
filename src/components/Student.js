@@ -10,8 +10,8 @@ const Student = ({ name, picture }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [showContentText, setShowContentText] = useState(true);
     const [contentToShow, setContentToShow] = useState('');
-    const [selectedMessage, setSelectedMessage] = useState(null);
-    const [showCourses, setShowCourses] = useState(false);
+    // const [selectedMessage, setSelectedMessage] = useState(null);
+    // const [showCourses, setShowCourses] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [pieChartData, setPieChartData] = useState(null);
     const [courses, setCourses] = useState([]);
@@ -326,12 +326,12 @@ const Student = ({ name, picture }) => {
                                 <label>
                                     Year of Enrollment: <input type="text" name='yearEnrolled' defaultValue={userData.yearOfEnrollment} onChange={(e) => handleProfileChange(e, "yearOfEnrollment")} />
                                 </label>
-                                <label>
+                                {/* <label>
                                     Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
                                 </label>
                                 <label>
                                     New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
-                                </label>
+                                </label> */}
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
@@ -409,7 +409,7 @@ const Student = ({ name, picture }) => {
                     </div>
                 )}
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (
-                    <div className="change-password-form">
+                    <div className="change-password-form student-profile">
                         <h2>Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
@@ -419,7 +419,8 @@ const Student = ({ name, picture }) => {
                                 New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
                             </label>
                             <button type="submit">Save Changes</button>
-                            <button type="button" onClick={toggleChangePassword}>Cancel</button>
+                            {/* onClick={toggleChangePassword} */}
+                            <button type="button" onClick={toggleProfile}>Cancel</button>
                         </form>
                     </div>
                 )}

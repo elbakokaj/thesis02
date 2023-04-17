@@ -17,10 +17,10 @@ const Admin = ({ name, picture }) => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [showEmailListPopup, setShowEmailListPopup] = useState(false);
-    const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
-    const [selectedEmail, setSelectedEmail] = useState("");
-    const [showEmailList, setShowEmailList] = useState(false);
+    // const [showEmailListPopup, setShowEmailListPopup] = useState(false);
+    // const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
+    // const [selectedEmail, setSelectedEmail] = useState("");
+    // const [showEmailList, setShowEmailList] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
     const [selectedSemester, setSelectedSemester] = useState(null);
@@ -35,7 +35,7 @@ const Admin = ({ name, picture }) => {
     const [showAttendance, setShowAttendance] = useState(false);
     const [selectedYear, setSelectedYear] = useState("");
     const navigate = useNavigate();
-
+    const [showChangePassword, setShowChangePassword] = useState(false);
     const handleLogout = () => {
         // Perform any logout actions, e.g., remove tokens, clear user data
         window.localStorage.clear()
@@ -44,11 +44,11 @@ const Admin = ({ name, picture }) => {
 
 
 
-    const [profile, setProfile] = useState({
-        name: 'John Doe',
-        surname: 'Doe',
-        birthday: 'January 1, 1980',
-    });
+    // const [profile, setProfile] = useState({
+    //     name: 'John Doe',
+    //     surname: 'Doe',
+    //     birthday: 'January 1, 1980',
+    // });
 
     const [editBody, setEditBody] = useState({
         firstName: "",
@@ -100,6 +100,8 @@ const Admin = ({ name, picture }) => {
                 )
             setContentToShow('profile');
             setShowContentText(false);
+            setShowChangePassword(false);
+
         } else {
             setContentToShow('');
             setShowContentText(true);
@@ -110,19 +112,19 @@ const Admin = ({ name, picture }) => {
         setIsEditMode(!isEditMode);
     };
 
-    const toggleEmailListPopup = () => {
-        setShowEmailListPopup(!showEmailListPopup);
-    };
+    // const toggleEmailListPopup = () => {
+    //     setShowEmailListPopup(!showEmailListPopup);
+    // };
 
-    const openEmailFormPopup = (email) => {
-        setSelectedEmail(email);
-        setShowEmailFormPopup(true);
-    };
+    // const openEmailFormPopup = (email) => {
+    //     setSelectedEmail(email);
+    //     setShowEmailFormPopup(true);
+    // };
 
-    const closeEmailFormPopup = () => {
-        setSelectedEmail("");
-        setShowEmailFormPopup(false);
-    };
+    // const closeEmailFormPopup = () => {
+    //     setSelectedEmail("");
+    //     setShowEmailFormPopup(false);
+    // };
 
     const setDefaultStudents = () => {
         return [
@@ -140,12 +142,12 @@ const Admin = ({ name, picture }) => {
         { id: 3, name: 'Summer 2023' },
     ];
 
-    const handleSendEmail = (e) => {
-        e.preventDefault();
-        // Implement your email sending logic here
-        console.log("Email sent to:", selectedEmail);
-        closeEmailFormPopup();
-    };
+    // const handleSendEmail = (e) => {
+    //     e.preventDefault();
+    //     // Implement your email sending logic here
+    //     console.log("Email sent to:", selectedEmail);
+    //     closeEmailFormPopup();
+    // };
 
 
 
@@ -171,11 +173,11 @@ const Admin = ({ name, picture }) => {
         setSelectedDate(null);
     };
 
-    const toggleEmailList = () => {
-        setShowEmailList(!showEmailList);
-        setShowProfile(false);
-        setShowContentText(false);
-    };
+    // const toggleEmailList = () => {
+    //     setShowEmailList(!showEmailList);
+    //     setShowProfile(false);
+    //     setShowContentText(false);
+    // };
     const onSelectSemester = (semester) => {
         setShowSemesters(false);
         setSelectedSemester(semester);
@@ -269,10 +271,10 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-    const handlePictureClick = () => {
-        console.log("Clicked to change profile picture");
-        // Handle picture change event here (e.g., open file picker, upload and update the picture)
-    };
+    // const handlePictureClick = () => {
+    //     console.log("Clicked to change profile picture");
+    //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
+    // };
 
     const CourseSelection = ({ courses, setSelectedCourse }) => {
         // render a list of courses and handle course selection
@@ -386,6 +388,21 @@ const Admin = ({ name, picture }) => {
         );
     };
 
+    const toggleChangePassword = () => {
+        if (contentToShow !== 'changePassword') {
+            setContentToShow('changePassword');
+            setShowContentText(false);
+        } else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
+    };
+
+
+    const handlePasswordChange = (e) => {
+        // ndrrimi i passit
+    };
+
     return (
         <div className='adminPage'>
 
@@ -445,12 +462,6 @@ const Admin = ({ name, picture }) => {
                                 <label>
                                     Birthday: <input type="date" name='birthday' defaultValue={userData?.birthday.substring(0, 10)} onChange={(e) => handleProfileChange(e, "birthday")} />
                                 </label>
-                                <label>
-                                    Current Password: <input name='currentPassword' value={profile.currentPassword} onChange={handleProfileChange} />
-                                </label>
-                                <label>
-                                    New Password: <input name='newPassword' value={profile.newPassword} onChange={handleProfileChange} />
-                                </label>
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
@@ -463,6 +474,8 @@ const Admin = ({ name, picture }) => {
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
                                 {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
+                                <button className="change-password-btn" onClick={toggleChangePassword}>Change Password</button>
+
                             </>
                         )}
                     </div>
@@ -476,7 +489,7 @@ const Admin = ({ name, picture }) => {
 
 
 
-                {showEmailFormPopup && (
+                {/* {showEmailFormPopup && (
                     <div className='popupEmail'>
                         <div className='popup-contentEmail'>
                             <h2>Send Email to {selectedEmail}</h2>
@@ -492,7 +505,7 @@ const Admin = ({ name, picture }) => {
                             </form>
                         </div>
                     </div>
-                )}
+                )} */}
                 {/* {contentToShow === 'contact' && (
                     <div className='email-list'>
                         <h2>Email List</h2>
@@ -571,7 +584,21 @@ const Admin = ({ name, picture }) => {
                     <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
                 )}
 
-
+                {!showProfile && !showContentText && contentToShow === 'changePassword' && (
+                    <div className="change-password-form student-profile">
+                        <h2>Change Password</h2>
+                        <form onSubmit={handlePasswordChange}>
+                            <label>
+                                Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
+                            </label>
+                            <label>
+                                New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
+                            </label>
+                            <button type="submit" >Save Changes</button>
+                            {/* onClick={toggleChangePassword} */}
+                            <button type='button' onClick={toggleProfile}>Cancel</button>                        </form>
+                    </div>
+                )}
 
 
 
