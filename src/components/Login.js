@@ -22,6 +22,10 @@ const Login = () => {
             .then((res) => {
                 window.localStorage.setItem("token", res.data.token)
                 const decodeToken = jwtDecode(res.data.token)
+                console.log('decoded', decodeToken)
+                if (decodeToken?.course_id) {
+                    window.localStorage.setItem("course_id", decodeToken?.course_id)
+                }
                 window.localStorage.setItem("user_id", decodeToken?.id)
                 window.localStorage.setItem('role', decodeToken?.role)
                 // console.log("decodeToken123", decodeToken)

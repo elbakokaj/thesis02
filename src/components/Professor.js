@@ -70,7 +70,16 @@ const Professor = ({ name, picture }) => {
     };
 
     const toggleSchoolYearPopup = () => {
-        setShowSchoolYearPopup(!showSchoolYearPopup);
+        if (contentToShow !== 'attendance') {
+            setContentToShow('attendance');
+            setShowContentText(false);
+            setStudents(setDefaultStudents())
+        }
+        else {
+            setContentToShow('');
+            setShowContentText(true);
+        }
+        //setShowSchoolYearPopup(!showSchoolYearPopup);
     };
 
     const toggleAccountSettings = () => {
@@ -131,16 +140,27 @@ const Professor = ({ name, picture }) => {
     //     setShowEmailFormPopup(false);
     // };
 
-    const setDefaultStudents = () => {
-        return [
-            { id: 1, name: 'Alice', attendance: [] },
-            { id: 2, name: 'Bob', attendance: [] },
-            { id: 3, name: 'Charlie', attendance: [] },
-            { id: 4, name: 'David', attendance: [] },
-            { id: 5, name: 'Eve', attendance: [] },
-        ];
-    };
+    const [users, setUsers] = useState()
+    const setDefaultStudents = async () => {
 
+        const body = { course_id: window?.localStorage?.getItem("course_id") }
+        return await axios.post(`attendances/find_students_attendences`, body)
+            .then((res) => {
+                setUsers(res?.data)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+
+        // [
+        //     { id: 1, name: 'Alice', attendance: [] },
+        //     { id: 2, name: 'Bob', attendance: [] },
+        //     { id: 3, name: 'Charlie', attendance: [] },
+        //     { id: 4, name: 'David', attendance: [] },
+        //     { id: 5, name: 'Eve', attendance: [] },
+        // ];
+    };
+    console.log("users", users)
     const handleSchoolYearSelect = (schoolYear) => {
         setSelectedYear(schoolYear);
         setStudents(setDefaultStudents());
@@ -148,30 +168,27 @@ const Professor = ({ name, picture }) => {
         setContentToShow('attendance');
     };
 
+    const toggleCourses = async () => {
+
+    };
     const handleAttendance = (studentId, status) => {
-        // find the student in the list
-        const updatedStudents = students.map((student) => {
-            if (student.id === studentId) {
-                // Remove all existing statuses
-                const updatedAttendance = student.attendance.filter(
-                    (attendanceStatus) =>
-                        attendanceStatus !== 'present' &&
-                        attendanceStatus !== 'excused' &&
-                        attendanceStatus !== 'absent'
-                );
-
-                // Add the new status
-                updatedAttendance.push(status);
-
-                return { ...student, attendance: updatedAttendance };
+        // Find the student in the list
+        const updatedStudents = users.map((student) => {
+            if (student?.status?.studentId === studentId) {
+                // Update the status property with the new attendance status
+                return { ...student, status: { ...student.status, status: status } };
             } else {
+                // Return the original student object
                 return student;
             }
         });
 
-        // update the state
-        setStudents(updatedStudents);
+        // Update the state
+        setUsers(updatedStudents);
     };
+
+
+
 
 
     // const handleSendEmail = (e) => {
@@ -380,7 +397,7 @@ const Professor = ({ name, picture }) => {
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
                 )}
-                {contentToShow === 'attendance' && students.length > 0 && (
+                {contentToShow === 'attendance' && users?.length > 0 && (
                     <div className='attendance-list'>
                         <h2>Attendance for School Year {selectedYear}</h2>
                         <table>
@@ -391,26 +408,27 @@ const Professor = ({ name, picture }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {students.map((student) => (
-                                    <tr key={student.id}>
-                                        <td>{student.name}</td>
+                                {users.map((student) => (
+                                    <tr key={student?.status?._id}>
+                                        {console.log('usersmap', student)}
+                                        <td>{student?.name}</td>
                                         <td>
                                             <div className='attendance-status'>
                                                 <button
-                                                    className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
-                                                    onClick={() => handleAttendance(student.id, 'present')}
+                                                    className={`status-btn ${student?.status?.status.includes('present') ? 'present' : ''}`}
+                                                    onClick={() => handleAttendance(student?.status?.studentId, 'present')}
                                                 >
                                                     Present
                                                 </button>
                                                 <button
-                                                    className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
-                                                    onClick={() => handleAttendance(student.id, 'excused')}
+                                                    className={`status-btn ${student?.status?.status?.includes('excused') ? 'excused' : ''}`}
+                                                    onClick={() => handleAttendance(student?.status?.studentId, 'excused')}
                                                 >
                                                     Excused
                                                 </button>
                                                 <button
-                                                    className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
-                                                    onClick={() => handleAttendance(student.id, 'absent')}
+                                                    className={`status-btn ${student?.status?.status?.includes('absent') ? 'absent' : ''}`}
+                                                    onClick={() => handleAttendance(student?.status?.studentId, 'absent')}
                                                 >
                                                     Absent
                                                 </button>
@@ -427,7 +445,7 @@ const Professor = ({ name, picture }) => {
                     </div>
                 )}
 
-                {showSchoolYearPopup && (
+                {/* {showSchoolYearPopup && (
                     <div className='popup'>
                         <div className='popup-content'>
                             <button className='popup-close' onClick={toggleSchoolYearPopup}>
@@ -448,7 +466,7 @@ const Professor = ({ name, picture }) => {
 
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {showAccountSettings && (
                     <div className='popup'>
