@@ -7,13 +7,7 @@ import axios from "../axios"
 
 
 const Admin = ({ name, picture }) => {
-    const [students, setStudents] = useState([
-        { id: 1, name: 'Alice', attendance: [] },
-        { id: 2, name: 'Bob', attendance: [] },
-        { id: 3, name: 'Charlie', attendance: [] },
-        { id: 4, name: 'David', attendance: [] },
-        { id: 5, name: 'Eve', attendance: [] },
-    ]);
+    const [students, setStudents] = useState([]);
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -136,11 +130,11 @@ const Admin = ({ name, picture }) => {
         ];
     };
 
-    const semesters = [
-        { id: 1, name: 'Fall 2022' },
-        { id: 2, name: 'Spring 2023' },
-        { id: 3, name: 'Summer 2023' },
-    ];
+    // const semesters = [
+    //     { id: 1, name: 'Fall 2022' },
+    //     { id: 2, name: 'Spring 2023' },
+    //     { id: 3, name: 'Summer 2023' },
+    // ];
 
     // const handleSendEmail = (e) => {
     //     e.preventDefault();
@@ -163,14 +157,24 @@ const Admin = ({ name, picture }) => {
     //         setShowContentText(true);
     //     }
     // };
-
-    const toggleCourses = () => {
+    const [professors, setProfessors] = useState()
+    const toggleCourses = async () => {
         setContentToShow('courses');
         setShowContentText(false);
         setSelectedSemester(null);
         setSelectedCourse(null);
         setSelectedGroup(null);
         setSelectedDate(null);
+        await axios.get(`users/find_all_professors`)
+            .then((res) => {
+                setProfessors(res?.data)
+
+
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+
     };
 
     // const toggleEmailList = () => {
@@ -178,16 +182,18 @@ const Admin = ({ name, picture }) => {
     //     setShowProfile(false);
     //     setShowContentText(false);
     // };
-    const onSelectSemester = (semester) => {
+
+    const onSelectSemester = async (professor_id) => {
         setShowSemesters(false);
-        setSelectedSemester(semester);
-        // Replace EXAMPLE_COURSES with the actual courses data that you have
-        const EXAMPLE_COURSES = [
-            { id: 1, name: 'Course 1' },
-            { id: 2, name: 'Course 2' },
-            { id: 3, name: 'Course 3' },
-        ];
-        setCourses(EXAMPLE_COURSES);
+        setSelectedSemester(professor_id);
+        await axios.get(`courses/find_specific_course/${professor_id}`)
+            .then((res) => {
+                setCourses(res?.data?.attendance_dates);
+                console.log('datat qe duhet tshfaqur', res?.data?.attendance_dates)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
     };
 
     const EXAMPLE_GROUPS = [
@@ -286,9 +292,9 @@ const Admin = ({ name, picture }) => {
         return (
             <div>
                 <ul>
-                    {courses.map((course) => (
-                        <li key={course.id} onClick={() => handleCourseClick(course)}>
-                            {course.name}
+                    {courses?.map((course) => (
+                        <li key={course?.id} onClick={() => handleCourseClick(course)}>
+                            {course?.date.slice(0, 10)}
                         </li>
                     ))}
                 </ul>
@@ -354,24 +360,24 @@ const Admin = ({ name, picture }) => {
                             const studentAttendance = attendance.find(item => item.studentId === student.id);
                             return (
                                 <tr key={student.id}>
-                                    <td>{student.name}</td>
+                                    <td>{student?.studentId?.firstName + " " + student?.studentId?.lastName}</td>
                                     <td>
                                         <div className="attendance-status">
                                             <button
-                                                className={`status-btn ${student.attendance.includes('present') ? 'present' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'present')}
+                                                className={`status-btn ${student?.status?.includes('present') ? 'present' : ''}`}
+                                                onClick={() => handleAttendance(student?.id, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
-                                                className={`status-btn ${student.attendance.includes('excused') ? 'excused' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'excused')}
+                                                className={`status-btn ${student?.status?.includes('excused') ? 'excused' : ''}`}
+                                                onClick={() => handleAttendance(student?.id, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
-                                                className={`status-btn ${student.attendance.includes('absent') ? 'absent' : ''}`}
-                                                onClick={() => handleAttendance(student.id, 'absent')}
+                                                className={`status-btn ${student?.status?.includes('absent') ? 'absent' : ''}`}
+                                                onClick={() => handleAttendance(student?.id, 'absent')}
                                             >
                                                 Absent
                                             </button>
@@ -399,9 +405,49 @@ const Admin = ({ name, picture }) => {
     };
 
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange = async (e) => {
         // ndrrimi i passit
+        e.preventDefault();
+        const body = {
+            old_password: oldPass,
+            new_password: newPass
+        }
+        if (oldPass == newPass) {
+            alert("Old password can not be the same as new password!")
+        }
+        else if (oldPass !== newPass) {
+            await axios.put(`/profile/change_password/${admin_id}`, body)
+                .then((res) => {
+                    if (res?.data?.message == "Old passwords do not match!") {
+                        alert(res?.data?.message)
+                    } else if ("Password changed sucesfully!") {
+                        alert("Password changed successfully!")
+                    }
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        const message = error.response.data.error;
+                        alert(`Error: ${message}`);
+                    } else if (error.request) {
+                        alert("Error: The server did not respond. Please try again later.");
+                    } else {
+                        alert("Error: An unexpected error occurred.");
+                    }
+                });
+        }
     };
+    const [oldPass, setOldPass] = useState("")
+    const [newPass, setNewPass] = useState("")
+    console.log('passwordat1', oldPass, newPass)
+    const handlePasswordText = (e, type) => {
+        if (type == "currentPassword") {
+            setOldPass(e.target.value)
+        }
+        if (type == "newPassword") {
+            setNewPass(e.target.value)
+        }
+
+    }
 
     return (
         <div className='adminPage'>
@@ -544,19 +590,21 @@ const Admin = ({ name, picture }) => {
                 {!selectedDate && contentToShow === 'courses' && (
                     <div className='semesterSelection'>
                         <div className="white-box">
-                            <h2>Select Semester</h2>
+                            <h2>Select Professor</h2>
                             <ul>
-                                {semesters.map((semester, index) => (
-                                    <li key={index} onClick={() => onSelectSemester(semester)}>
-                                        {semester.name}
-                                    </li>
+                                {console.log('profesors', professors)}
+                                {professors?.map((prof, index) => (
+                                    <button key={index} onClick={() => onSelectSemester(prof?._id)}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
+                                    // <li key={index} onClick={() => onSelectSemester(prof)}>
+                                    //     {`${prof?.firstName} ${prof?.lastName} / ${prof?.course}`}
+                                    // </li>
                                 ))}
                             </ul>
                         </div>
                         {selectedSemester !== null && (
                             <div className="white-box">
                                 <h2>Select Course</h2>
-                                <CourseSelection courses={courses} setSelectedCourse={setSelectedCourse} />
+                                <CourseSelection courses={courses} setSelectedCourse={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
                         )}
                     </div>
@@ -565,7 +613,7 @@ const Admin = ({ name, picture }) => {
 
 
 
-                {!selectedDate && selectedCourse !== null && contentToShow === 'courses' && (
+                {/* {!selectedDate && selectedCourse !== null && contentToShow === 'courses' && (
                     <div className='groupSelection'>
                         <div className="white-box">
                             <h2>Select Group</h2>
@@ -578,7 +626,7 @@ const Admin = ({ name, picture }) => {
                             </div>
                         )}
                     </div>
-                )}
+                )} */}
 
                 {contentToShow === 'attendance' && selectedDate !== null && (
                     <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
@@ -589,10 +637,10 @@ const Admin = ({ name, picture }) => {
                         <h2>Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
-                                Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
+                                Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <label>
-                                New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
+                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit" >Save Changes</button>
                             {/* onClick={toggleChangePassword} */}

@@ -4,6 +4,8 @@ import '../css/Professor.css';
 import 'boxicons/css/boxicons.min.css';
 import { useNavigate } from 'react-router-dom';
 import axios from "../axios"
+import JsonToCsv from 'react-json-to-csv';
+import Papa from "papaparse";
 
 const Professor = ({ name, picture }) => {
     const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
@@ -141,12 +143,14 @@ const Professor = ({ name, picture }) => {
     // };
 
     const [users, setUsers] = useState()
+    const course_id = { course_id: window?.localStorage?.getItem("course_id") }
     const setDefaultStudents = async () => {
 
-        const body = { course_id: window?.localStorage?.getItem("course_id") }
-        return await axios.post(`attendances/find_students_attendences`, body)
+        console.log('kursGashi', course_id?.course_id)
+        return await axios.get(`attendances/find_students/${course_id?.course_id}`,)
             .then((res) => {
                 setUsers(res?.data)
+                console.log('studentat e zellshem', res.data)
             })
             .catch(err =>
                 alert("Error:" + err)
@@ -220,41 +224,64 @@ const Professor = ({ name, picture }) => {
     // };
     const fetchClassDates = async () => {
         try {
+
+            await axios.get(`attendances/find_taken_attendances`)
+                .then((res) => {
+                    setClassDates(res.data);
+                    console.log('resgashi, ', res?.data)
+                })
+                .catch(err =>
+                    alert("Error:" + err)
+                )
             // Replace this URL with the actual API endpoint
-            const apiUrl = 'https://your-backend-api/class-dates';
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch class dates: ${response.statusText}`);
-            }
-            const dates = await response.json();
-            setClassDates(dates);
+            // const apiUrl = 'https://your-backend-api/class-dates';
+            // const response = await fetch(apiUrl);
+            // if (!response.ok) {
+            //     throw new Error(`Failed to fetch class dates: ${response.statusText}`);
+            // }
+            // const dates = await response.json();
+            // setClassDates(dates);
         } catch (error) {
             console.error('Error while fetching class dates:', error);
         }
     };
-
+    const payload = {
+        courseId: course_id?.course_id,
+        attendanceRecords: users
+    };
+    console.log('payload gashi', payload)
 
     const saveAttendance = async () => {
         // You will need to replace this URL with the actual API endpoint
-        const apiUrl = 'https://your-backend-api/attendance';
+        await axios.post(`attendances/store_students_attendances`, payload)
+            .then((res) => {
+                alert("updated !")
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ students }),
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to save attendance data: ${response.statusText}`);
-            }
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
 
-            console.log('Attendance data saved successfully');
-        } catch (error) {
-            console.error('Error while saving attendance data:', error);
-        }
+        // const apiUrl = 'https://your-backend-api/attendance';
+
+        // try {
+        //     const response = await fetch(apiUrl, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({ students }),
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error(`Failed to save attendance data: ${response.statusText}`);
+        //     }
+
+        //     console.log('Attendance data saved successfully');
+        // } catch (error) {
+        //     console.error('Error while saving attendance data:', error);
+        // }
     };
 
     // const handlePictureClick = () => {
@@ -262,29 +289,40 @@ const Professor = ({ name, picture }) => {
     //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
     // };
 
-    const downloadAttendanceData = async (date) => {
-        try {
-            // Replace this URL with the actual API endpoint
-            const apiUrl = `https://your-backend-api/attendance/${date}`;
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch attendance data: ${response.statusText}`);
-            }
-            const data = await response.json();
-            // Handle the downloaded attendance data (e.g., save it to a file, display it)
-            console.log('Downloaded attendance data:', data);
-        } catch (error) {
-            console.error('Error while downloading attendance data:', error);
-        }
+    const downloadAttendanceData = (data) => {
+        const csvData = data.records.map((record) => ({
+            Name: `${record.studentId.firstName} ${record.studentId.lastName}`,
+            Status: record.status,
+        }));
+        const csv = Papa.unparse(csvData);
+        const csvBlob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(csvBlob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute(
+            "download",
+            `${data.courseId}-${data.groupId}-${data.date}.csv`
+        );
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
+
     const markAllPresent = () => {
-        const updatedStudents = students.map((student) => ({
-            ...student,
-            attendance: 'present',
-        }));
-        setStudents(updatedStudents);
-    };
+        if (users && users.length > 0) {
+            const updatedUsers = users.map((user) => {
+                return {
+                    name: user.name,
+                    status: {
+                        ...user.status,
+                        status: "present",
+                    },
+                };
+            });
+            setUsers(updatedUsers);
+        }
+    }
 
     const toggleChangePassword = () => {
         if (contentToShow !== 'changePassword') {
@@ -410,7 +448,7 @@ const Professor = ({ name, picture }) => {
                             <tbody>
                                 {users.map((student) => (
                                     <tr key={student?.status?._id}>
-                                        {console.log('usersmap', student)}
+                                        {console.log('usersmapRamadani', users)}
                                         <td>{student?.name}</td>
                                         <td>
                                             <div className='attendance-status'>
@@ -543,9 +581,12 @@ const Professor = ({ name, picture }) => {
                     <div className='attendance-dates'>
                         <h2>Attendance Dates</h2>
                         <ul>
-                            {classDates.map((date, index) => (
-                                <li key={index} onClick={() => downloadAttendanceData(date)}>
-                                    <a href='#'>{date}</a>
+
+
+
+                            {classDates.map((el, index) => (
+                                <li key={index} onClick={() => downloadAttendanceData(el)}>
+                                    <a href='#'>{el?.date.slice(0, 10)}</a>
                                 </li>
                             ))}
                         </ul>
