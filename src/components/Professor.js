@@ -646,7 +646,8 @@ const Professor = ({ name, picture }) => {
                             </label>
                             <button type="submit" >Save Changes</button>
                             {/* onClick={toggleChangePassword} */}
-                            <button type='button' onClick={toggleProfile}>Cancel</button>                        </form>
+                            <button type='button' onClick={toggleProfile}>Cancel</button>
+                        </form>
                     </div>
                 )}
 

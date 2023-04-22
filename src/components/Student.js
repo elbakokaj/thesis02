@@ -74,11 +74,11 @@ const Student = ({ name, picture }) => {
             )
     }
     console.log('editBody', editBody)
-    const handleProfileSubmit = (e) => {
-        e.preventDefault();
-        // Handle saving changes here (e.g., send a request to update the profile in the backend)
-        toggleEditMode();
-    };
+    // const handleProfileSubmit = (e) => {
+    //     e.preventDefault();
+    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
+    //     toggleEditMode();
+    // };
     const toggleAccountSettings = () => {
         setShowAccountSettings(!showAccountSettings);
     };
@@ -264,9 +264,50 @@ const Student = ({ name, picture }) => {
     };
 
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange = async (e) => {
         // ndrrimi i passit
+        e.preventDefault();
+        const body = {
+            old_password: oldPass,
+            new_password: newPass
+        }
+        if (oldPass == newPass) {
+            alert("Old password can not be the same as new password!")
+        }
+        else if (oldPass !== newPass) {
+            await axios.put(`/profile/change_password/${student_id}`, body)
+                .then((res) => {
+                    if (res?.data?.message == "Old passwords do not match!") {
+                        alert(res?.data?.message)
+                    } else if ("Password changed sucesfully!") {
+                        alert("Password changed successfully!")
+                    }
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        const message = error.response.data.error;
+                        alert(`Error: ${message}`);
+                    } else if (error.request) {
+                        alert("Error: The server did not respond. Please try again later.");
+                    } else {
+                        alert("Error: An unexpected error occurred.");
+                    }
+                });
+        }
     };
+
+    const [oldPass, setOldPass] = useState("")
+    const [newPass, setNewPass] = useState("")
+    console.log('passwordat1', oldPass, newPass)
+    const handlePasswordText = (e, type) => {
+        if (type == "currentPassword") {
+            setOldPass(e.target.value)
+        }
+        if (type == "newPassword") {
+            setNewPass(e.target.value)
+        }
+
+    }
     return (
         <div className='studentPage'>
 
@@ -326,12 +367,7 @@ const Student = ({ name, picture }) => {
                                 <label>
                                     Year of Enrollment: <input type="text" name='yearEnrolled' defaultValue={userData.yearOfEnrollment} onChange={(e) => handleProfileChange(e, "yearOfEnrollment")} />
                                 </label>
-                                {/* <label>
-                                    Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
-                                </label>
-                                <label>
-                                    New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
-                                </label> */}
+
                                 <button type='submit'>Save Changes</button>
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
@@ -413,10 +449,10 @@ const Student = ({ name, picture }) => {
                         <h2>Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
-                                Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
+                                Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <label>
-                                New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
+                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <button type="submit">Save Changes</button>
                             {/* onClick={toggleChangePassword} */}
