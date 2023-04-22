@@ -65,11 +65,11 @@ const Professor = ({ name, picture }) => {
             )
     }
 
-    const handleProfileSubmit = (e) => {
-        e.preventDefault();
-        // Handle saving changes here (e.g., send a request to update the profile in the backend)
-        toggleEditMode();
-    };
+    // const handleProfileSubmit = (e) => {
+    //     e.preventDefault();
+    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
+    //     toggleEditMode();
+    // };
 
     const toggleSchoolYearPopup = () => {
         if (contentToShow !== 'attendance') {
@@ -107,6 +107,7 @@ const Professor = ({ name, picture }) => {
                 )
             setContentToShow('profile');
             setShowContentText(false);
+            setShowChangePassword(false);
         } else {
             setContentToShow('');
             setShowContentText(true);
@@ -165,16 +166,16 @@ const Professor = ({ name, picture }) => {
         // ];
     };
     console.log("users", users)
-    const handleSchoolYearSelect = (schoolYear) => {
-        setSelectedYear(schoolYear);
-        setStudents(setDefaultStudents());
-        setShowSchoolYearPopup(false);
-        setContentToShow('attendance');
-    };
+    // const handleSchoolYearSelect = (schoolYear) => {
+    //     setSelectedYear(schoolYear);
+    //     setStudents(setDefaultStudents());
+    //     setShowSchoolYearPopup(false);
+    //     setContentToShow('attendance');
+    // };
 
-    const toggleCourses = async () => {
+    // const toggleCourses = async () => {
 
-    };
+    // };
     const handleAttendance = (studentId, status) => {
         // Find the student in the list
         const updatedStudents = users.map((student) => {
@@ -335,10 +336,50 @@ const Professor = ({ name, picture }) => {
     };
 
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange = async (e) => {
         // ndrrimi i passit
+        e.preventDefault();
+        const body = {
+            old_password: oldPass,
+            new_password: newPass
+        }
+        if (oldPass == newPass) {
+            alert("Old password can not be the same as new password!")
+        }
+        else if (oldPass !== newPass) {
+            await axios.put(`/profile/change_password/${professor_id}`, body)
+                .then((res) => {
+                    if (res?.data?.message == "Old passwords do not match!") {
+                        alert(res?.data?.message)
+                    } else if ("Password changed sucesfully!") {
+                        alert("Password changed successfully!")
+                    }
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        const message = error.response.data.error;
+                        alert(`Error: ${message}`);
+                    } else if (error.request) {
+                        alert("Error: The server did not respond. Please try again later.");
+                    } else {
+                        alert("Error: An unexpected error occurred.");
+                    }
+                });
+        }
     };
 
+    const [oldPass, setOldPass] = useState("")
+    const [newPass, setNewPass] = useState("")
+    console.log('passwordat1', oldPass, newPass)
+    const handlePasswordText = (e, type) => {
+        if (type == "currentPassword") {
+            setOldPass(e.target.value)
+        }
+        if (type == "newPassword") {
+            setNewPass(e.target.value)
+        }
+
+    }
 
     return (
         <div className='professorPage'>
@@ -598,10 +639,10 @@ const Professor = ({ name, picture }) => {
                         <h2>Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
-                                Current Password: <input name='currentPassword' onChange={(e) => handleProfileChange(e, "currentPassword")} />
+                                Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <label>
-                                New Password: <input name='newPassword' onChange={(e) => handleProfileChange()} />
+                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit" >Save Changes</button>
                             {/* onClick={toggleChangePassword} */}

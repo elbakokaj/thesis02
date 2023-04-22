@@ -18,8 +18,8 @@ const Admin = ({ name, picture }) => {
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
     const [selectedSemester, setSelectedSemester] = useState(null);
-    const [courses, setCourses] = useState([]);
-    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [dates, setDates] = useState([]);
+    // const [selectedCourse, setSelectedDate] = useState(null);
     const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [classDates, setClassDates] = useState([]);
@@ -67,11 +67,11 @@ const Admin = ({ name, picture }) => {
             )
     }
 
-    const handleProfileSubmit = (e) => {
-        e.preventDefault();
-        // Handle saving changes here (e.g., send a request to update the profile in the backend)
-        toggleEditMode();
-    };
+    // const handleProfileSubmit = (e) => {
+    //     e.preventDefault();
+    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
+    //     toggleEditMode();
+    // };
     const toggleAccountSettings = () => {
         setShowAccountSettings(!showAccountSettings);
     };
@@ -120,15 +120,15 @@ const Admin = ({ name, picture }) => {
     //     setShowEmailFormPopup(false);
     // };
 
-    const setDefaultStudents = () => {
-        return [
-            { id: 1, name: 'Alice', attendance: [] },
-            { id: 2, name: 'Bob', attendance: [] },
-            { id: 3, name: 'Charlie', attendance: [] },
-            { id: 4, name: 'David', attendance: [] },
-            { id: 5, name: 'Eve', attendance: [] },
-        ];
-    };
+    // const setDefaultStudents = () => {
+    //     return [
+    //         { id: 1, name: 'Alice', attendance: [] },
+    //         { id: 2, name: 'Bob', attendance: [] },
+    //         { id: 3, name: 'Charlie', attendance: [] },
+    //         { id: 4, name: 'David', attendance: [] },
+    //         { id: 5, name: 'Eve', attendance: [] },
+    //     ];
+    // };
 
     // const semesters = [
     //     { id: 1, name: 'Fall 2022' },
@@ -162,7 +162,7 @@ const Admin = ({ name, picture }) => {
         setContentToShow('courses');
         setShowContentText(false);
         setSelectedSemester(null);
-        setSelectedCourse(null);
+        setSelectedDate(null);
         setSelectedGroup(null);
         setSelectedDate(null);
         await axios.get(`users/find_all_professors`)
@@ -188,7 +188,7 @@ const Admin = ({ name, picture }) => {
         setSelectedSemester(professor_id);
         await axios.get(`courses/find_specific_course/${professor_id}`)
             .then((res) => {
-                setCourses(res?.data?.attendance_dates);
+                setDates(res?.data?.attendance_dates);
                 console.log('datat qe duhet tshfaqur', res?.data?.attendance_dates)
             })
             .catch(err =>
@@ -196,17 +196,17 @@ const Admin = ({ name, picture }) => {
             )
     };
 
-    const EXAMPLE_GROUPS = [
-        { id: 1, name: 'Group 1' },
-        { id: 2, name: 'Group 2' },
-        { id: 3, name: 'Group 3' },
-    ];
+    // const EXAMPLE_GROUPS = [
+    //     { id: 1, name: 'Group 1' },
+    //     { id: 2, name: 'Group 2' },
+    //     { id: 3, name: 'Group 3' },
+    // ];
 
-    const EXAMPLE_CLASS_DATES = [
-        { id: 1, name: 'Date 1' },
-        { id: 2, name: 'Date 2' },
-        { id: 3, name: 'Date 3' },
-    ];
+    // const EXAMPLE_CLASS_DATES = [
+    //     { id: 1, name: 'Date 1' },
+    //     { id: 2, name: 'Date 2' },
+    //     { id: 3, name: 'Date 3' },
+    // ];
 
     const handleAttendance = (studentId, status) => {
         // find the student in the list
@@ -256,45 +256,45 @@ const Admin = ({ name, picture }) => {
         }
     };
 
-    const SemesterSelection = ({ semesters, setSelectedSemester }) => {
-        // render a list of semesters and handle semester selection
-        const handleSemesterClick = (semester) => {
-            setSelectedSemester(semester);
-        };
+    // const SemesterSelection = ({ semesters, setSelectedSemester }) => {
+    //     // render a list of semesters and handle semester selection
+    //     const handleSemesterClick = (semester) => {
+    //         setSelectedSemester(semester);
+    //     };
 
-        return (
-            <div>
-                <h2>Select Semester</h2>
-                <ul>
-                    {semesters.map((semester, index) => (
-                        <li key={index} onClick={() => onSelectSemester(semester)}>
-                            {semester.name}
-                        </li>
-                    ))}
+    //     return (
+    //         <div>
+    //             <h2>Select Semester</h2>
+    //             <ul>
+    //                 {semesters.map((semester, index) => (
+    //                     <li key={index} onClick={() => onSelectSemester(semester)}>
+    //                         {semester.name}
+    //                     </li>
+    //                 ))}
 
-                </ul>
-            </div>
-        );
-    };
+    //             </ul>
+    //         </div>
+    //     );
+    // };
 
     // const handlePictureClick = () => {
     //     console.log("Clicked to change profile picture");
     //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
     // };
 
-    const CourseSelection = ({ courses, setSelectedCourse }) => {
+    const DateSelection = ({ dates, setSelectedDate }) => {
         // render a list of courses and handle course selection
-        const handleCourseClick = (course) => {
-            setSelectedCourse(course);
-            setGroups(EXAMPLE_GROUPS);
+        const handleDateClick = (course) => {
+            setSelectedDate(course);
+            // setGroups(EXAMPLE_GROUPS);
         };
 
         return (
             <div>
                 <ul>
-                    {courses?.map((course) => (
-                        <li key={course?.id} onClick={() => handleCourseClick(course)}>
-                            {course?.date.slice(0, 10)}
+                    {dates?.map((date) => (
+                        <li key={date?.id} onClick={() => handleDateClick(date)}>
+                            {date?.date.slice(0, 10)}
                         </li>
                     ))}
                 </ul>
@@ -302,46 +302,46 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-    const GroupSelection = ({ groups, setSelectedGroup }) => {
-        // render a list of groups and handle group selection
-        const handleGroupClick = (group) => {
-            setSelectedGroup(group);
-            setClassDates(EXAMPLE_CLASS_DATES);
-        };
+    // const GroupSelection = ({ groups, setSelectedGroup }) => {
+    //     // render a list of groups and handle group selection
+    //     const handleGroupClick = (group) => {
+    //         setSelectedGroup(group);
+    //         setClassDates(EXAMPLE_CLASS_DATES);
+    //     };
 
-        return (
-            <div>
+    //     return (
+    //         <div>
 
-                <ul>
-                    {groups.map((group) => (
-                        <li key={group.id} onClick={() => handleGroupClick(group)}>
-                            {group.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    };
+    //             <ul>
+    //                 {groups.map((group) => (
+    //                     <li key={group.id} onClick={() => handleGroupClick(group)}>
+    //                         {group.name}
+    //                     </li>
+    //                 ))}
+    //             </ul>
+    //         </div>
+    //     );
+    // };
 
-    const ClassDateSelection = ({ classDates, setSelectedDate }) => {
-        // render a list of class dates and handle date selection
-        const handleDateClick = (date) => {
-            setSelectedDate(date);
-        };
+    // const ClassDateSelection = ({ classDates, setSelectedDate }) => {
+    //     // render a list of class dates and handle date selection
+    //     const handleDateClick = (date) => {
+    //         setSelectedDate(date);
+    //     };
 
-        return (
-            <div>
+    //     return (
+    //         <div>
 
-                <ul>
-                    {classDates.map((date) => (
-                        <li key={date.id} onClick={() => handleDateClick(date)}>
-                            {date.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    };
+    //             <ul>
+    //                 {classDates.map((date) => (
+    //                     <li key={date.id} onClick={() => handleDateClick(date)}>
+    //                         {date.name}
+    //                     </li>
+    //                 ))}
+    //             </ul>
+    //         </div>
+    //     );
+    // };
 
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
@@ -603,8 +603,8 @@ const Admin = ({ name, picture }) => {
                         </div>
                         {selectedSemester !== null && (
                             <div className="white-box">
-                                <h2>Select Course</h2>
-                                <CourseSelection courses={courses} setSelectedCourse={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
+                                <h2>Select Date</h2>
+                                <DateSelection dates={dates} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
                         )}
                     </div>
