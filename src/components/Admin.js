@@ -105,7 +105,6 @@ const Admin = ({ name, picture }) => {
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
     };
-
     // const toggleEmailListPopup = () => {
     //     setShowEmailListPopup(!showEmailListPopup);
     // };
@@ -208,28 +207,23 @@ const Admin = ({ name, picture }) => {
     //     { id: 3, name: 'Date 3' },
     // ];
 
+
+
     const handleAttendance = (studentId, status) => {
+        console.log(studentId, status)
         // find the student in the list
+        console.log('hahaishasd', students)
         const updatedStudents = students.map((student) => {
-            if (student.id === studentId) {
-                // Remove all existing statuses
-                const updatedAttendance = student.attendance.filter(
-                    (attendanceStatus) =>
-                        attendanceStatus !== 'present' &&
-                        attendanceStatus !== 'excused' &&
-                        attendanceStatus !== 'absent'
-                );
-
-                // Add the new status
-                updatedAttendance.push(status);
-
-                return { ...student, attendance: updatedAttendance };
+            if (student?.status?.studentId === studentId) {
+                // Update the status property with the new attendance status
+                return { ...student, status: status };
             } else {
+                // Return the original student object
                 return student;
             }
         });
 
-        // update the state
+        // Update the state
         setStudents(updatedStudents);
     };
 
@@ -281,8 +275,8 @@ const Admin = ({ name, picture }) => {
     //     console.log("Clicked to change profile picture");
     //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
     // };
-
-    const DateSelection = ({ dates, setSelectedDate }) => {
+    const DateSelection = ({ dates, selectedSemester, setSelectedDate }) => {
+        console.log('ramadan pireva', dates, selectedSemester, setSelectedDate)
         // render a list of courses and handle course selection
         const handleDateClick = (course) => {
             setSelectedDate(course);
@@ -302,48 +296,6 @@ const Admin = ({ name, picture }) => {
         );
     };
 
-    // const GroupSelection = ({ groups, setSelectedGroup }) => {
-    //     // render a list of groups and handle group selection
-    //     const handleGroupClick = (group) => {
-    //         setSelectedGroup(group);
-    //         setClassDates(EXAMPLE_CLASS_DATES);
-    //     };
-
-    //     return (
-    //         <div>
-
-    //             <ul>
-    //                 {groups.map((group) => (
-    //                     <li key={group.id} onClick={() => handleGroupClick(group)}>
-    //                         {group.name}
-    //                     </li>
-    //                 ))}
-    //             </ul>
-    //         </div>
-    //     );
-    // };
-
-    // const ClassDateSelection = ({ classDates, setSelectedDate }) => {
-    //     // render a list of class dates and handle date selection
-    //     const handleDateClick = (date) => {
-    //         setSelectedDate(date);
-    //     };
-
-    //     return (
-    //         <div>
-
-    //             <ul>
-    //                 {classDates.map((date) => (
-    //                     <li key={date.id} onClick={() => handleDateClick(date)}>
-    //                         {date.name}
-    //                     </li>
-    //                 ))}
-    //             </ul>
-    //         </div>
-    //     );
-    // };
-
-
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
             <div className="attendance-list">
@@ -357,7 +309,8 @@ const Admin = ({ name, picture }) => {
                     </thead>
                     <tbody>
                         {students.map((student) => {
-                            const studentAttendance = attendance.find(item => item.studentId === student.id);
+                            console.log('studentGashi5672123', student)
+                            // const studentAttendance = attendance.find(item => item.studentId === student.id);
                             return (
                                 <tr key={student.id}>
                                     <td>{student?.studentId?.firstName + " " + student?.studentId?.lastName}</td>
@@ -365,19 +318,19 @@ const Admin = ({ name, picture }) => {
                                         <div className="attendance-status">
                                             <button
                                                 className={`status-btn ${student?.status?.includes('present') ? 'present' : ''}`}
-                                                onClick={() => handleAttendance(student?.id, 'present')}
+                                                onClick={() => handleAttendance(student?.status?._id, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
                                                 className={`status-btn ${student?.status?.includes('excused') ? 'excused' : ''}`}
-                                                onClick={() => handleAttendance(student?.id, 'excused')}
+                                                onClick={() => handleAttendance(student?.status?._id, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
                                                 className={`status-btn ${student?.status?.includes('absent') ? 'absent' : ''}`}
-                                                onClick={() => handleAttendance(student?.id, 'absent')}
+                                                onClick={() => handleAttendance(student?.status?._id, 'absent')}
                                             >
                                                 Absent
                                             </button>
@@ -604,7 +557,7 @@ const Admin = ({ name, picture }) => {
                         {selectedSemester !== null && (
                             <div className="white-box">
                                 <h2>Select Date</h2>
-                                <DateSelection dates={dates} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
+                                <DateSelection dates={dates} date_id={dates?._id} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
                         )}
                     </div>

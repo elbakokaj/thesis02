@@ -298,7 +298,9 @@ const Student = ({ name, picture }) => {
 
     const [oldPass, setOldPass] = useState("")
     const [newPass, setNewPass] = useState("")
-    console.log('passwordat1', oldPass, newPass)
+
+    console.log('old pass ', oldPass)
+    console.log('old pass ', newPass)
     const handlePasswordText = (e, type) => {
         if (type == "currentPassword") {
             setOldPass(e.target.value)
@@ -452,7 +454,7 @@ const Student = ({ name, picture }) => {
                                 Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <label>
-                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
+                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit">Save Changes</button>
                             {/* onClick={toggleChangePassword} */}
