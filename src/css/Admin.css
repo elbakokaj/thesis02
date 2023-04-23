@@ -312,3 +312,15 @@ th {
     list-style-type: none;
     padding-left: 0;
 }
+
+.listDates {
+    font-size: 15px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #0A2558;
+    color: #fff;
+    margin-left: 15px;
+    margin-top: 5px;
+}

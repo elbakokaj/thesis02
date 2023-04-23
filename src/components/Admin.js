@@ -209,23 +209,18 @@ const Admin = ({ name, picture }) => {
 
 
 
-    const handleAttendance = (studentId, status) => {
-        console.log(studentId, status)
+    const handleAttendance = (student, status) => {
+        console.log(student, status)
         // find the student in the list
-        console.log('hahaishasd', students)
-        const updatedStudents = students.map((student) => {
-            if (student?.status?.studentId === studentId) {
-                // Update the status property with the new attendance status
-                return { ...student, status: status };
-            } else {
-                // Return the original student object
-                return student;
-            }
-        });
-
-        // Update the state
+        const updatedStudent = { ...student, status: status };
+        const updatedStudents = students.map((s) =>
+            s._id === student._id ? updatedStudent : s
+        );
         setStudents(updatedStudents);
+
+
     };
+    console.log('hahaishasd', students)
 
     const saveAttendance = async () => {
         // You will need to replace this URL with the actual API endpoint
@@ -287,7 +282,7 @@ const Admin = ({ name, picture }) => {
             <div>
                 <ul>
                     {dates?.map((date) => (
-                        <li key={date?.id} onClick={() => handleDateClick(date)}>
+                        <li className="listDates" key={date?.id} onClick={() => handleDateClick(date)}>
                             {date?.date.slice(0, 10)}
                         </li>
                     ))}
@@ -295,6 +290,36 @@ const Admin = ({ name, picture }) => {
             </div>
         );
     };
+    const updateAttendance = async (selectedDate, students) => {
+        const courseId = selectedDate?.courseId
+        const groupId = selectedDate?.groupId
+        const date = selectedDate?.date
+        // console.log('hej hej 2', students)
+        var test1 = []
+        for (let index = 0; index < students.length; index++) {
+            test1.push({ studentId: students[index]?.studentId?._id, status: students[index]?.status })
+
+        }
+        const body = {
+            courseId: courseId,
+            groupId: groupId,
+            date: date,
+            records: test1
+        }
+        console.log('hej hej ', body)
+
+        await axios.put(`attendances/update_attendance_records`, body)
+            .then((res) => {
+                console.log('responsi pozitiv', res)
+                // setDates(res?.data?.attendance_dates);
+                // console.log('datat qe duhet tshfaqur', res?.data?.attendance_dates)
+            })
+            .catch(err =>
+                alert("Error:" + err)
+            )
+
+    }
+
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
@@ -309,7 +334,7 @@ const Admin = ({ name, picture }) => {
                     </thead>
                     <tbody>
                         {students.map((student) => {
-                            console.log('studentGashi5672123', student)
+                            console.log('studentGashi5672123', attendance, students)
                             // const studentAttendance = attendance.find(item => item.studentId === student.id);
                             return (
                                 <tr key={student.id}>
@@ -318,19 +343,19 @@ const Admin = ({ name, picture }) => {
                                         <div className="attendance-status">
                                             <button
                                                 className={`status-btn ${student?.status?.includes('present') ? 'present' : ''}`}
-                                                onClick={() => handleAttendance(student?.status?._id, 'present')}
+                                                onClick={() => handleAttendance(student, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
                                                 className={`status-btn ${student?.status?.includes('excused') ? 'excused' : ''}`}
-                                                onClick={() => handleAttendance(student?.status?._id, 'excused')}
+                                                onClick={() => handleAttendance(student, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
                                                 className={`status-btn ${student?.status?.includes('absent') ? 'absent' : ''}`}
-                                                onClick={() => handleAttendance(student?.status?._id, 'absent')}
+                                                onClick={() => handleAttendance(student, 'absent')}
                                             >
                                                 Absent
                                             </button>
@@ -342,7 +367,7 @@ const Admin = ({ name, picture }) => {
                         })}
                     </tbody>
                 </table>
-                <button className='saveAttendanceButton' onClick={() => console.log(attendance)}>Save Attendance</button>
+                <button className='saveAttendanceButton' onClick={() => updateAttendance(selectedDate, students)}>Save Attendance</button>
             </div>
         );
     };
@@ -408,7 +433,7 @@ const Admin = ({ name, picture }) => {
             <div className='dashboard-admin'>
                 <header>
                     {/* <img className='profile-pic-ofAdmin' src={picture} alt='Profile' /> */}
-                    <h1>Welcome!</h1>
+                    <h1 className='welcome-'>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -547,7 +572,7 @@ const Admin = ({ name, picture }) => {
                             <ul>
                                 {console.log('profesors', professors)}
                                 {professors?.map((prof, index) => (
-                                    <button key={index} onClick={() => onSelectSemester(prof?._id)}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
+                                    <button key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
                                     // <li key={index} onClick={() => onSelectSemester(prof)}>
                                     //     {`${prof?.firstName} ${prof?.lastName} / ${prof?.course}`}
                                     // </li>

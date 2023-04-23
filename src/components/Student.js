@@ -227,10 +227,10 @@ const Student = ({ name, picture }) => {
         await axios.get(`/attendances/find_specific_status`, { params: body })
             .then((res) => {
                 console.log('body', body)
-                attendedClasses.push(res?.data?.filter((el) => el?.status == "present"));
-                missedClasses.push(res?.data?.filter((el) => el?.status == "absent"));
+                attendedClasses.push(res?.data?.present);
+                missedClasses.push(res?.data?.absent);
                 setSelectedCourse(res.data?._id)
-                console.log('res.data', res.data[0])
+                console.log('res.dataramadani', res.data)
 
             })
             .catch(err =>
@@ -245,7 +245,7 @@ const Student = ({ name, picture }) => {
             labels: ['Attended', 'Missed'],
             datasets: [
                 {
-                    data: [attendedClasses[0].length, missedClasses[0].length],
+                    data: [attendedClasses[0], missedClasses[0]],
                     backgroundColor: ['#4BC0C0', '#FF6384'],
                     hoverBackgroundColor: ['#4BC0C0', '#FF6384'],
                 },
@@ -315,7 +315,7 @@ const Student = ({ name, picture }) => {
 
             <div className='dashboard-student'>
                 <header>
-                    <h1>Welcome!</h1>
+                    <h1 className='welcome'>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">

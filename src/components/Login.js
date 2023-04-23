@@ -22,7 +22,7 @@ const Login = () => {
             .then((res) => {
                 window.localStorage.setItem("token", res.data.token)
                 const decodeToken = jwtDecode(res.data.token)
-                console.log('decoded', decodeToken)
+                // console.log('decoded', decoded)
                 if (decodeToken?.course_id) {
                     window.localStorage.setItem("course_id", decodeToken?.course_id)
                 }
@@ -68,13 +68,27 @@ const Login = () => {
     };
     const handleForgotPassword = async () => {
         // Make a request to the server to send a password reset email
-        await fetch('/api/forgot-password', {
-            method: 'POST',
-            body: JSON.stringify({ email }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+
+        axios.post("/api/forgot-password/link", { email: email })
+            .then((res) => {
+                alert('A password reset link has been sent to your email.');
+                console.log('res', res)
+                // window.localStorage.setItem("token", res.data.token)
+                // const decodeToken = jwtDecode(res.data.token)
+                // console.log('decoded', decodeToken)
+            }).catch((err) => {
+                console.log("Error :" + err)
+                alert("Error :" + err);
+
+            })
+
+        // await fetch('/api/forgot-password', {
+        //     method: 'POST',
+        //     body: JSON.stringify({ email }),
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // });
 
         // Show an alert or message to inform the user that the email has been sent
         alert('A password reset link has been sent to your email.');

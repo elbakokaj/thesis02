@@ -256,7 +256,7 @@ const Professor = ({ name, picture }) => {
         // You will need to replace this URL with the actual API endpoint
         await axios.post(`attendances/store_students_attendances`, payload)
             .then((res) => {
-                alert("updated !")
+                alert("New attendance taken !")
 
 
             })
@@ -380,13 +380,13 @@ const Professor = ({ name, picture }) => {
         }
 
     }
-
+    const [handelClick, setHandelClick] = useState(false);
     return (
         <div className='professorPage'>
             <div className='dashboard-professor'>
                 <header>
                     {/* <img className='profile-pic-ofProfessor' src={picture} alt='Profile' /> */}
-                    <h1>Welcome!</h1>
+                    <h1 >Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -495,19 +495,19 @@ const Professor = ({ name, picture }) => {
                                             <div className='attendance-status'>
                                                 <button
                                                     className={`status-btn ${student?.status?.status.includes('present') ? 'present' : ''}`}
-                                                    onClick={() => handleAttendance(student?.status?.studentId, 'present')}
+                                                    onClick={() => { handleAttendance(student?.status?.studentId, 'present') }}
                                                 >
                                                     Present
                                                 </button>
                                                 <button
                                                     className={`status-btn ${student?.status?.status?.includes('excused') ? 'excused' : ''}`}
-                                                    onClick={() => handleAttendance(student?.status?.studentId, 'excused')}
+                                                    onClick={() => { handleAttendance(student?.status?.studentId, 'excused') }}
                                                 >
                                                     Excused
                                                 </button>
                                                 <button
                                                     className={`status-btn ${student?.status?.status?.includes('absent') ? 'absent' : ''}`}
-                                                    onClick={() => handleAttendance(student?.status?.studentId, 'absent')}
+                                                    onClick={() => { handleAttendance(student?.status?.studentId, 'absent') }}
                                                 >
                                                     Absent
                                                 </button>
