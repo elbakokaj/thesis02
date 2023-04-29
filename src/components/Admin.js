@@ -6,28 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import axios from "../axios"
 
 
-const Admin = ({ name, picture }) => {
+const Admin = () => {
     const [students, setStudents] = useState([]);
-    const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    // const [showEmailListPopup, setShowEmailListPopup] = useState(false);
-    // const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
-    // const [selectedEmail, setSelectedEmail] = useState("");
-    // const [showEmailList, setShowEmailList] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
     const [selectedSemester, setSelectedSemester] = useState(null);
     const [dates, setDates] = useState([]);
-    // const [selectedCourse, setSelectedDate] = useState(null);
-    const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState(null);
-    const [classDates, setClassDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [attendance, setAttendance] = useState([]);
     const [showSemesters, setShowSemesters] = useState(false);
-    const [showAttendance, setShowAttendance] = useState(false);
-    const [selectedYear, setSelectedYear] = useState("");
     const navigate = useNavigate();
     const [showChangePassword, setShowChangePassword] = useState(false);
     const handleLogout = () => {
@@ -36,13 +26,6 @@ const Admin = ({ name, picture }) => {
         window.location.assign('/');
     };
 
-
-
-    // const [profile, setProfile] = useState({
-    //     name: 'John Doe',
-    //     surname: 'Doe',
-    //     birthday: 'January 1, 1980',
-    // });
 
     const [editBody, setEditBody] = useState({
         firstName: "",
@@ -66,15 +49,6 @@ const Admin = ({ name, picture }) => {
                 alert("Error:" + err)
             )
     }
-
-    // const handleProfileSubmit = (e) => {
-    //     e.preventDefault();
-    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
-    //     toggleEditMode();
-    // };
-    const toggleAccountSettings = () => {
-        setShowAccountSettings(!showAccountSettings);
-    };
 
     const [userData, setUserData] = useState(null)
 
@@ -105,57 +79,8 @@ const Admin = ({ name, picture }) => {
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
     };
-    // const toggleEmailListPopup = () => {
-    //     setShowEmailListPopup(!showEmailListPopup);
-    // };
-
-    // const openEmailFormPopup = (email) => {
-    //     setSelectedEmail(email);
-    //     setShowEmailFormPopup(true);
-    // };
-
-    // const closeEmailFormPopup = () => {
-    //     setSelectedEmail("");
-    //     setShowEmailFormPopup(false);
-    // };
-
-    // const setDefaultStudents = () => {
-    //     return [
-    //         { id: 1, name: 'Alice', attendance: [] },
-    //         { id: 2, name: 'Bob', attendance: [] },
-    //         { id: 3, name: 'Charlie', attendance: [] },
-    //         { id: 4, name: 'David', attendance: [] },
-    //         { id: 5, name: 'Eve', attendance: [] },
-    //     ];
-    // };
-
-    // const semesters = [
-    //     { id: 1, name: 'Fall 2022' },
-    //     { id: 2, name: 'Spring 2023' },
-    //     { id: 3, name: 'Summer 2023' },
-    // ];
-
-    // const handleSendEmail = (e) => {
-    //     e.preventDefault();
-    //     // Implement your email sending logic here
-    //     console.log("Email sent to:", selectedEmail);
-    //     closeEmailFormPopup();
-    // };
 
 
-
-    // const handleContactClick = () => {
-    //     if (students.length === 0) {
-    //         setStudents(setDefaultStudents());
-    //     }
-    //     if (contentToShow !== 'contact') {
-    //         setContentToShow('contact');
-    //         setShowContentText(false);
-    //     } else {
-    //         setContentToShow('');
-    //         setShowContentText(true);
-    //     }
-    // };
     const [professors, setProfessors] = useState()
     const toggleCourses = async () => {
         setContentToShow('courses');
@@ -176,12 +101,6 @@ const Admin = ({ name, picture }) => {
 
     };
 
-    // const toggleEmailList = () => {
-    //     setShowEmailList(!showEmailList);
-    //     setShowProfile(false);
-    //     setShowContentText(false);
-    // };
-
     const onSelectSemester = async (professor_id) => {
         setShowSemesters(false);
         setSelectedSemester(professor_id);
@@ -194,20 +113,6 @@ const Admin = ({ name, picture }) => {
                 alert("Error:" + err)
             )
     };
-
-    // const EXAMPLE_GROUPS = [
-    //     { id: 1, name: 'Group 1' },
-    //     { id: 2, name: 'Group 2' },
-    //     { id: 3, name: 'Group 3' },
-    // ];
-
-    // const EXAMPLE_CLASS_DATES = [
-    //     { id: 1, name: 'Date 1' },
-    //     { id: 2, name: 'Date 2' },
-    //     { id: 3, name: 'Date 3' },
-    // ];
-
-
 
     const handleAttendance = (student, status) => {
         console.log(student, status)
@@ -222,54 +127,6 @@ const Admin = ({ name, picture }) => {
     };
     console.log('hahaishasd', students)
 
-    const saveAttendance = async () => {
-        // You will need to replace this URL with the actual API endpoint
-        const apiUrl = 'https://your-backend-api/attendance';
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ students }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to save attendance data: ${response.statusText}`);
-            }
-
-            console.log('Attendance data saved successfully');
-        } catch (error) {
-            console.error('Error while saving attendance data:', error);
-        }
-    };
-
-    // const SemesterSelection = ({ semesters, setSelectedSemester }) => {
-    //     // render a list of semesters and handle semester selection
-    //     const handleSemesterClick = (semester) => {
-    //         setSelectedSemester(semester);
-    //     };
-
-    //     return (
-    //         <div>
-    //             <h2>Select Semester</h2>
-    //             <ul>
-    //                 {semesters.map((semester, index) => (
-    //                     <li key={index} onClick={() => onSelectSemester(semester)}>
-    //                         {semester.name}
-    //                     </li>
-    //                 ))}
-
-    //             </ul>
-    //         </div>
-    //     );
-    // };
-
-    // const handlePictureClick = () => {
-    //     console.log("Clicked to change profile picture");
-    //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
-    // };
     const DateSelection = ({ dates, selectedSemester, setSelectedDate }) => {
         console.log('ramadan pireva', dates, selectedSemester, setSelectedDate)
         // render a list of courses and handle course selection
@@ -319,7 +176,6 @@ const Admin = ({ name, picture }) => {
             )
 
     }
-
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
@@ -432,8 +288,7 @@ const Admin = ({ name, picture }) => {
 
             <div className='dashboard-admin'>
                 <header>
-                    {/* <img className='profile-pic-ofAdmin' src={picture} alt='Profile' /> */}
-                    <h1 className='welcome-'>Welcome!</h1>
+                    <h1 className='welcome'>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -449,14 +304,6 @@ const Admin = ({ name, picture }) => {
                             <span className="links_name">Courses</span>
                         </a>
                     </li>
-
-
-                    {/* <li onClick={handleContactClick}>
-                        <a href="#">
-                            <i className='bx bx-list-ul' ></i>
-                            <span className="links_name">Contact</span>
-                        </a>
-                    </li> */}
                     <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
@@ -469,10 +316,6 @@ const Admin = ({ name, picture }) => {
             <div className='content-ofAdmin'>
                 {contentToShow === 'profile' && (
                     <div className={`admin-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        {/* <div className="profile-picture">
-                            <img src={picture} alt="Profile" />
-                            <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
@@ -511,60 +354,6 @@ const Admin = ({ name, picture }) => {
                     </div>
                 )}
 
-
-
-                {/* {showEmailFormPopup && (
-                    <div className='popupEmail'>
-                        <div className='popup-contentEmail'>
-                            <h2>Send Email to {selectedEmail}</h2>
-                            <form onSubmit={handleSendEmail}>
-                                <label>
-                                    Subject: <input type='text' name='subject' />
-                                </label>
-                                <label>
-                                    Message: <textarea name='message'></textarea>
-                                </label>
-                                <button type='submit'>Send</button>
-                                <button type='button' onClick={closeEmailFormPopup}>Cancel</button>
-                            </form>
-                        </div>
-                    </div>
-                )} */}
-                {/* {contentToShow === 'contact' && (
-                    <div className='email-list'>
-                        <h2>Email List</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {students.map((student) => (
-                                    <tr key={student.id}>
-                                        <td>{student.name.split(" ")[0]}</td>
-                                        <td>{student.name.split(" ")[1]}</td>
-                                        <td>
-                                            <a
-                                                href='#'
-                                                onClick={() =>
-                                                    openEmailFormPopup(
-                                                        `${student.name.toLowerCase().replace(" ", ".")}@example.com`
-                                                    )
-                                                }
-                                            >
-                                                {`${student.name.toLowerCase().replace(" ", ".")}@example.com`}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )} */}
-
                 {!selectedDate && contentToShow === 'courses' && (
                     <div className='semesterSelection'>
                         <div className="white-box">
@@ -573,9 +362,6 @@ const Admin = ({ name, picture }) => {
                                 {console.log('profesors', professors)}
                                 {professors?.map((prof, index) => (
                                     <button key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
-                                    // <li key={index} onClick={() => onSelectSemester(prof)}>
-                                    //     {`${prof?.firstName} ${prof?.lastName} / ${prof?.course}`}
-                                    // </li>
                                 ))}
                             </ul>
                         </div>
@@ -587,24 +373,6 @@ const Admin = ({ name, picture }) => {
                         )}
                     </div>
                 )}
-
-
-
-
-                {/* {!selectedDate && selectedCourse !== null && contentToShow === 'courses' && (
-                    <div className='groupSelection'>
-                        <div className="white-box">
-                            <h2>Select Group</h2>
-                            <GroupSelection groups={groups} setSelectedGroup={setSelectedGroup} />
-                        </div>
-                        {selectedGroup !== null && contentToShow === 'courses' && (
-                            <div className="white-box">
-                                <h2>Select Date</h2>
-                                <ClassDateSelection classDates={classDates} setSelectedDate={date => { setSelectedDate(date); setContentToShow('attendance') }} />
-                            </div>
-                        )}
-                    </div>
-                )} */}
 
                 {contentToShow === 'attendance' && selectedDate !== null && (
                     <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
@@ -622,7 +390,8 @@ const Admin = ({ name, picture }) => {
                             </label>
                             <button type="submit" >Save Changes</button>
                             {/* onClick={toggleChangePassword} */}
-                            <button type='button' onClick={toggleProfile}>Cancel</button>                        </form>
+                            <button type='button' onClick={toggleProfile}>Cancel</button>
+                        </form>
                     </div>
                 )}
 

@@ -7,21 +7,16 @@ import axios from "../axios"
 import JsonToCsv from 'react-json-to-csv';
 import Papa from "papaparse";
 
-const Professor = ({ name, picture }) => {
-    const [showSchoolYearPopup, setShowSchoolYearPopup] = useState(false);
+const Professor = () => {
+
     const [students, setStudents] = useState([]);
     const [selectedYear, setSelectedYear] = useState("");
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    // const [showEmailListPopup, setShowEmailListPopup] = useState(false);
-    // const [showEmailFormPopup, setShowEmailFormPopup] = useState(false);
-    // const [selectedEmail, setSelectedEmail] = useState("");
-    // const [showEmailList, setShowEmailList] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
     const [showContentText, setShowContentText] = useState(true);
     const [classDates, setClassDates] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
     const navigate = useNavigate();
     const [showChangePassword, setShowChangePassword] = useState(false);
 
@@ -30,14 +25,6 @@ const Professor = ({ name, picture }) => {
         window.localStorage.clear()
         window.location.assign('/');
     };
-
-    // const [profile, setProfile] = useState({
-    //     name: 'John Doe',
-    //     surname: 'Doe',
-    //     birthday: 'January 1, 1980',
-    //     course: 'Ph.D. in Computer Science',
-    //     consultationHours: 'Tuesdays and Thursdays, 2-4pm',
-    // });
 
     const [editBody, setEditBody] = useState({
         firstName: "",
@@ -65,12 +52,6 @@ const Professor = ({ name, picture }) => {
             )
     }
 
-    // const handleProfileSubmit = (e) => {
-    //     e.preventDefault();
-    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
-    //     toggleEditMode();
-    // };
-
     const toggleSchoolYearPopup = () => {
         if (contentToShow !== 'attendance') {
             setContentToShow('attendance');
@@ -81,14 +62,12 @@ const Professor = ({ name, picture }) => {
             setContentToShow('');
             setShowContentText(true);
         }
-        //setShowSchoolYearPopup(!showSchoolYearPopup);
     };
 
     const toggleAccountSettings = () => {
         setShowAccountSettings(!showAccountSettings);
     };
 
-    // stats to get data from API'S
     const [userData, setUserData] = useState(null)
 
     const professor_id = window.localStorage.getItem("user_id")
@@ -129,20 +108,6 @@ const Professor = ({ name, picture }) => {
         setIsEditMode(!isEditMode);
     };
 
-    // const toggleEmailListPopup = () => {
-    //     setShowEmailListPopup(!showEmailListPopup);
-    // };
-
-    // const openEmailFormPopup = (email) => {
-    //     setSelectedEmail(email);
-    //     setShowEmailFormPopup(true);
-    // };
-
-    // const closeEmailFormPopup = () => {
-    //     setSelectedEmail("");
-    //     setShowEmailFormPopup(false);
-    // };
-
     const [users, setUsers] = useState()
     const course_id = { course_id: window?.localStorage?.getItem("course_id") }
     const setDefaultStudents = async () => {
@@ -156,26 +121,8 @@ const Professor = ({ name, picture }) => {
             .catch(err =>
                 alert("Error:" + err)
             )
-
-        // [
-        //     { id: 1, name: 'Alice', attendance: [] },
-        //     { id: 2, name: 'Bob', attendance: [] },
-        //     { id: 3, name: 'Charlie', attendance: [] },
-        //     { id: 4, name: 'David', attendance: [] },
-        //     { id: 5, name: 'Eve', attendance: [] },
-        // ];
     };
     console.log("users", users)
-    // const handleSchoolYearSelect = (schoolYear) => {
-    //     setSelectedYear(schoolYear);
-    //     setStudents(setDefaultStudents());
-    //     setShowSchoolYearPopup(false);
-    //     setContentToShow('attendance');
-    // };
-
-    // const toggleCourses = async () => {
-
-    // };
     const handleAttendance = (studentId, status) => {
         // Find the student in the list
         const updatedStudents = users.map((student) => {
@@ -193,36 +140,6 @@ const Professor = ({ name, picture }) => {
     };
 
 
-
-
-
-    // const handleSendEmail = (e) => {
-    //     e.preventDefault();
-    //     // Implement your email sending logic here
-    //     console.log("Email sent to:", selectedEmail);
-    //     closeEmailFormPopup();
-    // };
-
-
-
-    // const handleContactClick = () => {
-    //     if (students.length === 0) {
-    //         setStudents(setDefaultStudents());
-    //     }
-    //     if (contentToShow !== 'contact') {
-    //         setContentToShow('contact');
-    //         setShowContentText(false);
-    //     } else {
-    //         setContentToShow('');
-    //         setShowContentText(true);
-    //     }
-    // };
-
-    // const toggleEmailList = () => {
-    //     setShowEmailList(!showEmailList);
-    //     setShowProfile(false);
-    //     setShowContentText(false);
-    // };
     const fetchClassDates = async () => {
         try {
 
@@ -234,14 +151,6 @@ const Professor = ({ name, picture }) => {
                 .catch(err =>
                     alert("Error:" + err)
                 )
-            // Replace this URL with the actual API endpoint
-            // const apiUrl = 'https://your-backend-api/class-dates';
-            // const response = await fetch(apiUrl);
-            // if (!response.ok) {
-            //     throw new Error(`Failed to fetch class dates: ${response.statusText}`);
-            // }
-            // const dates = await response.json();
-            // setClassDates(dates);
         } catch (error) {
             console.error('Error while fetching class dates:', error);
         }
@@ -264,31 +173,7 @@ const Professor = ({ name, picture }) => {
                 alert("Error:" + err)
             )
 
-        // const apiUrl = 'https://your-backend-api/attendance';
-
-        // try {
-        //     const response = await fetch(apiUrl, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ students }),
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error(`Failed to save attendance data: ${response.statusText}`);
-        //     }
-
-        //     console.log('Attendance data saved successfully');
-        // } catch (error) {
-        //     console.error('Error while saving attendance data:', error);
-        // }
     };
-
-    // const handlePictureClick = () => {
-    //     console.log("Clicked to change profile picture");
-    //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
-    // };
 
     const downloadAttendanceData = (data) => {
         const csvData = data.records.map((record) => ({
@@ -385,8 +270,7 @@ const Professor = ({ name, picture }) => {
         <div className='professorPage'>
             <div className='dashboard-professor'>
                 <header>
-                    {/* <img className='profile-pic-ofProfessor' src={picture} alt='Profile' /> */}
-                    <h1 >Welcome!</h1>
+                    <h1 className='welcome'>Welcome!</h1>
                 </header>
 
                 <ul className="nav-links">
@@ -402,12 +286,6 @@ const Professor = ({ name, picture }) => {
                             <span className="links_name">Classes</span>
                         </a>
                     </li>
-                    {/* <li onClick={handleContactClick}>
-                        <a href="#">
-                            <i className='bx bx-list-ul' ></i>
-                            <span className="links_name">Contact</span>
-                        </a>
-                    </li> */}
                     <li onClick={toggleTakenAttendances}>
                         <a href="#">
                             <i className='bx bx-calendar-check'></i>
@@ -427,10 +305,6 @@ const Professor = ({ name, picture }) => {
             <div className='content-ofProfessor'>
                 {contentToShow === 'profile' && (
                     <div className={`professor-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        {/* <div className="profile-picture">
-                            <img src={picture} alt="Profile" />
-                            <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
@@ -524,28 +398,6 @@ const Professor = ({ name, picture }) => {
                     </div>
                 )}
 
-                {/* {showSchoolYearPopup && (
-                    <div className='popup'>
-                        <div className='popup-content'>
-                            <button className='popup-close' onClick={toggleSchoolYearPopup}>
-                                X
-                            </button>
-                            <h2>Select a School Year</h2>
-                            <ul>
-                                <li onClick={() => handleSchoolYearSelect('2021-2022')}>
-                                    <a href='#'>2021-2022</a>
-                                </li>
-                                <li onClick={() => handleSchoolYearSelect('2022-2023')}>
-                                    <a href='#'>2022-2023</a>
-                                </li>
-                                <li onClick={() => handleSchoolYearSelect('2023-2024')}>
-                                    <a href='#'>2023-2024</a>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                )} */}
 
                 {showAccountSettings && (
                     <div className='popup'>
@@ -566,68 +418,16 @@ const Professor = ({ name, picture }) => {
                     </div>
                 )}
 
-
-                {/* {showEmailFormPopup && (
-                    <div className='popupEmail'>
-                        <div className='popup-contentEmail'>
-                            <h2>Send Email to {selectedEmail}</h2>
-                            <form onSubmit={handleSendEmail}>
-                                <label>
-                                    Subject: <input type='text' name='subject' />
-                                </label>
-                                <label>
-                                    Message: <textarea name='message'></textarea>
-                                </label>
-                                <button type='submit'>Send</button>
-                                <button type='button' onClick={closeEmailFormPopup}>Cancel</button>
-                            </form>
-                        </div>
-                    </div>
-                )} */}
-                {/* {contentToShow === 'contact' && (
-                    <div className='email-list'>
-                        <h2>Email List</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {students.map((student) => (
-                                    <tr key={student.id}>
-                                        <td>{student.name.split(" ")[0]}</td>
-                                        <td>{student.name.split(" ")[1]}</td>
-                                        <td>
-                                            <a
-                                                href='#'
-                                                onClick={() =>
-                                                    openEmailFormPopup(
-                                                        `${student.name.toLowerCase().replace(" ", ".")}@example.com`
-                                                    )
-                                                }
-                                            >
-                                                {`${student.name.toLowerCase().replace(" ", ".")}@example.com`}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )} */}
                 {contentToShow === 'attendanceDates' && (
-                    <div className='attendance-dates'>
+                    <div className="white-box">
                         <h2>Attendance Dates</h2>
                         <ul>
 
 
 
                             {classDates.map((el, index) => (
-                                <li key={index} onClick={() => downloadAttendanceData(el)}>
-                                    <a href='#'>{el?.date.slice(0, 10)}</a>
+                                <li className="attendanceDates" key={index} onClick={() => downloadAttendanceData(el)}>
+                                    <a href='#' style={{ textDecoration: 'none', color: 'white' }}>{el?.date.slice(0, 10)}</a>
                                 </li>
                             ))}
                         </ul>
