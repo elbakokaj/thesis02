@@ -22,13 +22,11 @@ const Login = () => {
             .then((res) => {
                 window.localStorage.setItem("token", res.data.token)
                 const decodeToken = jwtDecode(res.data.token)
-                // console.log('decoded', decoded)
                 if (decodeToken?.course_id) {
                     window.localStorage.setItem("course_id", decodeToken?.course_id)
                 }
                 window.localStorage.setItem("user_id", decodeToken?.id)
                 window.localStorage.setItem('role', decodeToken?.role)
-                // console.log("decodeToken123", decodeToken)
                 if (decodeToken.role == "student") {
                     window.location.assign("http://localhost:3000/student");
                 }
@@ -60,53 +58,24 @@ const Login = () => {
 
         const data = await response.json();
 
-        // If the user's credentials are valid, store their role in local storage and set loggedIn to true
         if (data.role) {
             localStorage.setItem('role', data.role);
             setLoggedIn(true);
         }
     };
     const handleForgotPassword = async () => {
-        // Make a request to the server to send a password reset email
 
         axios.post("/api/forgot-password/link", { email: email })
             .then((res) => {
                 alert('A password reset link has been sent to your email.');
                 console.log('res', res)
-                // window.localStorage.setItem("token", res.data.token)
-                // const decodeToken = jwtDecode(res.data.token)
-                // console.log('decoded', decodeToken)
             }).catch((err) => {
                 console.log("Error :" + err)
                 alert("Error :" + err);
 
             })
-
-        // await fetch('/api/forgot-password', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ email }),
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // });
-
-        // Show an alert or message to inform the user that the email has been sent
         alert('A password reset link has been sent to your email.');
     };
-
-
-    // if (loggedIn) {
-    //     // Redirect the user to a different page depending on their role
-    //     const role = localStorage.getItem('role');
-
-    //     if (role === 'student') {
-    //         return <Navigate to="/dashboard/student" />;
-    //     } else if (role === 'teacher') {
-    //         return <Navigate to="/dashboard/teacher" />;
-    //     } else if (role === 'admin') {
-    //         return <Navigate to="/dashboard/admin" />;
-    //     }
-    // }
 
     return (
         <div className="login-wrapper">

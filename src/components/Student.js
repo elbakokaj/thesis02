@@ -4,50 +4,16 @@ import '../css/Student.css';
 import 'boxicons/css/boxicons.min.css';
 import { Pie } from 'react-chartjs-2';
 import axios from "../axios"
-const Student = ({ name, picture }) => {
+const Student = () => {
     const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [showContentText, setShowContentText] = useState(true);
     const [contentToShow, setContentToShow] = useState('');
-    // const [selectedMessage, setSelectedMessage] = useState(null);
-    // const [showCourses, setShowCourses] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [pieChartData, setPieChartData] = useState(null);
     const [courses, setCourses] = useState([]);
     const [showChangePassword, setShowChangePassword] = useState(false);
-
-
-    // const [messages, setMessages] = useState([
-    //     //dont forget to remove these when you connect backend, this are just to test if they work
-    //     {
-    //         from: 'Professor A',
-    //         subject: 'Important Update on Course',
-    //         date: '2023-03-20',
-    //         isRead: false,
-    //     },
-    //     {
-    //         from: 'Admin',
-    //         subject: 'Upcoming Event Reminder',
-    //         date: '2023-03-19',
-    //         isRead: true,
-    //     },
-    //     {
-    //         from: 'Professor B',
-    //         subject: 'Assignment Deadline Extended',
-    //         date: '2023-03-18',
-    //         isRead: false,
-    //     },
-    // ]);
-
-
-
-    // const [profile, setProfile] = useState({
-    //     name: 'John Doe',
-    //     surname: 'Doe',
-    //     birthday: 'January 1, 1980',
-    //     yearEnrolled: '2020/2021'
-    // });
 
     const [editBody, setEditBody] = useState({
         firstName: "",
@@ -74,11 +40,6 @@ const Student = ({ name, picture }) => {
             )
     }
     console.log('editBody', editBody)
-    // const handleProfileSubmit = (e) => {
-    //     e.preventDefault();
-    //     // Handle saving changes here (e.g., send a request to update the profile in the backend)
-    //     toggleEditMode();
-    // };
     const toggleAccountSettings = () => {
         setShowAccountSettings(!showAccountSettings);
     };
@@ -119,69 +80,6 @@ const Student = ({ name, picture }) => {
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
     };
-
-    // const toggleMessages = () => {
-    //     if (contentToShow !== 'messages') {
-    //         setContentToShow('messages');
-    //         setShowContentText(false);
-    //     } else {
-    //         setContentToShow('');
-    //         setShowContentText(true);
-    //     }
-    // }
-    // const fetchMessages = async () => {
-    //     try {
-    //         const response = await fetch('API_URL', {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 // Add any authentication headers if needed
-    //             },
-    //         });
-
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setMessages(data);
-    //         } else {
-    //             console.error('Error fetching messages:', response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching messages:', error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     // fetchMessages();
-    // }, []);
-    // const renderMessages = () => {
-    //     return messages.map((message, index) => (
-    //         <div
-    //             key={index}
-    //             className={`message-row ${message.isRead ? '' : 'unread'}`}
-    //             onClick={() => {
-    //                 handleRowClick(message);
-    //                 message.isRead = true;
-    //             }}
-    //         >
-    //             <div className="message-from">{message.from}</div>
-    //             <div className="message-subject">{message.subject}</div>
-    //             <div className="message-date">{message.date}</div>
-    //         </div>
-    //     ));
-    // };
-
-    // const handleRowClick = (message) => {
-    //     setSelectedMessage(message);
-    // };
-
-    // const closeMessagePopup = () => {
-    //     setSelectedMessage(null);
-    // };
-
-    // const handlePictureClick = () => {
-    //     console.log("Clicked to change profile picture");
-    //     // Handle picture change event here (e.g., open file picker, upload and update the picture)
-    // };
 
     const toggleCourses = async () => {
         await axios.get(`/courses/find_courses`)
@@ -331,12 +229,6 @@ const Student = ({ name, picture }) => {
                             <span className="links_name">Courses</span>
                         </a>
                     </li>
-                    {/* <li onClick={toggleMessages}>
-                        <a href="#">
-                            <i className='bx bx-message' ></i>
-                            <span className="links_name">Messages</span>
-                        </a>
-                    </li> */}
                     <li onClick={handleLogout}>
                         <a href="#">
                             <i className='bx bx-log-out'></i>
@@ -349,14 +241,10 @@ const Student = ({ name, picture }) => {
             <div className='content-ofStudent'>
                 {contentToShow === 'profile' && (
                     <div className={`student-profile ${isEditMode ? "edit-mode" : ""}`}>
-                        {/* <div className="profile-picture">
-                            <img src={picture} alt="Profile" />
-                            <i className="bx bx-camera camera-icon" onClick={handlePictureClick}></i>
-                        </div> */}
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
-                                <h2>Edit Profile</h2>
+                                <h2 data-testId="edit-header">Edit Profile</h2>
                                 <label>
                                     Name: <input type="text" name='name' defaultValue={userData?.firstName} onChange={(e) => handleProfileChange(e, "firstName")} />
                                 </label>
@@ -367,7 +255,7 @@ const Student = ({ name, picture }) => {
                                     Birthday: <input type="date" name='birthday' defaultValue={userData?.birthday.substring(0, 10)} onChange={(e) => handleProfileChange(e, "birthday")} />
                                 </label>
                                 <label>
-                                    Year of Enrollment: <input type="text" name='yearEnrolled' defaultValue={userData.yearOfEnrollment} onChange={(e) => handleProfileChange(e, "yearOfEnrollment")} />
+                                    Year of Enrollment: <input type="text" name='yearEnrolled' defaultValue={userData?.yearOfEnrollment} onChange={(e) => handleProfileChange(e, "yearOfEnrollment")} />
                                 </label>
 
                                 <button type='submit'>Save Changes</button>
@@ -376,7 +264,7 @@ const Student = ({ name, picture }) => {
                         ) : (
                             // Profile view
                             <>
-                                <h2>Student Profile</h2>
+                                <h2 data-testId="student-prof">Student Profile</h2>
                                 <p><strong>Name:</strong> {userData?.firstName}</p>
                                 <p><strong>Surname:</strong> {userData?.lastName}</p>
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
@@ -395,31 +283,8 @@ const Student = ({ name, picture }) => {
                         <p>Here you can access all of your important information and resources.</p>
                     </div>
                 )}
-
-
-                {/* {!showProfile && !showContentText && contentToShow === 'messages' && (
-                    <div className='messagesToShow'>
-                        {renderMessages()}
-                    </div>
-                )} */}
-                {/* {selectedMessage && (
-                    <div className="message-popup">
-                        <div className="message-popup-content">
-                            <h3>{selectedMessage.subject}</h3>
-                            <p><strong>From:</strong> {selectedMessage.from}</p>
-                            <p><strong>Date:</strong> {selectedMessage.date}</p>
-                            <p>
-                                {/* Add the full message content here 
-                                This is the full message content. Replace this with actual content when connected to the backend.
-                            </p>
-                            <button onClick={closeMessagePopup}>Close</button>
-                        </div>
-                    </div>
-                )} */}
-
-
                 {!showProfile && !showContentText && contentToShow === 'courses' && (
-                    <div className="coursesToShow">
+                    <div className="coursesToShow" data-testid="coursesToShow">
                         {selectedCourse === null ? (
                             renderCourses()
                         ) : (
@@ -430,8 +295,6 @@ const Student = ({ name, picture }) => {
                                         <div className="course-stats">
                                             <h3>Course Statistics</h3>
                                             <Pie data={pieChartData} />
-                                            {/* Add the diagram box here
-                                        <div id="course-stats"></div> */}
                                         </div>
                                         <div className='wrapperOfButton'>
                                             <h4>Hover on the chart to see the number of you missed or attended classes</h4>
@@ -448,7 +311,7 @@ const Student = ({ name, picture }) => {
                 )}
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (
                     <div className="change-password-form student-profile">
-                        <h2>Change Password</h2>
+                        <h2 data-testId="change-password-header">Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
                                 Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
@@ -457,7 +320,6 @@ const Student = ({ name, picture }) => {
                                 New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit">Save Changes</button>
-                            {/* onClick={toggleChangePassword} */}
                             <button type="button" onClick={toggleProfile}>Cancel</button>
                         </form>
                     </div>

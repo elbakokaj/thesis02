@@ -21,7 +21,6 @@ const Professor = () => {
     const [showChangePassword, setShowChangePassword] = useState(false);
 
     const handleLogout = () => {
-        // Perform any logout actions, e.g., remove tokens, clear user data
         window.localStorage.clear()
         window.location.assign('/');
     };
@@ -36,8 +35,6 @@ const Professor = () => {
 
     const handleProfileChange = (e, type) => {
         const { name, value } = e.target;
-
-        // Update the editBody object based on the input change
         setEditBody(prevEditBody => ({ ...prevEditBody, [type]: value }));
     };
 
@@ -124,18 +121,14 @@ const Professor = () => {
     };
     console.log("users", users)
     const handleAttendance = (studentId, status) => {
-        // Find the student in the list
         const updatedStudents = users.map((student) => {
             if (student?.status?.studentId === studentId) {
-                // Update the status property with the new attendance status
                 return { ...student, status: { ...student.status, status: status } };
             } else {
-                // Return the original student object
                 return student;
             }
         });
 
-        // Update the state
         setUsers(updatedStudents);
     };
 
@@ -162,7 +155,6 @@ const Professor = () => {
     console.log('payload gashi', payload)
 
     const saveAttendance = async () => {
-        // You will need to replace this URL with the actual API endpoint
         await axios.post(`attendances/store_students_attendances`, payload)
             .then((res) => {
                 alert("New attendance taken !")
@@ -222,7 +214,6 @@ const Professor = () => {
 
 
     const handlePasswordChange = async (e) => {
-        // ndrrimi i passit
         e.preventDefault();
         const body = {
             old_password: oldPass,
@@ -265,7 +256,6 @@ const Professor = () => {
         }
 
     }
-    const [handelClick, setHandelClick] = useState(false);
     return (
         <div className='professorPage'>
             <div className='dashboard-professor'>
@@ -306,9 +296,8 @@ const Professor = () => {
                 {contentToShow === 'profile' && (
                     <div className={`professor-profile ${isEditMode ? "edit-mode" : ""}`}>
                         {isEditMode ? (
-                            // Edit form
                             <form onSubmit={handleEditPost}>
-                                <h2>Edit Profile</h2>
+                                <h2 data-testid="edit-header">Edit Profile</h2>
                                 <label>
                                     Name: <input type="text" name='name' defaultValue={userData?.firstName} onChange={(e) => handleProfileChange(e, "firstName")} />
                                 </label>
@@ -328,15 +317,13 @@ const Professor = () => {
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
                         ) : (
-                            // Profile view
                             <>
-                                <h2>Professor Profile</h2>
+                                <h2 data-testId="professor-prof">Professor Profile</h2>
                                 <p><strong>Name:</strong> {userData?.firstName}</p>
                                 <p><strong>Surname:</strong> {userData?.lastName}</p>
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
                                 <p><strong>Course:</strong> {userData?.course}</p>
                                 <p><strong>Consultation Hours:</strong> {userData?.consultationHours}</p>
-                                {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                                 <button className="change-password-btn" onClick={toggleChangePassword}>Change Password</button>
 
@@ -351,7 +338,7 @@ const Professor = () => {
                     </div>
                 )}
                 {contentToShow === 'attendance' && users?.length > 0 && (
-                    <div className='attendance-list'>
+                    <div className='attendance-list' data-testId="attendanceListi">
                         <h2>Attendance for School Year {selectedYear}</h2>
                         <table>
                             <thead>
@@ -422,9 +409,6 @@ const Professor = () => {
                     <div className="white-box">
                         <h2>Attendance Dates</h2>
                         <ul>
-
-
-
                             {classDates.map((el, index) => (
                                 <li className="attendanceDates" key={index} onClick={() => downloadAttendanceData(el)}>
                                     <a href='#' style={{ textDecoration: 'none', color: 'white' }}>{el?.date.slice(0, 10)}</a>
@@ -436,7 +420,7 @@ const Professor = () => {
 
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (
                     <div className="change-password-form student-profile">
-                        <h2>Change Password</h2>
+                        <h2 data-testId="change-password-header">Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
                                 Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
@@ -445,7 +429,6 @@ const Professor = () => {
                                 New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit" >Save Changes</button>
-                            {/* onClick={toggleChangePassword} */}
                             <button type='button' onClick={toggleProfile}>Cancel</button>
                         </form>
                     </div>

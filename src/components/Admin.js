@@ -21,7 +21,6 @@ const Admin = () => {
     const navigate = useNavigate();
     const [showChangePassword, setShowChangePassword] = useState(false);
     const handleLogout = () => {
-        // Perform any logout actions, e.g., remove tokens, clear user data
         window.localStorage.clear()
         window.location.assign('/');
     };
@@ -35,7 +34,6 @@ const Admin = () => {
     const handleProfileChange = (e, type) => {
         const { name, value } = e.target;
 
-        // Update the editBody object based on the input change
         setEditBody(prevEditBody => ({ ...prevEditBody, [type]: value }));
     };
 
@@ -116,7 +114,6 @@ const Admin = () => {
 
     const handleAttendance = (student, status) => {
         console.log(student, status)
-        // find the student in the list
         const updatedStudent = { ...student, status: status };
         const updatedStudents = students.map((s) =>
             s._id === student._id ? updatedStudent : s
@@ -129,14 +126,12 @@ const Admin = () => {
 
     const DateSelection = ({ dates, selectedSemester, setSelectedDate }) => {
         console.log('ramadan pireva', dates, selectedSemester, setSelectedDate)
-        // render a list of courses and handle course selection
         const handleDateClick = (course) => {
             setSelectedDate(course);
-            // setGroups(EXAMPLE_GROUPS);
         };
 
         return (
-            <div>
+            <div >
                 <ul>
                     {dates?.map((date) => (
                         <li className="listDates" key={date?.id} onClick={() => handleDateClick(date)}>
@@ -151,7 +146,6 @@ const Admin = () => {
         const courseId = selectedDate?.courseId
         const groupId = selectedDate?.groupId
         const date = selectedDate?.date
-        // console.log('hej hej 2', students)
         var test1 = []
         for (let index = 0; index < students.length; index++) {
             test1.push({ studentId: students[index]?.studentId?._id, status: students[index]?.status })
@@ -168,8 +162,6 @@ const Admin = () => {
         await axios.put(`attendances/update_attendance_records`, body)
             .then((res) => {
                 console.log('responsi pozitiv', res)
-                // setDates(res?.data?.attendance_dates);
-                // console.log('datat qe duhet tshfaqur', res?.data?.attendance_dates)
             })
             .catch(err =>
                 alert("Error:" + err)
@@ -191,7 +183,6 @@ const Admin = () => {
                     <tbody>
                         {students.map((student) => {
                             console.log('studentGashi5672123', attendance, students)
-                            // const studentAttendance = attendance.find(item => item.studentId === student.id);
                             return (
                                 <tr key={student.id}>
                                     <td>{student?.studentId?.firstName + " " + student?.studentId?.lastName}</td>
@@ -237,10 +228,7 @@ const Admin = () => {
             setShowContentText(true);
         }
     };
-
-
     const handlePasswordChange = async (e) => {
-        // ndrrimi i passit
         e.preventDefault();
         const body = {
             old_password: oldPass,
@@ -319,7 +307,7 @@ const Admin = () => {
                         {isEditMode ? (
                             // Edit form
                             <form onSubmit={handleEditPost}>
-                                <h2>Edit Profile</h2>
+                                <h2 data-testid="edit-header">Edit Profile</h2>
                                 <label>
                                     Name: <input type="text" name='name' defaultValue={userData?.firstName} onChange={(e) => handleProfileChange(e, "firstName")} />
                                 </label>
@@ -333,13 +321,11 @@ const Admin = () => {
                                 <button type='button' onClick={toggleEditMode}>Cancel</button>
                             </form>
                         ) : (
-                            // Profile view
                             <>
-                                <h2>Admin Profile</h2>
+                                <h2 data-testid="admin-prof">Admin Profile</h2>
                                 <p><strong>Name:</strong> {userData?.firstName}</p>
                                 <p><strong>Surname:</strong> {userData?.lastName}</p>
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
-                                {/* Add Edit button */}
                                 <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                                 <button className="change-password-btn" onClick={toggleChangePassword}>Change Password</button>
 
@@ -355,7 +341,7 @@ const Admin = () => {
                 )}
 
                 {!selectedDate && contentToShow === 'courses' && (
-                    <div className='semesterSelection'>
+                    <div className='semesterSelection' data-testId="semesterSelection">
                         <div className="white-box">
                             <h2>Select Professor</h2>
                             <ul>
@@ -368,7 +354,7 @@ const Admin = () => {
                         {selectedSemester !== null && (
                             <div className="white-box">
                                 <h2>Select Date</h2>
-                                <DateSelection dates={dates} date_id={dates?._id} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
+                                <DateSelection data-testId="datesSelection" dates={dates} date_id={dates?._id} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
                         )}
                     </div>
@@ -380,7 +366,7 @@ const Admin = () => {
 
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (
                     <div className="change-password-form student-profile">
-                        <h2>Change Password</h2>
+                        <h2 data-testid="change-password-header">Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
                                 Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
@@ -389,14 +375,10 @@ const Admin = () => {
                                 New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit" >Save Changes</button>
-                            {/* onClick={toggleChangePassword} */}
                             <button type='button' onClick={toggleProfile}>Cancel</button>
                         </form>
                     </div>
                 )}
-
-
-
             </div>
         </div>
     );
