@@ -107,6 +107,7 @@ const Student = () => {
                     key={el?._id}
                     className="course-row course-box"
                     onClick={() => displayCourseStats(el._id, el?.course_date)}
+                    data-testId="courseRow"
                 >
                     <div className="course-name">{el?.name}</div>
                 </div >
@@ -290,9 +291,9 @@ const Student = () => {
                         ) : (
                             pieChartData && (
 
-                                <div class="pie-chart-container">
-                                    <div class="pie-chart-content">
-                                        <div className="course-stats">
+                                <div class="pie-chart-container" data-testid ="pieChartContainer">
+                                    <div class="pie-chart-content" data-testid ="pieChartContent">
+                                        <div className="course-stats" data-testId="course-stats">
                                             <h3>Course Statistics</h3>
                                             <Pie data={pieChartData} />
                                         </div>

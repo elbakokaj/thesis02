@@ -112,24 +112,24 @@ describe('Admin Component', () => {
         expect(semestersToShow).toBeInTheDocument();
     });
 
-    // test('Attendance List is Shown', async () => {
-    //     render(<Admin />);
-    //     const coursesLink = screen.getByText(/Courses/i);
+    test('Attendance List is Shown', async () => {
+        render(<Admin />);
+        const coursesLink = screen.getByText(/Courses/i);
 
-    //     fireEvent.click(coursesLink);
+        fireEvent.click(coursesLink);
 
-    //     // const courseRow = await screen.findByText(/Mock Course/i);
-    //     // fireEvent.click(courseRow);
+        // const courseRow = await screen.findByText(/Mock Course/i);
+        // fireEvent.click(courseRow);
 
-    //     const semestersToShow = await screen.findByTestId("semesterSelection");
-    //     expect(semestersToShow).toBeInTheDocument();
-    //     fireEvent.click(semestersToShow)
+        const semestersToShow = await screen.findByTestId("semesterSelection");
+        expect(semestersToShow).toBeInTheDocument();
+        fireEvent.click(semestersToShow)
 
-    //     // const datesToShow = await screen.findByTestId("datesSelection");
-    //     // expect(datesToShow).toBeInTheDocument();
-    //     // fireEvent.click(datesToShow)
+        const datesToShow = await screen.findByTestId("datesSelection");
+        expect(datesToShow).toBeInTheDocument();
+        fireEvent.click(datesToShow)
 
-    //     const attendance = await screen.findByText("Attendance List");
-    //     expect(attendance).toBeInTheDocument();
-    // });
+        const attendance = await screen.findByText("Attendance List");
+        expect(attendance).toBeInTheDocument();
+    });
 });

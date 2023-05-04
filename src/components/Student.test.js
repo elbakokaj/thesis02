@@ -3,8 +3,41 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import Student from './Student';
+import axios from '../axios';
+
+describe('Student Component with mocked axios', () => {
+    let getSpy;
+
+    beforeEach(() => {
+        getSpy = jest.spyOn(axios, 'get');
+    });
+
+    test('displays pie chart container when a course is clicked', async () => {
+        getSpy
+            .mockResolvedValueOnce({ data: [{ name: 'Mock Course', _id: '1' }] })
+            .mockResolvedValueOnce({ data: { present: 10, absent: 2, _id: '1' } });
+
+        render(<Student />);
+        const coursesLink = screen.getByText(/Courses/i);
+
+        fireEvent.click(coursesLink);
+
+        const courseRow = await screen.findByTestId('courseRow');
+        fireEvent.click(courseRow);
+
+        const pieChartContainer = await screen.findByTestId('pieChartContainer');
+        expect(pieChartContainer).toBeInTheDocument();
+    });
+
+    afterEach(() => {
+        getSpy.mockRestore();
+    });
+});
+
+
 
 describe('Student Component', () => {
+
     test('renders Welcome text Student', () => {
         render(<Student />);
         const welcomeElement = screen.getByText(/Welcome!/i);
@@ -86,22 +119,4 @@ describe('Student Component', () => {
         const editProfileHeader = await screen.findByTestId('edit-header');
         expect(editProfileHeader).toBeInTheDocument();
     });
-
-    // test('shows Courses Statitics when Course Name link is clicked', async () => {
-    //     render(<Student />);
-    //     const coursesLink = screen.getByText(/Courses/i);
-
-    //     fireEvent.click(coursesLink);
-
-    //     await waitFor(() => {
-    //         expect(screen.findByTestId("coursesToShow")).toBeInTheDocument();
-    //     });
-
-    //     const dataLink = await screen.findByTestId("coursesToShow");
-
-    //     fireEvent.click(dataLink);
-
-    //     const statsToShow = await screen.findByTestId("course-stats");
-    //     expect(statsToShow).toBeInTheDocument();
-    // });
 });
