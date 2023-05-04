@@ -171,7 +171,7 @@ const Admin = () => {
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
-            <div className="attendance-list">
+            <div className="attendance-list" >
                 <h2>Attendance List</h2>
                 <table>
                     <thead>
@@ -347,7 +347,7 @@ const Admin = () => {
                             <ul>
                                 {console.log('profesors', professors)}
                                 {professors?.map((prof, index) => (
-                                    <button key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
+                                    <button key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)} data-testid={`prof-${index}`}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
                                 ))}
                             </ul>
                         </div>
@@ -361,7 +361,7 @@ const Admin = () => {
                 )}
 
                 {contentToShow === 'attendance' && selectedDate !== null && (
-                    <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
+                    <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} data-testId="attendance-list" />
                 )}
 
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (
