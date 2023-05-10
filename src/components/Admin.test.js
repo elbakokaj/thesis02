@@ -2,16 +2,10 @@ import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Admin from './Admin';
 import '@testing-library/jest-dom';
-
 import userEvent from '@testing-library/user-event';
+import axios from '../axios';
 
-
-// Mocking axios and useNavigate
-// jest.mock('axios');
-// jest.mock('react-router-dom', () => ({
-//     ...jest.requireActual('react-router-dom'),
-//     useNavigate: () => jest.fn(),
-// }));
+jest.mock('../axios');
 
 jest.mock('../axios', () => ({
     get: jest.fn(() => Promise.resolve({ data: [] })),
@@ -24,28 +18,7 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => jest.fn(),
 }));
 
-// const setupCourseMock = () => {
-//     jest.mock('../axios', () => ({
-//         get: jest.fn((url) => {
-//             if (url.includes('courses')) {
-//                 return Promise.resolve({
-//                     data: [
-//                         {
-//                             id: '1',
-//                             name: 'Mock Course',
-//                             attendance: [
-//                                 { student: 'John Doe', attendanceStatus: 'Present' },
-//                                 { student: 'Jane Doe', attendanceStatus: 'Absent' },
-//                             ],
-//                         },
-//                     ],
-//                 });
-//             }
-//             return Promise.resolve({ data: [] });
-//         }),
-//         put: jest.fn(() => Promise.resolve({ data: {} })),
-//     }));
-// };
+
 
 
 describe('Admin Component', () => {
@@ -135,47 +108,156 @@ describe('Admin Component', () => {
         const semestersToShow = await screen.findByTestId("semesterSelection");
         expect(semestersToShow).toBeInTheDocument();
     });
+    test('submits the change password form successfully', async () => {
+        axios.put.mockResolvedValue({ data: { message: 'Password changed successfully!' } });
 
-    //fix this
-    // test('shows Attendance list when Attendance button is clicked for a course', async () => {
-    //     setupCourseMock();
-    //     render(<Admin />);
+        render(<Admin />);
 
-    //     // Click the Courses link
-    //     const coursesLink = screen.getByText(/Courses/i);
-    //     fireEvent.click(coursesLink);
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
 
-    //     // Click the course row
-    //     const courseRow = await screen.findByText(/Mock Course/i);
-    //     fireEvent.click(courseRow);
+        const changePasswordBtn = await screen.findByText('Change Password');
+        fireEvent.click(changePasswordBtn);
 
-    //     // Click the attendance date
-    //     const attendanceDate = await screen.findByText(/2023-05-04/i);
-    //     fireEvent.click(attendanceDate);
+        const oldPasswordInput = screen.getByLabelText("Current Password:");
+        const newPasswordInput = screen.getByLabelText("New Password:");
+        const saveChangesBtn = screen.getByText("Save Changes");
 
-    //     // Check if the attendance list is shown
-    //     const attendanceList = await screen.findByTestId("attendance-list");
-    //     expect(attendanceList).toBeInTheDocument();
+        fireEvent.change(oldPasswordInput, { target: { value: 'oldPassword' } });
+        fireEvent.change(newPasswordInput, { target: { value: 'newPassword' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    test('date selection is displayed after selecting a professor', async () => {
+        axios.get.mockResolvedValueOnce({
+            data: [
+                {
+                    _id: '1',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    course: 'Math',
+                },
+            ],
+        });
+
+        render(<Admin />);
+        fireEvent.click(screen.getByText('Courses'));
+
+        await waitFor(() => screen.getByText('Select Professor'));
+
+        fireEvent.click(screen.getByTestId('prof-0'));
+
+        await waitFor(() => screen.getByText('Select Date'));
+    });
+
+    test('attendance list is displayed after selecting a date', async () => {
+        axios.get.mockResolvedValueOnce({
+            data: [
+                {
+                    _id: '1',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    course: 'Math',
+                },
+            ],
+        });
+
+        axios.get.mockResolvedValueOnce({
+            data: {
+                attendance_dates: [
+                    {
+                        id: '1',
+                        date: '2023-01-01',
+                    },
+                ],
+            },
+        });
+
+        axios.get.mockResolvedValueOnce({
+            data: {
+                records: [
+                    {
+                        id: '1',
+                        studentId: {
+                            _id: '1',
+                            firstName: 'Alice',
+                            lastName: 'Smith',
+                        },
+                        status: 'present',
+                    },
+                ],
+            },
+        });
+
+        render(<Admin />);
+        fireEvent.click(screen.getByText('Courses'));
+
+        await waitFor(() => screen.getByText('Select Professor'));
+
+        fireEvent.click(screen.getByTestId('prof-0'));
+
+        await waitFor(() => screen.getByText('Select Date'));
+
+        fireEvent.click(screen.getByTestId('date-0'));
+
+        await waitFor(() => screen.getByText('Attendance List'));
+    });
+
+    test('submits the Edit Profile form successfully', async () => {
+        axios.put.mockResolvedValue({ data: { message: 'Profile updated successfully!' } });
+
+        render(<Admin />);
+
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
+
+        const editProfileBtn = await screen.findByText('Edit Profile');
+        fireEvent.click(editProfileBtn);
+
+        const firstNameInput = screen.getByLabelText("Name:");
+        const lastNameInput = screen.getByLabelText("Surname:");
+        const saveChangesBtn = screen.getByText("Save Changes");
+
+        fireEvent.change(firstNameInput, { target: { value: 'NewFirstName' } });
+        fireEvent.change(lastNameInput, { target: { value: 'NewLastName' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    // it('changes the attendance status successfully', async () => {
+    //     const { getByTestId, getByText } = render(<Admin />);
+
+    //     // Wait for students to be loaded
+    //     await waitFor(() => getByText('John Doe'));
+
+    //     // Get the Present, Excused, and Absent buttons for the first student
+    //     const presentBtn = getByTestId('attendance-0-status-present');
+    //     const excusedBtn = getByTestId('attendance-0-status-excused');
+    //     const absentBtn = getByTestId('attendance-0-status-absent');
+
+    //     // Fire click events on the buttons and assert the changes
+    //     fireEvent.click(presentBtn);
+    //     expect(presentBtn).toHaveClass('present');
+
+    //     fireEvent.click(excusedBtn);
+    //     expect(excusedBtn).toHaveClass('excused');
+    //     expect(presentBtn).not.toHaveClass('present');
+
+    //     fireEvent.click(absentBtn);
+    //     expect(absentBtn).toHaveClass('absent');
+    //     expect(excusedBtn).not.toHaveClass('excused');
     // });
 
+
+
+
 });
-// test('Attendance List is Shown', async () => {
-//     render(<Admin />);
-//     const coursesLink = screen.getByText(/Courses/i);
-
-//     fireEvent.click(coursesLink);
-
-//     // const courseRow = await screen.findByText(/Mock Course/i);
-//     // fireEvent.click(courseRow);
-
-//     const semestersToShow = await screen.findByTestId("semesterSelection");
-//     expect(semestersToShow).toBeInTheDocument();
-//     fireEvent.click(semestersToShow)
-
-//     const datesToShow = await screen.findByTestId("datesSelection");
-//     expect(datesToShow).toBeInTheDocument();
-//     fireEvent.click(datesToShow)
-
-//     const attendance = await screen.findByText("Attendance List");
-//     expect(attendance).toBeInTheDocument();
-// });

@@ -133,8 +133,8 @@ const Admin = () => {
         return (
             <div >
                 <ul>
-                    {dates?.map((date) => (
-                        <li className="listDates" key={date?.id} onClick={() => handleDateClick(date)}>
+                    {dates?.map((date, index) => (
+                        <li className="listDates" data-testid={`date-${index}`} key={date?.id} onClick={() => handleDateClick(date)}>
                             {date?.date.slice(0, 10)}
                         </li>
                     ))}
@@ -171,7 +171,7 @@ const Admin = () => {
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
-            <div className="attendance-list" >
+            <div className="attendance-list" data-typeId="attendance-list" >
                 <h2>Attendance List</h2>
                 <table>
                     <thead>
@@ -181,7 +181,7 @@ const Admin = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {students.map((student) => {
+                        {students?.map((student) => {
                             console.log('studentGashi5672123', attendance, students)
                             return (
                                 <tr key={student.id}>
@@ -347,14 +347,14 @@ const Admin = () => {
                             <ul>
                                 {console.log('profesors', professors)}
                                 {professors?.map((prof, index) => (
-                                    <button key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)} data-testid={`prof-${index}`}> {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
+                                    <button data-testid={`prof-${index}`} key={index} className="change-password-btn" onClick={() => onSelectSemester(prof?._id)} > {prof?.firstName} {prof?.lastName} / {prof?.course}</button>
                                 ))}
                             </ul>
                         </div>
                         {selectedSemester !== null && (
-                            <div className="white-box">
+                            <div className="white-box" data-testid="datesSelection">
                                 <h2>Select Date</h2>
-                                <DateSelection data-testId="datesSelection" dates={dates} date_id={dates?._id} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
+                                <DateSelection dates={dates} date_id={dates?._id} setSelectedDate={date => { setStudents(date?.records); setSelectedDate(date); setContentToShow('attendance') }} />
                             </div>
                         )}
                     </div>
@@ -369,10 +369,10 @@ const Admin = () => {
                         <h2 data-testid="change-password-header">Change Password</h2>
                         <form onSubmit={handlePasswordChange}>
                             <label>
-                                Current Password: <input name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
+                                Current Password: <input type="password" name='currentPassword' onChange={(e) => handlePasswordText(e, "currentPassword")} />
                             </label>
                             <label>
-                                New Password: <input name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
+                                New Password: <input type="password" name='newPassword' onChange={(e) => handlePasswordText(e, "newPassword")} />
                             </label>
                             <button type="submit" >Save Changes</button>
                             <button type='button' onClick={toggleProfile}>Cancel</button>
