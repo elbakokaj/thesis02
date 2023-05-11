@@ -11,7 +11,6 @@ const Professor = () => {
 
     const [students, setStudents] = useState([]);
     const [selectedYear, setSelectedYear] = useState("");
-    const [showAccountSettings, setShowAccountSettings] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [contentToShow, setContentToShow] = useState('');
@@ -61,9 +60,6 @@ const Professor = () => {
         }
     };
 
-    const toggleAccountSettings = () => {
-        setShowAccountSettings(!showAccountSettings);
-    };
 
     const [userData, setUserData] = useState(null)
 
@@ -109,17 +105,14 @@ const Professor = () => {
     const course_id = { course_id: window?.localStorage?.getItem("course_id") }
     const setDefaultStudents = async () => {
 
-        console.log('kursGashi', course_id?.course_id)
         return await axios.get(`attendances/find_students/${course_id?.course_id}`,)
             .then((res) => {
                 setUsers(res?.data)
-                console.log('studentat e zellshem', res.data)
             })
             .catch(err =>
                 alert("Error:" + err)
             )
     };
-    console.log("users", users)
     const handleAttendance = (studentId, status) => {
         const updatedStudents = users.map((student) => {
             if (student?.status?.studentId === studentId) {
@@ -139,7 +132,6 @@ const Professor = () => {
             await axios.get(`attendances/find_taken_attendances`)
                 .then((res) => {
                     setClassDates(res.data);
-                    console.log('resgashi, ', res?.data)
                 })
                 .catch(err =>
                     alert("Error:" + err)
@@ -152,7 +144,6 @@ const Professor = () => {
         courseId: course_id?.course_id,
         attendanceRecords: users
     };
-    console.log('payload gashi', payload)
 
     const saveAttendance = async () => {
         await axios.post(`attendances/store_students_attendances`, payload)
@@ -246,7 +237,6 @@ const Professor = () => {
 
     const [oldPass, setOldPass] = useState("")
     const [newPass, setNewPass] = useState("")
-    console.log('passwordat1', oldPass, newPass)
     const handlePasswordText = (e, type) => {
         if (type == "currentPassword") {
             setOldPass(e.target.value)
@@ -318,13 +308,13 @@ const Professor = () => {
                             </form>
                         ) : (
                             <>
-                                <h2 data-testId="professor-prof">Professor Profile</h2>
+                                <h2 data-testid="professor-prof">Professor Profile</h2>
                                 <p><strong>Name:</strong> {userData?.firstName}</p>
                                 <p><strong>Surname:</strong> {userData?.lastName}</p>
                                 <p><strong>Birthday:</strong> {userData?.birthday.substring(0, 10)}</p>
                                 <p><strong>Course:</strong> {userData?.course}</p>
                                 <p><strong>Consultation Hours:</strong> {userData?.consultationHours}</p>
-                                <button className="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
+                                <button className="edit-profile-btn" data-testId="edit-profile-btn" onClick={toggleEditMode}>Edit Profile</button>
                                 <button className="change-password-btn" onClick={toggleChangePassword}>Change Password</button>
 
                             </>
@@ -350,7 +340,6 @@ const Professor = () => {
                             <tbody>
                                 {users.map((student) => (
                                     <tr key={student?.status?._id}>
-                                        {console.log('usersmapRamadani', users)}
                                         <td>{student?.name}</td>
                                         <td>
                                             <div className='attendance-status'>
@@ -381,26 +370,6 @@ const Professor = () => {
                         <div className="buttons-container">
                             <button className='allPresentButton' onClick={markAllPresent}>All Present</button>
                             <button className='saveAttendanceButton' onClick={saveAttendance}>Save Attendance</button>
-                        </div>
-                    </div>
-                )}
-
-
-                {showAccountSettings && (
-                    <div className='popup'>
-                        <div className='popup-content'>
-                            <h2>Account Settings</h2>
-                            <ul>
-                                <li onClick={toggleProfile}>
-                                    <a href='#'>View Profile</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Edit Profile</a>
-                                </li>
-                            </ul>
-                            <button className='popup-close' onClick={toggleAccountSettings}>
-                                X
-                            </button>
                         </div>
                     </div>
                 )}

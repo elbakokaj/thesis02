@@ -2,6 +2,8 @@ import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Professor from './Professor';
 import '@testing-library/jest-dom';
+import axios from '../axios';
+
 
 jest.mock('../axios', () => ({
     get: jest.fn(() => Promise.resolve({ data: [] })),
@@ -92,6 +94,77 @@ describe('Professor Component', () => {
         expect(editProfileHeader).toBeInTheDocument();
     });
 
-    //when i click present absent excused the input values should change
-    //the taken attendances are they downloaded
+
+    test('change password form submits successfully', async () => {
+        axios.put.mockResolvedValue({ data: {} });
+
+        render(<Professor />);
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
+
+        const changePasswordBtn = await screen.findByText('Change Password');
+        fireEvent.click(changePasswordBtn);
+
+        const oldPasswordInput = screen.getByLabelText("Current Password:");
+        const newPasswordInput = screen.getByLabelText("New Password:");
+        const saveChangesBtn = screen.getByText("Save Changes");
+
+        fireEvent.change(oldPasswordInput, { target: { value: 'oldPassword' } });
+        fireEvent.change(newPasswordInput, { target: { value: 'newPassword' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    test('edit profile form submits successfully', async () => {
+        axios.put.mockResolvedValue({ data: {} });
+
+        render(<Professor />);
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
+
+        const editProfileBtn = await screen.findByText('Edit Profile');
+        fireEvent.click(editProfileBtn);
+
+        const firstNameInput = screen.getByLabelText("Name:");
+        const lastNameInput = screen.getByLabelText("Surname:");
+        const saveChangesBtn = screen.getByText("Save Changes");
+
+        fireEvent.change(firstNameInput, { target: { value: 'NewFirstName' } });
+        fireEvent.change(lastNameInput, { target: { value: 'NewLastName' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    test('attendance dates are displayed when the "Taken Attendances" button is clicked', async () => {
+        // Add mock data for classDates
+        const mockClassDates = [
+            { date: '2023-05-01' },
+            { date: '2023-05-02' },
+        ];
+
+        // Override the axios.get function to return mock data
+        axios.get.mockResolvedValue({ data: mockClassDates });
+
+        render(<Professor />);
+
+        const takenAttendancesButton = screen.getByText(/Taken Attendances/i);
+        fireEvent.click(takenAttendancesButton);
+
+        await waitFor(() => {
+            mockClassDates.forEach((el, index) => {
+                const dateElement = screen.getByText(el.date.slice(0, 10));
+                expect(dateElement).toBeInTheDocument();
+            });
+        });
+    });
+
+
 })
