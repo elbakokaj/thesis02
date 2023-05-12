@@ -8,13 +8,17 @@ import axios from '../axios';
 jest.mock('../axios', () => ({
     get: jest.fn(() => Promise.resolve({ data: [] })),
     put: jest.fn(() => Promise.resolve({ data: {} })),
+    post: jest.fn(() => Promise.resolve({ data: {} })),
 }));
+
 
 // Mocking the useNavigate hook
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => jest.fn(),
 }));
+
+jest.mock('axios');
 
 describe('Professor Component', () => {
 
@@ -165,6 +169,170 @@ describe('Professor Component', () => {
             });
         });
     });
+
+    test('attendance buttons functionality', async () => {
+        // Mocking the users data
+        const mockUsers = [
+            {
+                name: 'John Doe',
+                status: {
+                    _id: '1',
+                    studentId: 'student1',
+                    status: 'present',
+                },
+            },
+            {
+                name: 'Jane Smith',
+                status: {
+                    _id: '2',
+                    studentId: 'student2',
+                    status: 'excused',
+                },
+            },
+        ];
+
+        // Override the axios.get function to return mock data
+        axios.get.mockResolvedValueOnce({ data: mockUsers });
+
+        render(<Professor />);
+
+        const classesButton = screen.getByText('Classes');
+        fireEvent.click(classesButton);
+
+        const attendanceList = await screen.findByTestId('attendanceListi');
+        expect(attendanceList).toBeInTheDocument();
+
+        // Find the attendance buttons
+        const presentButtons = screen.getAllByText('Present');
+        const excusedButtons = screen.getAllByText('Excused');
+        const absentButtons = screen.getAllByText('Absent');
+
+        // Click each button once and check if the button's className is updated correctly
+        for (let i = 0; i < presentButtons.length; i++) {
+            fireEvent.click(presentButtons[i]);
+            expect(presentButtons[i]).toHaveClass('present');
+        }
+
+        for (let i = 0; i < excusedButtons.length; i++) {
+            fireEvent.click(excusedButtons[i]);
+            expect(excusedButtons[i]).toHaveClass('excused');
+        }
+
+        for (let i = 0; i < absentButtons.length; i++) {
+            fireEvent.click(absentButtons[i]);
+            expect(absentButtons[i]).toHaveClass('absent');
+        }
+    });
+
+    test('all present buttpn functionality', async () => {
+        // Mocking the users data
+        const mockUsers = [
+            {
+                name: 'John Doe',
+                status: {
+                    _id: '1',
+                    studentId: 'student1',
+                    status: 'present',
+                },
+            },
+            {
+                name: 'Jane Smith',
+                status: {
+                    _id: '2',
+                    studentId: 'student2',
+                    status: 'excused',
+                },
+            },
+        ];
+
+
+        // Override the axios.get function to return mock data
+        axios.get.mockResolvedValueOnce({ data: mockUsers });
+
+        render(<Professor />);
+
+        const classesButton = screen.getByText('Classes');
+        fireEvent.click(classesButton);
+
+        const attendanceList = await screen.findByTestId('attendanceListi');
+        expect(attendanceList).toBeInTheDocument();
+
+        // Find the All Present button and click it
+        const allPresentButton = screen.getByText('All Present');
+        fireEvent.click(allPresentButton);
+
+        // Find the attendance buttons
+        const presentButtons = screen.getAllByText('Present');
+        const excusedButtons = screen.getAllByText('Excused');
+        const absentButtons = screen.getAllByText('Absent');
+
+        // Check if all the presentButtons have the 'present' class
+        presentButtons.forEach((button) => {
+            expect(button).toHaveClass('present');
+        });
+
+        // Check if all the excusedButtons and absentButtons do not have their respective classes
+        excusedButtons.forEach((button) => {
+            expect(button).not.toHaveClass('excused');
+        });
+
+        absentButtons.forEach((button) => {
+            expect(button).not.toHaveClass('absent');
+        });
+
+
+    });
+
+
+    test('Save Attendance button functionality', async () => {
+        // Mocking the users data
+        const mockUsers = [
+            {
+                name: 'John Doe',
+                status: {
+                    _id: '1',
+                    studentId: 'student1',
+                    status: 'present',
+                },
+            },
+            {
+                name: 'Jane Smith',
+                status: {
+                    _id: '2',
+                    studentId: 'student2',
+                    status: 'excused',
+                },
+            },
+        ];
+
+        // Override the axios.get function to return mock data
+        axios.get.mockResolvedValueOnce({ data: mockUsers });
+
+        render(<Professor />);
+
+        const classesButton = screen.getByText('Classes');
+        fireEvent.click(classesButton);
+
+        const attendanceList = await screen.findByTestId('attendanceListi');
+        expect(attendanceList).toBeInTheDocument();
+
+        // Find the Save Attendance button and click it
+        const saveAttendanceButton = screen.getByText('Save Attendance');
+        fireEvent.click(saveAttendanceButton);
+
+        // Check if the saveAttendanceMock function has been called
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalled();
+        });
+
+
+    });
+
+
+    //test case per kur e prek daten ne taken attendance 
+
+
+
 
 
 })

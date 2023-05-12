@@ -5,7 +5,6 @@ import Login from './components/Login';
 import Student from './components/Student';
 import Admin from './components/Admin';
 import Professor from './components/Professor';
-import ForgetPassword from './components/ForgetPassword';
 import NotFoundPage from './components/404/404';
 import 'chart.js/auto';
 
@@ -19,7 +18,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/pagenotfound" element={<NotFoundPage />} />
         {
           notfoundurl !== "/" &&

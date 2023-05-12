@@ -328,7 +328,7 @@ const Professor = () => {
                     </div>
                 )}
                 {contentToShow === 'attendance' && users?.length > 0 && (
-                    <div className='attendance-list' data-testId="attendanceListi">
+                    <div className='attendance-list' data-testid="attendanceListi">
                         <h2>Attendance for School Year {selectedYear}</h2>
                         <table>
                             <thead>
@@ -379,8 +379,8 @@ const Professor = () => {
                         <h2>Attendance Dates</h2>
                         <ul>
                             {classDates.map((el, index) => (
-                                <li className="attendanceDates" key={index} onClick={() => downloadAttendanceData(el)}>
-                                    <a href='#' style={{ textDecoration: 'none', color: 'white' }}>{el?.date.slice(0, 10)}</a>
+                                <li data-testid="attendanceDate" className="attendanceDates" key={index} onClick={() => downloadAttendanceData(el)}>
+                                    <a href='#' style={{ textDecoration: 'none', color: 'white' }} >{el?.date.slice(0, 10)}</a>
                                 </li>
                             ))}
                         </ul>
