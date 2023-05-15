@@ -171,36 +171,39 @@ const Admin = () => {
 
     const AttendanceList = ({ attendance, setAttendance, students }) => {
         return (
-            <div className="attendance-list" data-typeId="attendance-list" >
+            <div className="attendance-list" data-testid="attendance-list" >
                 <h2>Attendance List</h2>
                 <table>
                     <thead>
-                        <tr>
+                        <tr >
                             <th>Name</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {students?.map((student) => {
+                        {students?.map((student, index) => {
                             console.log('studentGashi5672123', attendance, students)
                             return (
-                                <tr key={student.id}>
+                                <tr key={student.id} data-testid={`student-${student.id}`}>
                                     <td>{student?.studentId?.firstName + " " + student?.studentId?.lastName}</td>
                                     <td>
-                                        <div className="attendance-status">
+                                        <div className="attendance-status" data-testid={`attendance-status-${index}`}>
                                             <button
+                                                data-testid={`attendance-${index}-status-present`}
                                                 className={`status-btn ${student?.status?.includes('present') ? 'present' : ''}`}
                                                 onClick={() => handleAttendance(student, 'present')}
                                             >
                                                 Present
                                             </button>
                                             <button
+                                                data-testid={`attendance-${index}-status-excused`}
                                                 className={`status-btn ${student?.status?.includes('excused') ? 'excused' : ''}`}
                                                 onClick={() => handleAttendance(student, 'excused')}
                                             >
                                                 Excused
                                             </button>
                                             <button
+                                                data-testid={`attendance-${index}-status-absent`}
                                                 className={`status-btn ${student?.status?.includes('absent') ? 'absent' : ''}`}
                                                 onClick={() => handleAttendance(student, 'absent')}
                                             >
@@ -361,7 +364,7 @@ const Admin = () => {
                 )}
 
                 {contentToShow === 'attendance' && selectedDate !== null && (
-                    <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} data-testId="attendance-list" />
+                    <AttendanceList attendance={attendance} setAttendance={setAttendance} students={students} />
                 )}
 
                 {!showProfile && !showContentText && contentToShow === 'changePassword' && (

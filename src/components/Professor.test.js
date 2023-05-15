@@ -22,6 +22,11 @@ jest.mock('axios');
 
 describe('Professor Component', () => {
 
+    test('renders Welcome text Student', () => {
+        render(<Professor />);
+        const welcomeElement = screen.getByText(/Welcome!/i);
+        expect(welcomeElement).toBeInTheDocument();
+    });
 
     test('renders Professor component without crashing', () => {
         render(<Professor />);

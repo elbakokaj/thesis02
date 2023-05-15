@@ -5,6 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import Student from './Student';
 import axios from '../axios';
 
+
 describe('Student Component with mocked axios', () => {
     let getSpy;
 
@@ -51,6 +52,7 @@ describe('Student Component', () => {
     });
 
     test('renders Courses link Student', () => {
+
         render(<Student />);
         const coursesLink = screen.getByText(/Courses/i);
         expect(coursesLink).toBeInTheDocument();
@@ -120,5 +122,51 @@ describe('Student Component', () => {
         expect(editProfileHeader).toBeInTheDocument();
     });
 
+    test('edit profile form submits successfully', async () => {
+        jest.spyOn(axios, 'put').mockResolvedValue({ data: {} });
 
+        render(<Student />);
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
+
+        const editProfileBtn = await screen.findByText('Edit Profile');
+        fireEvent.click(editProfileBtn);
+
+        const firstNameInput = screen.getByLabelText('Name:');
+        const lastNameInput = screen.getByLabelText('Surname:');
+        const saveChangesBtn = screen.getByText('Save Changes');
+
+        fireEvent.change(firstNameInput, { target: { value: 'NewFirstName' } });
+        fireEvent.change(lastNameInput, { target: { value: 'NewLastName' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    test('change password form submits successfully', async () => {
+        jest.spyOn(axios, 'put').mockResolvedValue({ data: {} });
+
+        render(<Student />);
+        const profileButton = screen.getByText(/Profile/i);
+        fireEvent.click(profileButton);
+
+        const changePasswordBtn = await screen.findByText('Change Password');
+        fireEvent.click(changePasswordBtn);
+
+        const oldPasswordInput = screen.getByLabelText("Current Password:");
+        const newPasswordInput = screen.getByLabelText("New Password:");
+        const saveChangesBtn = screen.getByText("Save Changes");
+
+        fireEvent.change(oldPasswordInput, { target: { value: 'oldPassword' } });
+        fireEvent.change(newPasswordInput, { target: { value: 'newPassword' } });
+
+        fireEvent.click(saveChangesBtn);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledTimes(2);
+        });
+    });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import Admin from './Admin';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
@@ -23,6 +23,11 @@ jest.mock('react-router-dom', () => ({
 
 describe('Admin Component', () => {
 
+    test('renders Welcome text Student', () => {
+        render(<Admin />);
+        const welcomeElement = screen.getByText(/Welcome!/i);
+        expect(welcomeElement).toBeInTheDocument();
+    });
     test('renders Admin component without crashing', () => {
         render(<Admin />);
     });
@@ -233,30 +238,8 @@ describe('Admin Component', () => {
         });
     });
 
-    // it('changes the attendance status successfully', async () => {
-    //     const { getByTestId, getByText } = render(<Admin />);
 
-    //     // Wait for students to be loaded
-    //     await waitFor(() => getByText('John Doe'));
-
-    //     // Get the Present, Excused, and Absent buttons for the first student
-    //     const presentBtn = getByTestId('attendance-0-status-present');
-    //     const excusedBtn = getByTestId('attendance-0-status-excused');
-    //     const absentBtn = getByTestId('attendance-0-status-absent');
-
-    //     // Fire click events on the buttons and assert the changes
-    //     fireEvent.click(presentBtn);
-    //     expect(presentBtn).toHaveClass('present');
-
-    //     fireEvent.click(excusedBtn);
-    //     expect(excusedBtn).toHaveClass('excused');
-    //     expect(presentBtn).not.toHaveClass('present');
-
-    //     fireEvent.click(absentBtn);
-    //     expect(absentBtn).toHaveClass('absent');
-    //     expect(excusedBtn).not.toHaveClass('excused');
-    // });
-
+    //TEST CASE PER UPDATING ATTENDANCE SPO DI ME BO
 
 
 
