@@ -82,7 +82,7 @@ const Student = () => {
     };
 
     const toggleCourses = async () => {
-        await axios.get(`/courses/find_courses`)
+        await axios.get(`/courses/course_name/${student_id}`)
             .then((res) => {
                 setCourses(res.data)
                 console.log('allCourses', res.data)
@@ -291,8 +291,8 @@ const Student = () => {
                         ) : (
                             pieChartData && (
 
-                                <div class="pie-chart-container" data-testid ="pieChartContainer">
-                                    <div class="pie-chart-content" data-testid ="pieChartContent">
+                                <div class="pie-chart-container" data-testid="pieChartContainer">
+                                    <div class="pie-chart-content" data-testid="pieChartContent">
                                         <div className="course-stats" data-testId="course-stats">
                                             <h3>Course Statistics</h3>
                                             <Pie data={pieChartData} />
